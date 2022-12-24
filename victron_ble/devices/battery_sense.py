@@ -9,7 +9,7 @@ class BatterySenseData:
 
     def get_temperature(self) -> float:
         """
-        Return the temperature in celsius
+        Return the temperature in Celsius
         """
         return self.data["temperature"]
 

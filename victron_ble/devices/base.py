@@ -34,3 +34,7 @@ class Device(abc.ABC):
     @abc.abstractmethod
     def parse(self, data: bytes):
         pass
+
+
+def kelvin_to_celsius(temp_in_kelvin: float) -> float:
+    return round(temp_in_kelvin - 273.15, 2)

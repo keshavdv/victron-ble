@@ -45,4 +45,4 @@ class TestBatteryMonitor:
         actual = BatteryMonitor("aff4d0995b7d1e176c0c33ecb9e70dcd").parse(
             bytes.fromhex(data)
         )
-        assert actual.get_temperature() == 65.535
+        assert actual.get_temperature() == 382.2

@@ -12,7 +12,7 @@ from construct import (
     Struct,
 )
 
-from victron_ble.devices.base import Device
+from victron_ble.devices.base import Device, kelvin_to_celsius
 
 
 class AuxMode(Enum):
@@ -112,9 +112,12 @@ class BatteryMonitorData:
 
     def get_temperature(self) -> Optional[float]:
         """
-        Return the temperature in celsius if the aux input is set to temperature
+        Return the temperature in Celsius if the aux input is set to temperature
         """
-        return self.data.get("temperature")
+        temp = self.data.get("temperature_kelvin")
+        if temp:
+            return kelvin_to_celsius(temp)
+        return None
 
     def get_starter_voltage(self) -> Optional[float]:
         """
@@ -212,6 +215,6 @@ class BatteryMonitor(Device):
         elif aux_mode == AuxMode.MIDPOINT_VOLTAGE:
             parsed["midpoint_voltage"] = pkt.aux / 100
         elif aux_mode == AuxMode.TEMPERATURE:
-            parsed["temperature"] = pkt.aux / 1000
+            parsed["temperature_kelvin"] = pkt.aux / 100
 
         return BatteryMonitorData(parsed)

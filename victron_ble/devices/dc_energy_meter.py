@@ -3,7 +3,7 @@ from typing import Any, Dict, Optional
 
 from construct import BitStruct, Flag, Int8sl, Int16sl, Int16ul, Int24sl, Struct
 
-from victron_ble.devices.base import Device
+from victron_ble.devices.base import Device, kelvin_to_celsius
 from victron_ble.devices.battery_monitor import AuxMode
 
 
@@ -93,9 +93,12 @@ class DcEnergyMeterData:
 
     def get_temperature(self) -> Optional[float]:
         """
-        Return the temperature in celsius if the aux input is set to temperature
+        Return the temperature in Celsius if the aux input is set to temperature
         """
-        return self.data.get("temperature")
+        temp = self.data.get("temperature_kelvin")
+        if temp:
+            return kelvin_to_celsius(temp)
+        return None
 
     def get_starter_voltage(self) -> Optional[float]:
         """
@@ -136,7 +139,6 @@ class DcEnergyMeter(Device):
 
     def parse(self, data: bytes) -> DcEnergyMeterData:
         decrypted = self.decrypt(data)
-        print(decrypted.hex())
         pkt = self.PACKET.parse(decrypted)
 
         aux_mode = AuxMode(pkt.current & 0b11)
@@ -162,6 +164,6 @@ class DcEnergyMeter(Device):
                 Int16sl.parse((pkt.aux).to_bytes(2, "little")) / 100
             )
         elif aux_mode == AuxMode.TEMPERATURE:
-            parsed["temperature"] = pkt.aux / 1000
+            parsed["temperature_kelvin"] = pkt.aux / 100
 
         return DcEnergyMeterData(parsed)
