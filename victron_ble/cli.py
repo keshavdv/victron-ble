@@ -20,6 +20,12 @@ class DeviceKeyParam(click.ParamType):
                 addr = parts[0].strip()
                 key = parts[1].strip()
                 return (addr, key)
+            if len(parts) > 2:
+                parts = value.split("|")
+                if len(parts) == 2:
+                    addr = parts[0].strip()
+                    key = parts[1].strip()
+                    return (addr, key)
 
         self.fail(f"{value} is not a valid <addr>:<key> pair", param, ctx)
 
