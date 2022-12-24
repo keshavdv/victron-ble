@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="None" />
+      <link rel="shortcut icon" href="img/favicon.ico" />
+    <title>victron_ble</title>
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "victron_ble";
+        var mkdocs_page_input_path = "index.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <script src="js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="." class="icon icon-home"> victron_ble
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href=".">victron_ble</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#commands">Commands</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#devices">Devices</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#smartshunt">SmartShunt</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#smart-battery-sense">Smart Battery Sense</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href=".">victron_ble</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+      <li>victron_ble</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="victron_ble">victron_ble</h1>
+<h2 id="commands">Commands</h2>
+<ul>
+<li><code>victron-ble discover</code> - Discover Victron device IDs</li>
+</ul>
+<pre><code class="language-bash">❯ victron-ble discover --help                                                                                      ⏎ ✹
+Usage: victron-ble discover [OPTIONS]
+
+  Discover Victron devices with Instant Readout
+
+Options:
+  --help  Show this message and exit.
+</code></pre>
+<ul>
+<li><code>victron-ble read</code> - Parse data from Victron instant readouts</li>
+</ul>
+<pre><code class="language-bash">❯ victron-ble read --help                                                                                          ⏎ ✹
+Usage: victron-ble read [OPTIONS] [DEVICE_KEYS]...
+
+  Read data from specified devices
+
+Options:
+  --help  Show this message and exit.
+</code></pre>
+<h2 id="devices">Devices</h2>
+<h3 id="smartshunt">SmartShunt</h3>
+<p>Sample output:</p>
+<pre><code class="language-json">{
+    &quot;remaining_mins&quot;: 65535,
+    &quot;aux_mode&quot;: 3,
+    &quot;current&quot;: 0,
+    &quot;voltage&quot;: 12.53,
+    &quot;consumed_ah&quot;: 0.0,
+    &quot;soc&quot;: 100.0,
+    &quot;alarm&quot;: {
+        &quot;low_voltage&quot;: false,
+        &quot;high_voltage&quot;: false,
+        &quot;low_soc&quot;: false,
+        &quot;low_starter_voltage&quot;: false,
+        &quot;high_starter_voltage&quot;: false,
+        &quot;low_temperature&quot;: false,
+        &quot;high_temperature&quot;: false,
+        &quot;mid_voltage&quot;: false
+    }
+}
+</code></pre>
+<p>When aux_mode is equal to the following values, an additional property will be included in the output</p>
+<ul>
+<li>0 =&gt; <code>"starter_voltage": -0.02</code></li>
+<li>1 =&gt; <code>"midpoint_voltage": 12.35</code></li>
+<li>2 =&gt; <code>"temperature": 29.35</code></li>
+<li>3 =&gt; Disabled</li>
+</ul>
+<h3 id="smart-battery-sense">Smart Battery Sense</h3>
+<p>Sample output:</p>
+<pre><code class="language-json">{
+    'temperature': 29.565,
+    'voltage': 12.22
+}
+</code></pre>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+    
+  </span>
+</div>
+    <script>var base_url = '.';</script>
+    <script src="js/theme_extra.js" defer></script>
+    <script src="js/theme.js" defer></script>
+      <script src="search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
+
+<!--
+MkDocs version : 1.4.2
+Build Date UTC : 2022-12-24 06:09:45.585082+00:00
+-->
