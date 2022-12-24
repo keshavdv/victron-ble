@@ -57,7 +57,7 @@ class BatteryMonitor(Device):
         # Unknown byte
         "uk_1b" / Int8sl,
         # Value of the auxillary input (millivolts or degrees)
-        "aux" / Int16sl,
+        "aux" / Int16ul,
         # The upper 22 bits indicate the current in milliamps
         # The lower 2 bits identify the aux input mode:
         #   0 = Starter battery voltage
