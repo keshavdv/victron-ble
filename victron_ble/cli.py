@@ -15,13 +15,13 @@ class DeviceKeyParam(click.ParamType):
 
     def convert(self, value, param, ctx):
         if isinstance(value, str):
-            parts = value.split(":")
+            parts = value.split("@")
             if len(parts) == 2:
                 addr = parts[0].strip()
                 key = parts[1].strip()
                 return (addr, key)
 
-        self.fail(f"{value} is not a valid <addr>:<key> pair", param, ctx)
+        self.fail(f"{value} is not a valid <addr>@<key> pair", param, ctx)
 
 
 @click.group()
