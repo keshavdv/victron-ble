@@ -109,7 +109,7 @@ parsed_data = parser(<key>).parse(<ble advertisement data>)
 If you'd like to help support a new device, collect the following and create a new Github issue:
 
 1. Run `victron-ble discover` to find the ID of the device you'd like to support
-2. Run `victron-ble dump <ID>` for an few minutes while collecting corresponding screenshots from the official apps instant readout to identify the current values
+2. Run `victron-ble dump <ID>` for a few minutes while collecting corresponding screenshots from the official apps instant readout to identify the current values
 
 For pull requests:
 
