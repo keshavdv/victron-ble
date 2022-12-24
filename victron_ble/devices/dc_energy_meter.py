@@ -95,13 +95,13 @@ class DcEnergyMeterData:
         """
         Return the temperature in celsius if the aux input is set to temperature
         """
-        return self.data["temperature"]
+        return self.data.get("temperature")
 
     def get_starter_voltage(self) -> Optional[float]:
         """
         Return the starter battery voltage in volts if the aux input is set to starter battery
         """
-        return self.data["starter_voltage"]
+        return self.data.get("starter_voltage")
 
 
 class DcEnergyMeter(Device):

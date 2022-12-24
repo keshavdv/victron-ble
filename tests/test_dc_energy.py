@@ -22,6 +22,8 @@ class TestDcEnergyMeter:
         assert actual.get_high_temperature_alarm() == False
         assert actual.get_low_temperature_alarm() == False
 
+        assert actual.get_temperature() == None
+
     def test_aux_starter(self) -> None:
         data = "100289a30d787fafde83ccec982199fd815286"
         actual = DcEnergyMeter("aff4d0995b7d1e176c0c33ecb9e70dcd").parse(

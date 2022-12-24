@@ -114,19 +114,19 @@ class BatteryMonitorData:
         """
         Return the temperature in celsius if the aux input is set to temperature
         """
-        return self.data["temperature"]
+        return self.data.get("temperature")
 
     def get_starter_voltage(self) -> Optional[float]:
         """
         Return the starter battery voltage in volts if the aux input is set to starter battery
         """
-        return self.data["starter_voltage"]
+        return self.data.get("starter_voltage")
 
     def get_midpoint_voltage(self) -> Optional[float]:
         """
         Return the midpoint battery voltage in volts if the aux input is set to midpoint voltage
         """
-        return self.data["midpoint_voltage"]
+        return self.data.get("midpoint_voltage")
 
 
 class BatteryMonitor(Device):

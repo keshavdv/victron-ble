@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.2.1 (2022)
+------------------
+- Fix KeyErrors for auxilary data
+
+
 0.2.0 (2022)
 ------------------
 - Change return types for parsers (breaking)

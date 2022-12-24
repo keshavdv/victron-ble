@@ -22,6 +22,10 @@ class TestBatteryMonitor:
         assert actual.get_low_voltage_alarm() == False
         assert actual.get_midpoint_deviation_alarm() == False
 
+        assert actual.get_temperature() == None
+        assert actual.get_starter_voltage() == None
+        assert actual.get_midpoint_voltage() == None
+
     def test_aux_midpoint(self) -> None:
         data = "100289a3021001afc15f433b2663c8cfc0678b5d3d29a8"
         actual = BatteryMonitor("aff4d0995b7d1e176c0c33ecb9e70dcd").parse(
