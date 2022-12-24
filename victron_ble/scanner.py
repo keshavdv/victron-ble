@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import inspect
 import json
 import logging
 import time
@@ -10,7 +11,7 @@ from bleak import BleakScanner
 from bleak.backends.device import BLEDevice
 from bleak.backends.scanner import AdvertisementData
 
-from victron_ble.devices import Device, detect_device_type
+from victron_ble.devices import Device, DeviceData, detect_device_type
 
 logger = logging.getLogger(__name__)
 
@@ -46,10 +47,19 @@ class BaseScanner:
         await self._scanner.stop()
 
 
-class EnumEncoder(json.JSONEncoder):
+# An ugly hack to print a class as JSON
+class DeviceDataEncoder(json.JSONEncoder):
     def default(self, obj):
-        if isinstance(obj, Enum):
-            return obj.name.lower()
+        if issubclass(obj.__class__, DeviceData):
+            data = {}
+            for name, method in inspect.getmembers(obj, predicate=inspect.ismethod):
+                if name.startswith("get_"):
+                    value = method()
+                    if isinstance(value, Enum):
+                        value = value.name.lower()
+                    if value is not None:
+                        data[name[4:]] = value
+            return data
 
 
 class Scanner(BaseScanner):
@@ -81,9 +91,9 @@ class Scanner(BaseScanner):
             "name": device.name,
             "address": device.address,
             "rssi": device.rssi,
-            "payload": parsed.data,
+            "payload": parsed,
         }
-        print(json.dumps(blob, cls=EnumEncoder, indent=2))
+        print(json.dumps(blob, cls=DeviceDataEncoder, indent=2))
 
 
 class DiscoveryScanner(BaseScanner):

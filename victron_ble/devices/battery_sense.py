@@ -1,23 +1,23 @@
 from typing import Any, Dict
 
-from victron_ble.devices import BatteryMonitor, Device
+from victron_ble.devices import BatteryMonitor, Device, DeviceData
 
 
-class BatterySenseData:
+class BatterySenseData(DeviceData):
     def __init__(self, data: Dict[str, Any]) -> None:
-        self.data = data
+        self._data = data
 
     def get_temperature(self) -> float:
         """
         Return the temperature in Celsius
         """
-        return self.data["temperature"]
+        return self._data["temperature"]
 
     def get_voltage(self) -> float:
         """
         Return the voltage in volts
         """
-        return self.data["voltage"]
+        return self._data["voltage"]
 
 
 class BatterySense(Device):

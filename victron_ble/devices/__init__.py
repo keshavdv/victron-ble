@@ -2,12 +2,12 @@ from typing import Dict, Optional, Type
 
 from construct import Int8ul, Int16ul
 
-from victron_ble.devices.base import Device
+from victron_ble.devices.base import Device, DeviceData
 from victron_ble.devices.battery_monitor import AuxMode, BatteryMonitor
 from victron_ble.devices.battery_sense import BatterySense
 from victron_ble.devices.dc_energy_meter import DcEnergyMeter
 
-__all__ = ["AuxMode", "Device", "BatteryMonitor", "DcEnergyMeter"]
+__all__ = ["AuxMode", "Device", "DeviceData", "BatteryMonitor", "DcEnergyMeter"]
 
 MODEL_MAPPING: Dict[int, Type[Device]] = {
     0xA3A4: BatterySense,  # Smart Battery Sense

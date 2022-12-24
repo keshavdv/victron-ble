@@ -5,11 +5,15 @@ from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad
 
 
+class DeviceData:
+    pass
+
+
 class Device(abc.ABC):
     def __init__(self, advertisement_key: str):
         self.advertisement_key = advertisement_key
 
-    def decrypt(self, data: bytes):
+    def decrypt(self, data: bytes) -> bytes:
         parser = Struct(
             "prefix" / FixedSized(2, GreedyBytes),
             # Model ID

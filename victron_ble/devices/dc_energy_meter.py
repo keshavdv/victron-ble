@@ -3,7 +3,7 @@ from typing import Any, Dict, Optional
 
 from construct import BitStruct, Flag, Int8sl, Int16sl, Int16ul, Int24sl, Struct
 
-from victron_ble.devices.base import Device, kelvin_to_celsius
+from victron_ble.devices.base import Device, DeviceData, kelvin_to_celsius
 from victron_ble.devices.battery_monitor import AuxMode
 
 
@@ -27,75 +27,75 @@ class MeterType(Enum):
     WATER_HEATER = 10
 
 
-class DcEnergyMeterData:
+class DcEnergyMeterData(DeviceData):
     def __init__(self, data: Dict[str, Any]) -> None:
-        self.data = data
+        self._data = data
 
     def get_meter_type(self) -> MeterType:
         """
         Return an enum indicating the current meter type
         """
-        return self.data["meter_type"]
+        return self._data["meter_type"]
 
     def get_current(self) -> float:
         """
         Return the current in amps
         """
-        return self.data["current"]
+        return self._data["current"]
 
     def get_voltage(self) -> float:
         """
         Return the voltage in volts
         """
-        return self.data["voltage"]
+        return self._data["voltage"]
 
     def get_low_voltage_alarm(self) -> bool:
         """
         Return a boolean indicating if the low voltage alarm is active
         """
-        return self.data["alarm"]["low_voltage"]
+        return self._data["alarm"]["low_voltage"]
 
     def get_high_voltage_alarm(self) -> bool:
         """
         Return a boolean indicating if the high voltage alarm is active
         """
-        return self.data["alarm"]["high_voltage"]
+        return self._data["alarm"]["high_voltage"]
 
     def get_low_starter_battery_voltage_alarm(self) -> bool:
         """
         Return a boolean indicating if the low starter battery voltage alarm is active
         """
-        return self.data["alarm"]["low_starter_voltage"]
+        return self._data["alarm"]["low_starter_voltage"]
 
     def get_high_starter_battery_voltage_alarm(self) -> bool:
         """
         Return a boolean indicating if the high starter battery voltage alarm is active
         """
-        return self.data["alarm"]["high_starter_voltage"]
+        return self._data["alarm"]["high_starter_voltage"]
 
     def get_low_temperature_alarm(self) -> bool:
         """
         Return a boolean indicating if the low temperature alarm is active
         """
-        return self.data["alarm"]["low_temperature"]
+        return self._data["alarm"]["low_temperature"]
 
     def get_high_temperature_alarm(self) -> bool:
         """
         Return a boolean indicating if the high temperature alarm is active
         """
-        return self.data["alarm"]["high_temperature"]
+        return self._data["alarm"]["high_temperature"]
 
     def get_aux_mode(self) -> AuxMode:
         """
         Return an enum indicating the current auxiliary input mode
         """
-        return self.data["aux_mode"]
+        return self._data["aux_mode"]
 
     def get_temperature(self) -> Optional[float]:
         """
         Return the temperature in Celsius if the aux input is set to temperature
         """
-        temp = self.data.get("temperature_kelvin")
+        temp = self._data.get("temperature_kelvin")
         if temp:
             return kelvin_to_celsius(temp)
         return None
@@ -104,7 +104,7 @@ class DcEnergyMeterData:
         """
         Return the starter battery voltage in volts if the aux input is set to starter battery
         """
-        return self.data.get("starter_voltage")
+        return self._data.get("starter_voltage")
 
 
 class DcEnergyMeter(Device):

@@ -12,7 +12,7 @@ from construct import (
     Struct,
 )
 
-from victron_ble.devices.base import Device, kelvin_to_celsius
+from victron_ble.devices.base import Device, DeviceData, kelvin_to_celsius
 
 
 class AuxMode(Enum):
@@ -22,99 +22,99 @@ class AuxMode(Enum):
     DISABLED = 3
 
 
-class BatteryMonitorData:
+class BatteryMonitorData(DeviceData):
     def __init__(self, data: Dict[str, Any]) -> None:
-        self.data = data
+        self._data = data
 
     def get_remaining_mins(self) -> float:
         """
         Return the number of remaining minutes of battery life in minutes
         """
-        return self.data["remaining_mins"]
+        return self._data["remaining_mins"]
 
     def get_current(self) -> float:
         """
         Return the current in amps
         """
-        return self.data["current"]
+        return self._data["current"]
 
     def get_voltage(self) -> float:
         """
         Return the voltage in volts
         """
-        return self.data["voltage"]
+        return self._data["voltage"]
 
     def get_soc(self) -> float:
         """
         Return the state of charge in percentage
         """
-        return self.data["soc"]
+        return self._data["soc"]
 
     def get_consumed_ah(self) -> float:
         """
         Return the consumed energy in amp hours
         """
-        return self.data["consumed_ah"]
+        return self._data["consumed_ah"]
 
     def get_low_voltage_alarm(self) -> bool:
         """
         Return a boolean indicating if the low voltage alarm is active
         """
-        return self.data["alarm"]["low_voltage"]
+        return self._data["alarm"]["low_voltage"]
 
     def get_high_voltage_alarm(self) -> bool:
         """
         Return a boolean indicating if the high voltage alarm is active
         """
-        return self.data["alarm"]["high_voltage"]
+        return self._data["alarm"]["high_voltage"]
 
     def get_low_soc_alarm(self) -> bool:
         """
         Return a boolean indicating if the low state of charge alarm is active
         """
-        return self.data["alarm"]["low_soc"]
+        return self._data["alarm"]["low_soc"]
 
     def get_low_starter_battery_voltage_alarm(self) -> bool:
         """
         Return a boolean indicating if the low starter battery voltage alarm is active
         """
-        return self.data["alarm"]["low_starter_voltage"]
+        return self._data["alarm"]["low_starter_voltage"]
 
     def get_high_starter_battery_voltage_alarm(self) -> bool:
         """
         Return a boolean indicating if the high starter battery voltage alarm is active
         """
-        return self.data["alarm"]["high_starter_voltage"]
+        return self._data["alarm"]["high_starter_voltage"]
 
     def get_low_temperature_alarm(self) -> bool:
         """
         Return a boolean indicating if the low temperature alarm is active
         """
-        return self.data["alarm"]["low_temperature"]
+        return self._data["alarm"]["low_temperature"]
 
     def get_high_temperature_alarm(self) -> bool:
         """
         Return a boolean indicating if the high temperature alarm is active
         """
-        return self.data["alarm"]["high_temperature"]
+        return self._data["alarm"]["high_temperature"]
 
     def get_midpoint_deviation_alarm(self) -> bool:
         """
         Return a boolean indicating if the high temperature alarm is active
         """
-        return self.data["alarm"]["mid_deviation"]
+        return self._data["alarm"]["mid_deviation"]
 
     def get_aux_mode(self) -> AuxMode:
         """
         Return an enum indicating the current auxiliary input mode
         """
-        return self.data["aux_mode"]
+        return self._data["aux_mode"]
 
     def get_temperature(self) -> Optional[float]:
         """
         Return the temperature in Celsius if the aux input is set to temperature
         """
-        temp = self.data.get("temperature_kelvin")
+        temp = self._data.get("temperature_kelvin")
         if temp:
             return kelvin_to_celsius(temp)
         return None
@@ -123,13 +123,13 @@ class BatteryMonitorData:
         """
         Return the starter battery voltage in volts if the aux input is set to starter battery
         """
-        return self.data.get("starter_voltage")
+        return self._data.get("starter_voltage")
 
     def get_midpoint_voltage(self) -> Optional[float]:
         """
         Return the midpoint battery voltage in volts if the aux input is set to midpoint voltage
         """
-        return self.data.get("midpoint_voltage")
+        return self._data.get("midpoint_voltage")
 
 
 class BatteryMonitor(Device):
