@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.2.2 (2022)
+------------------
+- Change JSON output
+
+
 0.2.1 (2022)
 ------------------
 - Fix KeyErrors for auxilary data
