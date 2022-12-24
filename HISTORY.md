@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.3.0 (2022)
+------------------
+- Switch delimiter format in CLI
+
+
 0.2.2 (2022)
 ------------------
 - Change JSON output

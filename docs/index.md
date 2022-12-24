@@ -31,22 +31,21 @@ Sample output:
 
 ```json
 {
-    "remaining_mins": 65535,
-    "aux_mode": 3,
-    "current": 0,
-    "voltage": 12.53,
-    "consumed_ah": 0.0,
-    "soc": 100.0,
-    "alarm": {
-        "low_voltage": false,
-        "high_voltage": false,
-        "low_soc": false,
-        "low_starter_voltage": false,
-        "high_starter_voltage": false,
-        "low_temperature": false,
-        "high_temperature": false,
-        "mid_voltage": false
-    }
+  "aux_mode": "temperature",
+  "consumed_ah": 0.0,
+  "current": 0.0,
+  "high_starter_battery_voltage_alarm": false,
+  "high_temperature_alarm": false,
+  "high_voltage_alarm": false,
+  "low_soc_alarm": false,
+  "low_starter_battery_voltage_alarm": false,
+  "low_temperature_alarm": false,
+  "low_voltage_alarm": false,
+  "midpoint_deviation_alarm": false,
+  "remaining_mins": 65535,
+  "soc": 100.0,
+  "temperature": 382.2,
+  "voltage": 12.5
 }
 ```
 
@@ -64,7 +63,7 @@ Sample output:
 
 ```json
 {
-    'temperature': 29.565,
-    'voltage': 12.22
+  'temperature': 29.565,
+  'voltage': 12.22
 }
 ```

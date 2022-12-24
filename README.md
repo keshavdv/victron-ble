@@ -58,7 +58,7 @@ $ > victron-ble discover
 
 
 # Dump data for a particular device (replace the ID and key with your own)
-$ > victron-ble read "763aeff5-1334-e64a-ab30-a0f478s20fe1:0df4d0395b7d1a876c0c33ecb9e70dcd"
+$ > victron-ble read "763aeff5-1334-e64a-ab30-a0f478s20fe1@0df4d0395b7d1a876c0c33ecb9e70dcd"
 INFO:victron_ble.scanner:Reading data for ['763aeff5-1334-e64a-ab30-a0f478s20fe1']
 {
   "name": "SmartShunt HT4531A246S",
