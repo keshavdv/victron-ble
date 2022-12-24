@@ -1,36 +1,41 @@
 from enum import Enum
 from typing import Any, Dict, Optional
 
-from construct import (
-    BitStruct,
-    Flag,
-    GreedyBytes,
-    Int8sl,
-    Int16sl,
-    Int16ul,
-    Int24sl,
-    Struct,
-)
+from construct import BitStruct, Flag, Int8sl, Int16sl, Int16ul, Int24sl, Struct
 
 from victron_ble.devices.base import Device
+from victron_ble.devices.battery_monitor import AuxMode
 
 
-class AuxMode(Enum):
-    STARTER_VOLTAGE = 0
-    MIDPOINT_VOLTAGE = 1
-    TEMPERATURE = 2
-    DISABLED = 3
+class MeterType(Enum):
+    SOLAR_CHARGER = -7
+    WIND_CHARGER = -6
+    SHAFT_GENERATOR = -5
+    ALTERNATOR = -4
+    FUEL_CELL = -3
+    WATER_GENERATOR = -2
+    DC_DC_CHARGER = -1
+    AC_CHARGER = 1
+    GENERIC_SOURCE = 2
+    GENERIC_LOAD = 3
+    ELECTRIC_DRIVE = 4
+    FRIDGE = 5
+    WATER_PUMP = 6
+    BILGE_PUMP = 7
+    DC_SYSTEM = 8
+    INVERTER = 9
+    WATER_HEATER = 10
 
 
-class BatteryMonitorData:
+class DcEnergyMeterData:
     def __init__(self, data: Dict[str, Any]) -> None:
         self.data = data
 
-    def get_remaining_mins(self) -> float:
+    def get_meter_type(self) -> MeterType:
         """
-        Return the number of remaining minutes of battery life in minutes
+        Return an enum indicating the current meter type
         """
-        return self.data["remaining_mins"]
+        return self.data["meter_type"]
 
     def get_current(self) -> float:
         """
@@ -44,18 +49,6 @@ class BatteryMonitorData:
         """
         return self.data["voltage"]
 
-    def get_soc(self) -> float:
-        """
-        Return the state of charge in percentage
-        """
-        return self.data["soc"]
-
-    def get_consumed_ah(self) -> float:
-        """
-        Return the consumed energy in amp hours
-        """
-        return self.data["consumed_ah"]
-
     def get_low_voltage_alarm(self) -> bool:
         """
         Return a boolean indicating if the low voltage alarm is active
@@ -67,12 +60,6 @@ class BatteryMonitorData:
         Return a boolean indicating if the high voltage alarm is active
         """
         return self.data["alarm"]["high_voltage"]
-
-    def get_low_soc_alarm(self) -> bool:
-        """
-        Return a boolean indicating if the low state of charge alarm is active
-        """
-        return self.data["alarm"]["low_soc"]
 
     def get_low_starter_battery_voltage_alarm(self) -> bool:
         """
@@ -98,12 +85,6 @@ class BatteryMonitorData:
         """
         return self.data["alarm"]["high_temperature"]
 
-    def get_midpoint_deviation_alarm(self) -> bool:
-        """
-        Return a boolean indicating if the high temperature alarm is active
-        """
-        return self.data["alarm"]["mid_deviation"]
-
     def get_aux_mode(self) -> AuxMode:
         """
         Return an enum indicating the current auxiliary input mode
@@ -122,34 +103,16 @@ class BatteryMonitorData:
         """
         return self.data["starter_voltage"]
 
-    def get_midpoint_voltage(self) -> Optional[float]:
-        """
-        Return the midpoint battery voltage in volts if the aux input is set to midpoint voltage
-        """
-        return self.data["midpoint_voltage"]
 
-
-class BatteryMonitor(Device):
+class DcEnergyMeter(Device):
 
     PACKET = Struct(
-        # Remaining time in minutes
-        "remaining_mins" / Int16ul,
+        "meter_type" / Int16sl,
         # Voltage reading in 0.1v increments
         "voltage" / Int16ul,
-        # Bit map of alarm status
-        # 0b00000001 = low voltage alarm
-        # 0b00000010 = high voltage alarm
-        # 0b00000100 = low soc alarm
-        # 0b00001000 = low starter alarm
-        # 0b00001001 = low voltage + low starter alarm
-        # 0b00011001 = high starter + low voltage + low starter alarm
-        # 0b00010000 = high starter alarm
-        # 0b00100000 = low temp alarm
-        # 0b01000000 = high temp alarm
-        # 0b10000000 = midpoint voltage deviation alarm
         "alarm"
         / BitStruct(
-            "mid_deviation" / Flag,
+            "mid_voltage" / Flag,
             "high_temperature" / Flag,
             "low_temperature" / Flag,
             "high_starter_voltage" / Flag,
@@ -160,7 +123,7 @@ class BatteryMonitor(Device):
         ),
         # Unknown byte
         "uk_1b" / Int8sl,
-        # Value of the auxillary input (millivolts or degrees)
+        # Value of the auxillary input
         "aux" / Int16ul,
         # The upper 22 bits indicate the current in milliamps
         # The lower 2 bits identify the aux input mode:
@@ -169,38 +132,27 @@ class BatteryMonitor(Device):
         #   2 = Temperature
         #   3 = Disabled
         "current" / Int24sl,
-        # Consumed Ah in 0.1Ah increments
-        "consumed_ah" / Int16ul,
-        # The lowest 4 bits are unknown
-        # The next 8 bits indicate the state of charge in 0.1% increments
-        # The upper 2 bits are unknown
-        "soc" / Int16ul,
-        # Throw away any extra bytes
-        GreedyBytes,
     )
 
-    def parse(self, data: bytes) -> BatteryMonitorData:
+    def parse(self, data: bytes) -> DcEnergyMeterData:
         decrypted = self.decrypt(data)
+        print(decrypted.hex())
         pkt = self.PACKET.parse(decrypted)
 
         aux_mode = AuxMode(pkt.current & 0b11)
 
         parsed = {
-            "remaining_mins": pkt.remaining_mins,
+            "meter_type": MeterType(pkt.meter_type),
             "aux_mode": aux_mode,
             "current": (pkt.current >> 2) / 1000,
             "voltage": pkt.voltage / 100,
-            "consumed_ah": pkt.consumed_ah / 10,
-            "soc": ((pkt.soc & 0x3FFF) >> 4) / 10,
             "alarm": {
                 "low_voltage": pkt.alarm.low_voltage,
                 "high_voltage": pkt.alarm.high_voltage,
-                "low_soc": pkt.alarm.low_soc,
                 "low_starter_voltage": pkt.alarm.low_starter_voltage,
                 "high_starter_voltage": pkt.alarm.high_starter_voltage,
                 "low_temperature": pkt.alarm.low_temperature,
                 "high_temperature": pkt.alarm.high_temperature,
-                "mid_deviation": pkt.alarm.mid_deviation,
             },
         }
 
@@ -209,9 +161,7 @@ class BatteryMonitor(Device):
             parsed["starter_voltage"] = (
                 Int16sl.parse((pkt.aux).to_bytes(2, "little")) / 100
             )
-        elif aux_mode == AuxMode.MIDPOINT_VOLTAGE:
-            parsed["midpoint_voltage"] = pkt.aux / 100
         elif aux_mode == AuxMode.TEMPERATURE:
             parsed["temperature"] = pkt.aux / 1000
 
-        return BatteryMonitorData(parsed)
+        return DcEnergyMeterData(parsed)

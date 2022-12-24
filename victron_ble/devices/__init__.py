@@ -1,21 +1,50 @@
-from construct import Int16ul
+from typing import Dict, Optional, Type
+
+from construct import Int8ul, Int16ul
 
 from victron_ble.devices.base import Device
-from victron_ble.devices.battery_monitor import BatteryMonitor, BatterySense
+from victron_ble.devices.battery_monitor import AuxMode, BatteryMonitor
+from victron_ble.devices.battery_sense import BatterySense
+from victron_ble.devices.dc_energy_meter import DcEnergyMeter
 
-__all__ = ["Device", "BatteryMonitor"]
+__all__ = ["AuxMode", "Device", "BatteryMonitor", "DcEnergyMeter"]
 
-MODEL_MAPPING = {
-    0xA381: BatteryMonitor,  # BMV-712 Smart
-    0xA382: BatteryMonitor,  # BMV-710H Smart
-    0xA383: BatteryMonitor,  # BMV-712 Smart Rev2
-    0xA389: BatteryMonitor,  # SmartShunt 500A/50mV
-    0xA38A: BatteryMonitor,  # SmartShunt 1000A/50mV
-    0xA38B: BatteryMonitor,  # SmartShunt 2000A/50mV
+MODEL_MAPPING: Dict[int, Type[Device]] = {
     0xA3A4: BatterySense,  # Smart Battery Sense
 }
 
 
-def detect_device_type(data):
+def detect_device_type(data: bytes) -> Optional[Type[Device]]:
     model_id = Int16ul.parse(data[2:4])
-    return MODEL_MAPPING.get(model_id)
+    mode = Int8ul.parse(data[4:5])
+
+    # Model ID-based preferences
+    match = MODEL_MAPPING.get(model_id)
+    if match:
+        return match
+
+    # Defaults
+    if mode == 0x2:  # BatteryMonitor
+        return BatteryMonitor
+    elif mode == 0xD:  # DcEnergyMeter
+        return DcEnergyMeter
+    elif mode == 0x8:  # AcCharger
+        pass
+    elif mode == 0x4:  # DcDcConverter
+        pass
+    elif mode == 0x3:  # Inverter
+        pass
+    elif mode == 0x6:  # InverterRS
+        pass
+    elif mode == 0xA:  # LynxSmartBMS
+        pass
+    elif mode == 0xB:  # MultiRS
+        pass
+    elif mode == 0x5:  # SmartLithium
+        pass
+    elif mode == 0x1:  # SolarCharger
+        pass
+    elif mode == 0xC:  # VE.Bus
+        pass
+
+    return None

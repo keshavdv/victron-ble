@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import logging
 import time
+from enum import Enum
 from typing import Set
 
 from bleak import BleakScanner
@@ -45,6 +46,12 @@ class BaseScanner:
         await self._scanner.stop()
 
 
+class EnumEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, Enum):
+            return obj.name.lower()
+
+
 class Scanner(BaseScanner):
     def __init__(self, device_keys: dict[str, str] = {}):
         super().__init__()
@@ -74,9 +81,9 @@ class Scanner(BaseScanner):
             "name": device.name,
             "address": device.address,
             "rssi": device.rssi,
-            "payload": parsed,
+            "payload": parsed.data,
         }
-        print(json.dumps(blob, indent=2))
+        print(json.dumps(blob, cls=EnumEncoder, indent=2))
 
 
 class DiscoveryScanner(BaseScanner):
