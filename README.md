@@ -7,13 +7,17 @@ Disclaimer: This software is not an officially supported interface by Victron an
 
 **Supported Devices:**
 
-  * SmartShunt 500A/500mv (and likely BMV-712/702) provide the following data:
+* SmartShunt 500A/500mv (and likely BMV-712/702) provide the following data:
     * Voltage
     * Alarm status
     * Current
     * Remaining time
+    * State of charge (%)
     * Consumed amp hours
-    * Auxillary input
+    * Auxillary input (temperature, midpoint voltage, or starter battery voltage)
+* Smart Battery Sense
+    * Voltage
+    * Temperature (°C)
 
 If you'd like to support development for additional devices, consider [sponsoring this project](https://github.com/sponsors/keshavdv/)
 

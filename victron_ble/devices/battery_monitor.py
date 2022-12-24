@@ -107,3 +107,13 @@ class BatteryMonitor(Device):
                 "mid_voltage": pkt.alarm.mid_voltage,
             },
         }
+
+
+class BatterySense(BatteryMonitor):
+    def parse(self, data: bytes):
+        parsed = super().parse(data)
+
+        return {
+            "temperature": parsed["aux"] / 1000,
+            "voltage": parsed["voltage"],
+        }

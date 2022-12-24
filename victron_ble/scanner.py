@@ -68,6 +68,7 @@ class Scanner(BaseScanner):
 
             self._known_devices[device.address] = device_klass(advertisement_key)
 
+        logger.debug(f"Received data from {device.address.lower()}: {data.hex()}")
         parsed = self._known_devices[device.address].parse(data)
         blob = {
             "name": device.name,

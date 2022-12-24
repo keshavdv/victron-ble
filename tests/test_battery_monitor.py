@@ -1,4 +1,4 @@
-from victron_ble.devices import BatteryMonitor
+from victron_ble.devices import BatteryMonitor, BatterySense
 
 
 class TestBatteryMonitor:
@@ -26,4 +26,14 @@ class TestBatteryMonitor:
         key = "aff4d0995b7d1e176c0c33ecb9e70dcd"
         data = "100289a302b040af925d09a4d89aa0128bdef48c6298a9"
         actual = BatteryMonitor(key).parse(bytes.fromhex(data))
+        assert actual == expected
+
+
+class TestBatterySense:
+    def test_parse_data(self):
+        expected = {"temperature": 29.565, "voltage": 12.22}
+
+        key = "0da694539597f9cf6c613cde60d7bf05"
+        data = "1000a4a3025f150d8dcbff517f30eb65e76b22a04ac4e1"
+        actual = BatterySense(key).parse(bytes.fromhex(data))
         assert actual == expected

@@ -1,7 +1,7 @@
 from construct import Int16ul
 
 from victron_ble.devices.base import Device
-from victron_ble.devices.battery_monitor import BatteryMonitor
+from victron_ble.devices.battery_monitor import BatteryMonitor, BatterySense
 
 __all__ = ["Device", "BatteryMonitor"]
 
@@ -12,6 +12,7 @@ MODEL_MAPPING = {
     0xA389: BatteryMonitor,  # SmartShunt 500A/50mV
     0xA38A: BatteryMonitor,  # SmartShunt 1000A/50mV
     0xA38B: BatteryMonitor,  # SmartShunt 2000A/50mV
+    0xA3A4: BatterySense,  # Smart Battery Sense
 }
 
 
