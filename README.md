@@ -14,7 +14,7 @@ Disclaimer: This software is not an officially supported interface by Victron an
     * Remaining time
     * State of charge (%)
     * Consumed amp hours
-    * Auxillary input (temperature, midpoint voltage, or starter battery voltage)
+    * Auxilary input (temperature, midpoint voltage, or starter battery voltage)
 * Smart Battery Sense
     * Voltage
     * Temperature (°C)
