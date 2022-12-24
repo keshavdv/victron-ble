@@ -88,10 +88,11 @@ class BatteryMonitor(Device):
 
         pkt = self.PACKET.parse(decrypted)
 
-        return {
+        aux_mode = pkt.current & 0b11
+
+        parsed = {
             "remaining_mins": pkt.remaining_mins,
-            "aux_mode": pkt.current & 0b11,
-            "aux": pkt.aux,
+            "aux_mode": aux_mode,
             "current": pkt.current >> 2,
             "voltage": pkt.voltage / 100,
             "consumed_ah": pkt.consumed_ah / 10,
@@ -108,12 +109,21 @@ class BatteryMonitor(Device):
             },
         }
 
+        if aux_mode == 0:
+            # Starter voltage is treated as signed
+            parsed["starter_voltage"] = (
+                Int16sl.parse((pkt.aux).to_bytes(2, "little")) / 100
+            )
+        elif aux_mode == 1:
+            parsed["midpoint_voltage"] = pkt.aux / 100
+        elif aux_mode == 2:
+            parsed["temperature"] = pkt.aux / 1000
+
+        return parsed
+
 
 class BatterySense(BatteryMonitor):
     def parse(self, data: bytes):
         parsed = super().parse(data)
 
-        return {
-            "temperature": parsed["aux"] / 1000,
-            "voltage": parsed["voltage"],
-        }
+        return {k: parsed[k] for k in ["temperature", "voltage"]}
