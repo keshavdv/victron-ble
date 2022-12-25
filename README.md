@@ -65,23 +65,21 @@ INFO:victron_ble.scanner:Reading data for ['763aeff5-1334-e64a-ab30-a0f478s20fe1
   "address": "763AEFF5-1334-E64A-AB30-A0F478S20FE1",
   "rssi": -79,
   "payload": {
+    "aux_mode": "temperature",
+    "consumed_ah": 0.0,
+    "current": 0.0,
+    "high_starter_battery_voltage_alarm": false,
+    "high_temperature_alarm": false,
+    "high_voltage_alarm": false,
+    "low_soc_alarm": false,
+    "low_starter_battery_voltage_alarm": false,
+    "low_temperature_alarm": false,
+    "low_voltage_alarm": false,
+    "midpoint_deviation_alarm": false,
     "remaining_mins": 65535,
-    "aux_mode": 3,
-    "aux": 0,
-    "current": 0,
-    "voltage": 12.52,
-    "consumed_ah": 50.0,
-    "soc": 50.0,
-    "alarm": {
-      "low_voltage": false,
-      "high_voltage": false,
-      "low_soc": false,
-      "low_starter_voltage": false,
-      "high_starter_voltage": false,
-      "low_temperature": false,
-      "high_temperature": false,
-      "mid_voltage": false
-    }
+    "soc": 100.0,
+    "temperature": 382.2,
+    "voltage": 12.87
   }
 }
 ...
