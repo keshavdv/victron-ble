@@ -57,10 +57,10 @@ class SolarChargerData(DeviceData):
 class SolarCharger(Device):
 
     PACKET = Struct(
-        # Chargine State:   0 - Off
-        #                   3 - Bulk
-        #                   4 - Absorption
-        #                   5 - Float
+        # Charge State:   0 - Off
+        #                 3 - Bulk
+        #                 4 - Absorption
+        #                 5 - Float
         "charge_state" / Int16sl,
         # Battery voltage reading in 0.01V increments
         "battery_voltage" / Int16ul,
