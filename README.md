@@ -30,7 +30,7 @@ pip install victron_ble
 
 ## Usage
 
-To be able to decrypt the contents of the advertisement, you'll need to first fetch the per-device encryption key from the official Victron application. The method to do this will vary per platform, but only instructions for the OSX app are provided below for now: 
+To be able to decrypt the contents of the advertisement, you'll need to first fetch the per-device encryption key from the official Victron application. The method to do this will vary per platform, instructions below:
 
 #### Fetching Keys
  
@@ -57,6 +57,11 @@ To be able to decrypt the contents of the advertisement, you'll need to first fe
 A0:F4:78:02:0F:E1|0df4d0395b7d1a876c0c33ecb9e70dcd
 ❯
 ```
+
+**Windows**
+
+Not supported yet. Please figure this out and contribute some
+instructions.
 
 #### Reading data
 
