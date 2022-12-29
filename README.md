@@ -7,7 +7,7 @@ Disclaimer: This software is not an officially supported interface by Victron an
 
 **Supported Devices:**
 
-* SmartShunt 500A/500mv (and likely BMV-712/702) provide the following data:
+* SmartShunt 500A/500mv and BMV-712/702 provide the following data:
     * Voltage
     * Alarm status
     * Current
