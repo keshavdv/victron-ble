@@ -30,7 +30,7 @@ pip install victron_ble
 
 ## Usage
 
-To be able to decrypt the contents of the advertisement, you'll need to first fetch the per-device encryption key from the official Victron application. The method to do this will vary per platform, but only instructions for the OSX app are provided below for now: 
+To be able to decrypt the contents of the advertisement, you'll need to first fetch the per-device encryption key from the official Victron application. The method to do this will vary per platform, instructions below:
 
 #### Fetching Keys
  
@@ -38,13 +38,30 @@ To be able to decrypt the contents of the advertisement, you'll need to first fe
 
 1. Install the Victron app from the Mac App Store
 2. Pair with your device at least once to transfer keys
-3. Run the following from Terminal to dump the known keys (install sqlite3 via Homebrew)
+3. Run the following from Terminal to dump the known keys (install `sqlite3` via Homebrew)
 ```bash
 ❯ sqlite3 ~/Library/Containers/com.victronenergy.victronconnect.mac/Data/Library/Application\ Support/Victron\ Energy/Victron\ Connect/d25b6546b47ebb21a04ff86a2c4fbb76.sqlite 'select address,advertisementKey from advertisementKeys inner join macAddresses on advertisementKeys.macAddress == macAddresses.macAddress'
 
 {763aeff5-1334-e64a-ab30-a0f478s20fe1}|0df4d0395b7d1a876c0c33ecb9e70dcd
 ❯
-````
+```
+
+**Linux**
+
+1. Download the Victron AppImage app from the Victron website.
+2. Pair with your device at least once to transfer keys
+3. Run the following from a terminal to dump the known keys (install `sqlite3` via your package manager)
+```bash
+❯ sqlite3 ~/.local/share/Victron\ Energy/Victron\ Connect/d25b6546b47ebb21a04ff86a2c4fbb76.sqlite 'select address,advertisementKey from advertisementKeys inner join macAddresses on advertisementKeys.macAddress == macAddresses.macAddress'
+
+A0:F4:78:02:0F:E1|0df4d0395b7d1a876c0c33ecb9e70dcd
+❯
+```
+
+**Windows**
+
+Not supported yet. Please figure this out and contribute some
+instructions.
 
 #### Reading data
 
