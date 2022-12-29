@@ -12,6 +12,7 @@ from bleak.backends.device import BLEDevice
 from bleak.backends.scanner import AdvertisementData
 
 from victron_ble.devices import Device, DeviceData, detect_device_type
+from victron_ble.exceptions import AdvertisementKeyMissingError, UnknownDeviceError
 
 logger = logging.getLogger(__name__)
 
@@ -72,25 +73,41 @@ class Scanner(BaseScanner):
         logger.info(f"Reading data for {list(self._device_keys.keys())}")
         await super().start()
 
-    def callback(self, device: BLEDevice, data: bytes):
-        advertisement_key = self._device_keys.get(device.address.lower())
-        if advertisement_key is None:
-            return
+    def get_device(self, ble_device: BLEDevice, raw_data: bytes) -> Device:
+        address = ble_device.address.lower()
+        if address not in self._known_devices:
+            advertisement_key = self.load_key(address)
 
-        if device.address not in self._known_devices:
-            device_klass = detect_device_type(data)
+            device_klass = detect_device_type(raw_data)
             if not device_klass:
-                logger.error(f"Could not identify device type for {device}")
-                return
+                raise UnknownDeviceError(
+                    f"Could not identify device type for {ble_device}"
+                )
 
-            self._known_devices[device.address] = device_klass(advertisement_key)
+            self._known_devices[address] = device_klass(advertisement_key)
+        return self._known_devices[address]
 
-        logger.debug(f"Received data from {device.address.lower()}: {data.hex()}")
-        parsed = self._known_devices[device.address].parse(data)
+    def load_key(self, address: str) -> str:
+        try:
+            return self._device_keys[address]
+        except KeyError:
+            raise AdvertisementKeyMissingError(f"No key available for {address}")
+
+    def callback(self, ble_device: BLEDevice, raw_data: bytes):
+        logger.debug(
+            f"Received data from {ble_device.address.lower()}: {raw_data.hex()}"
+        )
+        try:
+            device = self.get_device(ble_device, raw_data)
+        except UnknownDeviceError as e:
+            logger.error(e)
+            return
+        parsed = device.parse(raw_data)
+
         blob = {
-            "name": device.name,
-            "address": device.address,
-            "rssi": device.rssi,
+            "name": ble_device.name,
+            "address": ble_device.address,
+            "rssi": ble_device.rssi,
             "payload": parsed,
         }
         print(json.dumps(blob, cls=DeviceDataEncoder, indent=2))
