@@ -6,8 +6,9 @@ from victron_ble.devices.base import Device, DeviceData
 from victron_ble.devices.battery_monitor import AuxMode, BatteryMonitor
 from victron_ble.devices.battery_sense import BatterySense
 from victron_ble.devices.dc_energy_meter import DcEnergyMeter
+from victron_ble.devices.solar_charger import SolarCharger
 
-__all__ = ["AuxMode", "Device", "DeviceData", "BatteryMonitor", "DcEnergyMeter"]
+__all__ = ["AuxMode", "Device", "DeviceData", "BatteryMonitor", "DcEnergyMeter", "SolarCharger"]
 
 MODEL_MAPPING: Dict[int, Type[Device]] = {
     0xA3A4: BatterySense,  # Smart Battery Sense
@@ -43,7 +44,7 @@ def detect_device_type(data: bytes) -> Optional[Type[Device]]:
     elif mode == 0x5:  # SmartLithium
         pass
     elif mode == 0x1:  # SolarCharger
-        pass
+        return SolarCharger
     elif mode == 0xC:  # VE.Bus
         pass
 
