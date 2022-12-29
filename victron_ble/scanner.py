@@ -99,6 +99,8 @@ class Scanner(BaseScanner):
         )
         try:
             device = self.get_device(ble_device, raw_data)
+        except AdvertisementKeyMissingError:
+            return
         except UnknownDeviceError as e:
             logger.error(e)
             return
