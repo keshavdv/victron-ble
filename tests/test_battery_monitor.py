@@ -1,3 +1,4 @@
+from math import isinf
 from victron_ble.devices.battery_monitor import BatteryMonitor, AuxMode
 
 
@@ -10,7 +11,7 @@ class TestBatteryMonitor:
         assert actual.get_aux_mode() == AuxMode.DISABLED
         assert actual.get_consumed_ah() == 50.0
         assert actual.get_current() == 0
-        assert actual.get_remaining_mins() == 65535
+        assert isinf(actual.get_remaining_mins())
         assert actual.get_soc() == 50.0
         assert actual.get_voltage() == 12.53
         assert actual.get_high_starter_battery_voltage_alarm() == False

@@ -1,3 +1,4 @@
+from math import inf
 from enum import Enum
 from typing import Any, Dict, Optional
 
@@ -187,9 +188,12 @@ class BatteryMonitor(Device):
         pkt = self.PACKET.parse(decrypted)
 
         aux_mode = AuxMode(pkt.current & 0b11)
+        remaining_mins = pkt.remaining_mins
+        if remaining_mins == 0xFFFF:
+            remaining_mins = inf
 
         parsed = {
-            "remaining_mins": pkt.remaining_mins,
+            "remaining_mins": remaining_mins,
             "aux_mode": aux_mode,
             "current": (pkt.current >> 2) / 1000,
             "voltage": pkt.voltage / 100,
