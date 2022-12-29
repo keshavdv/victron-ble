@@ -111,7 +111,7 @@ class DcEnergyMeter(Device):
 
     PACKET = Struct(
         "meter_type" / Int16sl,
-        # Voltage reading in 0.1v increments
+        # Voltage reading in 10mV increments
         "voltage" / Int16ul,
         "alarm"
         / BitStruct(
