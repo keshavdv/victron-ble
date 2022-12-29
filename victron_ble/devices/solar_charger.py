@@ -57,20 +57,20 @@ class SolarChargerData(DeviceData):
 class SolarCharger(Device):
 
     PACKET = Struct(
-        # state:    0 - Off
-        #           3 - Bulk
-        #           4 - Absorption
-        #           5 - Float
+        # Chargine State:   0 - Off
+        #                   3 - Bulk
+        #                   4 - Absorption
+        #                   5 - Float
         "charge_state" / Int16sl,
-        # Voltage reading in 0.01V increments
+        # Battery voltage reading in 0.01V increments
         "battery_voltage" / Int16ul,
-        # Current reading in 0.1A increments
+        # Battery charging Current reading in 0.1A increments
         "battery_charging_current" / Int16ul,
         # Todays solar power yield in 10Wh increments
         "yield_today" / Int16ul,
         # Current power from solar in 1W increments
         "solar_power" / Int16ul,
-        # Current load output
+        # External device load
         "external_device_load" / Int16ul,
     )
 
@@ -84,7 +84,7 @@ class SolarCharger(Device):
             "battery_charging_current": pkt.battery_charging_current / 10,
             "yield_today": pkt.yield_today * 10,
             "solar_power": pkt.solar_power,
-            "external_device_load": (pkt.load & 0x01FF),
+            "external_device_load": (pkt.external_device_load & 0x01FF),
         }
 
         return SolarChargerData(parsed)
