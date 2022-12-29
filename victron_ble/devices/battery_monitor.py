@@ -137,7 +137,7 @@ class BatteryMonitor(Device):
     PACKET = Struct(
         # Remaining time in minutes
         "remaining_mins" / Int16ul,
-        # Voltage reading in 0.1v increments
+        # Voltage reading in 10mV increments
         "voltage" / Int16ul,
         # Bit map of alarm status
         # 0b00000001 = low voltage alarm
