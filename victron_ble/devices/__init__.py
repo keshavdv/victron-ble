@@ -8,7 +8,7 @@ from victron_ble.devices.battery_sense import BatterySense
 from victron_ble.devices.dc_energy_meter import DcEnergyMeter
 from victron_ble.devices.solar_charger import SolarCharger
 
-__all__ = ["AuxMode", "Device", "DeviceData", "BatteryMonitor", "DcEnergyMeter", "SolarCharger"]
+__all__ = ["AuxMode", "Device", "DeviceData", "BatteryMonitor", "DcEnergyMeter", "SolarCharger", ]
 
 MODEL_MAPPING: Dict[int, Type[Device]] = {
     0xA3A4: BatterySense,  # Smart Battery Sense

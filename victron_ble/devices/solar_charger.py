@@ -19,21 +19,21 @@ class SolarChargerData(DeviceData):
 
     def get_charge_state(self) -> ChargeState:
         """
-        Return an enum indicating the current meter type
+        Return an enum indicating the current charging state
         """
         return self._data["charge_state"]
 
-    def get_voltage(self) -> float:
+    def get_battery_voltage(self) -> float:
         """
-        Return the voltage in volts
+        Return the battery voltage in volts
         """
-        return self._data["voltage"]
+        return self._data["battery_voltage"]
 
-    def get_current(self) -> float:
+    def get_battery_charging_current(self) -> float:
         """
-        Return the current in amps
+        Return the battery charging current in amps
         """
-        return self._data["current"]
+        return self._data["battery_charging_current"]
 
     def get_yield_today(self) -> float:
         """
@@ -41,17 +41,17 @@ class SolarChargerData(DeviceData):
         """
         return self._data["yield_today"]
 
-    def get_power(self) -> float:
+    def get_solar_power(self) -> float:
         """
         Return the current solar power in W
         """
-        return self._data["power"]
+        return self._data["solar_power"]
 
-    def get_load(self) -> float:
+    def get_external_device_load(self) -> float:
         """
-        Return the load in amps
+        Return the external device load in amps
         """
-        return self._data["load"]
+        return self._data["external_device_load"]
 
 
 class SolarCharger(Device):
@@ -63,15 +63,15 @@ class SolarCharger(Device):
         #           5 - Float
         "charge_state" / Int16sl,
         # Voltage reading in 0.01V increments
-        "voltage" / Int16ul,
+        "battery_voltage" / Int16ul,
         # Current reading in 0.1A increments
-        "current" / Int16ul,
+        "battery_charging_current" / Int16ul,
         # Todays solar power yield in 10Wh increments
         "yield_today" / Int16ul,
         # Current power from solar in 1W increments
-        "power" / Int16ul,
+        "solar_power" / Int16ul,
         # Current load output
-        "load" / Int16ul,
+        "external_device_load" / Int16ul,
     )
 
     def parse(self, data: bytes) -> SolarChargerData:
@@ -80,11 +80,11 @@ class SolarCharger(Device):
 
         parsed = {
             "charge_state": ChargeState(pkt.charge_state),
-            "voltage": pkt.voltage / 100,
-            "current": pkt.current / 10,
+            "battery_voltage": pkt.battery_voltage / 100,
+            "battery_charging_current": pkt.battery_charging_current / 10,
             "yield_today": pkt.yield_today * 10,
-            "power": pkt.power,
-            "load": (pkt.load & 0x01ff)
+            "solar_power": pkt.solar_power,
+            "external_device_load": (pkt.load & 0x01FF),
         }
 
         return SolarChargerData(parsed)
