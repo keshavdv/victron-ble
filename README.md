@@ -20,11 +20,11 @@ Disclaimer: This software is not an officially supported interface by Victron an
     * Temperature (°C)
 * Solar Charger (Tested with BlueSolar 75/15):
     * Charger State (Off, Bulk, Absorption, Float)
-    * Voltage (V)
-    * Charging Current (A)
-    * Power (W)
+    * Battery Voltage (V)
+    * Battery Charging Current (A)
+    * Solar Power (W)
     * Yield Today (Wh)
-    * external Device Load (A)
+    * External Device Load (A)
 
 If you'd like to support development for additional devices, consider [sponsoring this project](https://github.com/sponsors/keshavdv/)
 
