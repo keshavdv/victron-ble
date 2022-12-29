@@ -62,9 +62,9 @@ class SolarCharger(Device):
         #           4 - Absorption
         #           5 - Float
         "charge_state" / Int16sl,
-        # Voltage reading in 0.1v increments
+        # Voltage reading in 0.01V increments
         "voltage" / Int16ul,
-        # Current reading
+        # Current reading in 0.1A increments
         "current" / Int16ul,
         # Todays solar power yield in 10Wh increments
         "yield_today" / Int16ul,
