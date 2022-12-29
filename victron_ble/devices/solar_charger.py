@@ -1,18 +1,16 @@
 from enum import Enum
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 
-from construct import BitStruct, Flag, Int8sl, Int16sl, Int16ul, Int24sl, Struct
+from construct import Int16sl, Int16ul, Struct
 
-from victron_ble.devices.base import Device, DeviceData, kelvin_to_celsius
-from victron_ble.devices.battery_monitor import AuxMode
+from victron_ble.devices.base import Device, DeviceData
 
 
 class ChargeState(Enum):
-    OFF        = 0
-    BULK       = 3
+    OFF = 0
+    BULK = 3
     ABSORPTION = 4
-    FLOAT      = 5
-
+    FLOAT = 5
 
 
 class SolarChargerData(DeviceData):
@@ -54,7 +52,6 @@ class SolarChargerData(DeviceData):
         Return the load in amps
         """
         return self._data["load"]
-
 
 
 class SolarCharger(Device):
