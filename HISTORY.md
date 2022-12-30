@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.3.2 (2022)
+------------------
+- Fix release
+
+
 0.3.1 (2022)
 ------------------
 - Relax dependency requirements
