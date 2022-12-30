@@ -2,6 +2,7 @@ from victron_ble.devices import (
     BatteryMonitor,
     BatterySense,
     DcEnergyMeter,
+    SolarCharger,
     detect_device_type,
 )
 
@@ -20,3 +21,7 @@ def test_dc_energy_discovery() -> None:
 
 def test_battery_sense_discovery() -> None:
     assert detect_device_type(bytes.fromhex("1002a4a302")) == BatterySense
+
+
+def test_solar_charger_discovery() -> None:
+    assert detect_device_type(bytes.fromhex("100242a001")) == SolarCharger
