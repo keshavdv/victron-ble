@@ -70,7 +70,7 @@ class SolarCharger(Device):
         "yield_today" / Int16ul,
         # Current power from solar in 1W increments
         "solar_power" / Int16ul,
-        # External device load
+        # External device load in 0.1A increments
         "external_device_load" / Int16ul,
     )
 
@@ -84,7 +84,7 @@ class SolarCharger(Device):
             "battery_charging_current": pkt.battery_charging_current / 10,
             "yield_today": pkt.yield_today * 10,
             "solar_power": pkt.solar_power,
-            "external_device_load": (pkt.external_device_load & 0x01FF),
+            "external_device_load": (pkt.external_device_load & 0x01FF) / 10,
         }
 
         return SolarChargerData(parsed)
