@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.3.3 (2022)
+------------------
+- Update pypi description
+
+
 0.3.2 (2022)
 ------------------
 - Fix release
