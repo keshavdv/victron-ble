@@ -1,6 +1,21 @@
 Changelog
 =========
 
+0.3.3 (2022)
+------------------
+- Update pypi description
+
+
+0.3.2 (2022)
+------------------
+- Fix release
+
+
+0.3.1 (2022)
+------------------
+- Relax dependency requirements
+
+
 0.3.0 (2022)
 ------------------
 - Switch delimiter format in CLI
