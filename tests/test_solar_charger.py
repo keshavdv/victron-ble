@@ -1,5 +1,5 @@
 from victron_ble.devices.solar_charger import SolarCharger
-from victron_ble.devices.base import ChargerState
+from victron_ble.devices.base import OperationMode
 
 
 class TestSolarChargwer:
@@ -9,7 +9,7 @@ class TestSolarChargwer:
             bytes.fromhex(data)
         )
 
-        assert actual.get_charge_state() == ChargerState.ABSORPTION
+        assert actual.get_charge_state() == OperationMode.ABSORPTION
         assert actual.get_battery_voltage() == 13.88
         assert actual.get_battery_charging_current() == 1.4
         assert actual.get_yield_today() == 30
@@ -21,4 +21,4 @@ class TestSolarChargwer:
         actual = SolarCharger("a2781bef23aecd48d6b9397350724c67").parse(
             bytes.fromhex(data)
         )
-        assert actual.get_charge_state() == ChargerState.BULK
+        assert actual.get_charge_state() == OperationMode.BULK

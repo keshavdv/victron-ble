@@ -6,7 +6,7 @@ from Crypto.Util.Padding import pad
 from enum import Enum
 
 
-class ChargerState(Enum):
+class OperationMode(Enum):
     OFF = 0
     LOW_POWER = 1
     FAULT = 2
