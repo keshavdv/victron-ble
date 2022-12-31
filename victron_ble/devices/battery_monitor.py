@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Any, Dict, Optional
+from typing import Optional
 
 from construct import (
     BitStruct,
@@ -23,9 +23,6 @@ class AuxMode(Enum):
 
 
 class BatteryMonitorData(DeviceData):
-    def __init__(self, data: Dict[str, Any]) -> None:
-        self._data = data
-
     def get_remaining_mins(self) -> float:
         """
         Return the number of remaining minutes of battery life in minutes
@@ -217,4 +214,4 @@ class BatteryMonitor(Device):
         elif aux_mode == AuxMode.TEMPERATURE:
             parsed["temperature_kelvin"] = pkt.aux / 100
 
-        return BatteryMonitorData(parsed)
+        return BatteryMonitorData(self.get_model_id(data), parsed)

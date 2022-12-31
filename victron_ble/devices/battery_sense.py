@@ -1,12 +1,7 @@
-from typing import Any, Dict
-
 from victron_ble.devices import BatteryMonitor, Device, DeviceData
 
 
 class BatterySenseData(DeviceData):
-    def __init__(self, data: Dict[str, Any]) -> None:
-        self._data = data
-
     def get_temperature(self) -> float:
         """
         Return the temperature in Celsius
@@ -25,5 +20,6 @@ class BatterySense(Device):
         parsed = BatteryMonitor(self.advertisement_key).parse(data)
 
         return BatterySenseData(
-            {"temperature": parsed.get_temperature(), "voltage": parsed.get_voltage()}
+            self.get_model_id(data),
+            {"temperature": parsed.get_temperature(), "voltage": parsed.get_voltage()},
         )

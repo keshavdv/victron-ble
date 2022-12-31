@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Any, Dict, Optional
+from typing import Optional
 
 from construct import BitStruct, Flag, Int8sl, Int16sl, Int16ul, Int24sl, Struct
 
@@ -28,9 +28,6 @@ class MeterType(Enum):
 
 
 class DcEnergyMeterData(DeviceData):
-    def __init__(self, data: Dict[str, Any]) -> None:
-        self._data = data
-
     def get_meter_type(self) -> MeterType:
         """
         Return an enum indicating the current meter type
@@ -166,4 +163,4 @@ class DcEnergyMeter(Device):
         elif aux_mode == AuxMode.TEMPERATURE:
             parsed["temperature_kelvin"] = pkt.aux / 100
 
-        return DcEnergyMeterData(parsed)
+        return DcEnergyMeterData(self.get_model_id(data), parsed)

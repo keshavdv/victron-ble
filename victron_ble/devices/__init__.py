@@ -9,7 +9,9 @@ from victron_ble.devices.dc_energy_meter import DcEnergyMeter
 
 __all__ = ["AuxMode", "Device", "DeviceData", "BatteryMonitor", "DcEnergyMeter"]
 
-MODEL_MAPPING: Dict[int, Type[Device]] = {
+# Add to this list if a device should be forced to use a particular implementation
+# instead of relying on the identifier in the advertisement
+MODEL_PARSER_OVERRIDE: Dict[int, Type[Device]] = {
     0xA3A4: BatterySense,  # Smart Battery Sense
 }
 
@@ -19,7 +21,7 @@ def detect_device_type(data: bytes) -> Optional[Type[Device]]:
     mode = Int8ul.parse(data[4:5])
 
     # Model ID-based preferences
-    match = MODEL_MAPPING.get(model_id)
+    match = MODEL_PARSER_OVERRIDE.get(model_id)
     if match:
         return match
 
