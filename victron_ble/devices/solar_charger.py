@@ -1,23 +1,14 @@
-from enum import Enum
 from typing import Any, Dict
-
 from construct import Int16sl, Int16ul, Struct
 
-from victron_ble.devices.base import Device, DeviceData
-
-
-class ChargeState(Enum):
-    OFF = 0
-    BULK = 3
-    ABSORPTION = 4
-    FLOAT = 5
+from victron_ble.devices.base import Device, DeviceData, ChargerState
 
 
 class SolarChargerData(DeviceData):
     def __init__(self, data: Dict[str, Any]) -> None:
         self._data = data
 
-    def get_charge_state(self) -> ChargeState:
+    def get_charge_state(self) -> ChargerState:
         """
         Return an enum indicating the current charging state
         """
@@ -79,7 +70,7 @@ class SolarCharger(Device):
         pkt = self.PACKET.parse(decrypted)
 
         parsed = {
-            "charge_state": ChargeState(pkt.charge_state),
+            "charge_state": ChargerState(pkt.charge_state),
             "battery_voltage": pkt.battery_voltage / 100,
             "battery_charging_current": pkt.battery_charging_current / 10,
             "yield_today": pkt.yield_today * 10,
