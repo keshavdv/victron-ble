@@ -23,6 +23,7 @@ class TestDcEnergyMeter:
         assert actual.get_low_temperature_alarm() == False
 
         assert actual.get_temperature() == None
+        assert actual.get_model_name() == "SmartShunt 500A/50mV"
 
     def test_aux_starter(self) -> None:
         data = "100289a30d787fafde83ccec982199fd815286"

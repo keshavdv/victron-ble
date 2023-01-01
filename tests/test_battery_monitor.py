@@ -25,6 +25,7 @@ class TestBatteryMonitor:
         assert actual.get_temperature() == None
         assert actual.get_starter_voltage() == None
         assert actual.get_midpoint_voltage() == None
+        assert actual.get_model_name() == "SmartShunt 500A/50mV"
 
     def test_aux_midpoint(self) -> None:
         data = "100289a3021001afc15f433b2663c8cfc0678b5d3d29a8"

@@ -8,3 +8,4 @@ class TestBatterySense:
         actual = BatterySense(key).parse(bytes.fromhex(data))
         assert actual.get_temperature() == 22.5
         assert actual.get_voltage() == 12.22
+        assert actual.get_model_name() == "Smart Battery Sense"
