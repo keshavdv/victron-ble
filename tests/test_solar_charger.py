@@ -34,5 +34,5 @@ class TestSolarChargwer:
         assert actual.get_charge_state() == OperationMode.BULK
         assert actual.get_solar_power() == 265
         assert actual.get_yield_today() == 500
-        assert actual.get_external_device_load() == None
+        assert actual.get_external_device_load() is None
         assert actual.get_model_name() == "BlueSolar MPPT 100|50 rev2"
