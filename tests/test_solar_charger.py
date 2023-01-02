@@ -15,6 +15,7 @@ class TestSolarChargwer:
         assert actual.get_yield_today() == 30
         assert actual.get_solar_power() == 19
         assert actual.get_external_device_load() == 0.0
+        assert actual.get_model_name() == "BlueSolar MPPT 75|15"
 
     def test_bulk_charge(self) -> None:
         data = "100242a0015939a26cc2941a491e766be8457386"

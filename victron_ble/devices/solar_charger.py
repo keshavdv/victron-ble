@@ -1,13 +1,9 @@
-from typing import Any, Dict
 from construct import Int16sl, Int16ul, Struct
 
 from victron_ble.devices.base import Device, DeviceData, OperationMode
 
 
 class SolarChargerData(DeviceData):
-    def __init__(self, data: Dict[str, Any]) -> None:
-        self._data = data
-
     def get_charge_state(self) -> OperationMode:
         """
         Return an enum indicating the current charging state
@@ -78,4 +74,7 @@ class SolarCharger(Device):
             "external_device_load": (pkt.external_device_load & 0x01FF) / 10,
         }
 
-        return SolarChargerData(parsed)
+        if pkt.external_device_load == 0xFFFF:
+            parsed["external_device_load"] = None
+
+        return SolarChargerData(self.get_model_id(data), parsed)

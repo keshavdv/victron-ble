@@ -7,6 +7,7 @@ from Crypto.Util.Padding import pad
 from enum import Enum
 
 
+# Sourced from VE.Direct docs
 class OperationMode(Enum):
     OFF = 0
     LOW_POWER = 1
@@ -23,6 +24,7 @@ class OperationMode(Enum):
     RECONDITION = 247
     BATTERY_SAFE = 248
     EXTERNAL_CONTROL = 252
+
 
 # Sourced from VE.Direct docs
 MODEL_ID_MAPPING = {
