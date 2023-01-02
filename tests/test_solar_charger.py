@@ -23,3 +23,16 @@ class TestSolarChargwer:
             bytes.fromhex(data)
         )
         assert actual.get_charge_state() == OperationMode.BULK
+
+    def test_parse_mppt100(self) -> None:
+        data = "100249a0013a399bbb3e36d7237c7687f96e45dc"
+        actual = SolarCharger("9b3509d3d7aba706846214ca64500d0c").parse(
+            bytes.fromhex(data)
+        )
+        assert actual.get_battery_charging_current() == 10.1
+        assert actual.get_battery_voltage() == 25.55
+        assert actual.get_charge_state() == OperationMode.BULK
+        assert actual.get_solar_power() == 265
+        assert actual.get_yield_today() == 500
+        assert actual.get_external_device_load() == None
+        assert actual.get_model_name() == "BlueSolar MPPT 100|50 rev2"
