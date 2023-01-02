@@ -21,6 +21,7 @@ __all__ = [
 # instead of relying on the identifier in the advertisement
 MODEL_PARSER_OVERRIDE: Dict[int, Type[Device]] = {
     0xA3A4: BatterySense,  # Smart Battery Sense
+    0xA3A5: BatterySense,  # Smart Battery Sense
 }
 
 

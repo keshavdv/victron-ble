@@ -163,6 +163,7 @@ MODEL_ID_MAPPING = {
     0xA38A: "SmartShunt 1000A/50mV",
     0xA38B: "SmartShunt 2000A/50mV",
     0xA3A4: "Smart Battery Sense",
+    0xA3A5: "Smart Battery Sense",
 }
 
 
