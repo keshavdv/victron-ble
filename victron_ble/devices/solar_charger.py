@@ -1,4 +1,5 @@
 from construct import Int16sl, Int16ul, Struct
+from typing import Optional
 
 from victron_ble.devices.base import Device, DeviceData, OperationMode
 
@@ -34,11 +35,13 @@ class SolarChargerData(DeviceData):
         """
         return self._data["solar_power"]
 
-    def get_external_device_load(self) -> float:
+    def get_external_device_load(self) -> Optional[float]:
         """
-        Return the external device load in amps
+        Return the external device load in amps - if 0xFFFF no load output exists
         """
-        return self._data["external_device_load"]
+        if self._data["external_device_load"] == 0xFFFF:
+            return None
+        return (self._data["external_device_load"] & 0x01FF) / 10
 
 
 class SolarCharger(Device):
@@ -71,10 +74,7 @@ class SolarCharger(Device):
             "battery_charging_current": pkt.battery_charging_current / 10,
             "yield_today": pkt.yield_today * 10,
             "solar_power": pkt.solar_power,
-            "external_device_load": (pkt.external_device_load & 0x01FF) / 10,
+            "external_device_load": pkt.external_device_load,
         }
-
-        if pkt.external_device_load == 0xFFFF:
-            parsed["external_device_load"] = None
 
         return SolarChargerData(self.get_model_id(data), parsed)
