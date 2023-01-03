@@ -18,6 +18,13 @@ Disclaimer: This software is not an officially supported interface by Victron an
 * Smart Battery Sense
     * Voltage
     * Temperature (°C)
+* Solar Charger (Tested with BlueSolar 75/15):
+    * Charger State (Off, Bulk, Absorption, Float)
+    * Battery Voltage (V)
+    * Battery Charging Current (A)
+    * Solar Power (W)
+    * Yield Today (Wh)
+    * External Device Load (A)
 
 If you'd like to support development for additional devices, consider [sponsoring this project](https://github.com/sponsors/keshavdv/)
 
