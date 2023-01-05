@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.4.0 (2022)
+------------------
+- Add solar charger support
+
+
 0.3.3 (2022)
 ------------------
 - Update pypi description
