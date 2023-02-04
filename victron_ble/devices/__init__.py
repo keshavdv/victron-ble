@@ -7,6 +7,7 @@ from victron_ble.devices.battery_monitor import AuxMode, BatteryMonitor
 from victron_ble.devices.battery_sense import BatterySense
 from victron_ble.devices.dc_energy_meter import DcEnergyMeter
 from victron_ble.devices.solar_charger import SolarCharger
+from victron_ble.devices.dcdc_converter import DcDcConverter
 
 __all__ = [
     "AuxMode",
@@ -15,6 +16,7 @@ __all__ = [
     "BatteryMonitor",
     "DcEnergyMeter",
     "SolarCharger",
+    "DcDcConverter",
 ]
 
 # Add to this list if a device should be forced to use a particular implementation
@@ -42,7 +44,7 @@ def detect_device_type(data: bytes) -> Optional[Type[Device]]:
     elif mode == 0x8:  # AcCharger
         pass
     elif mode == 0x4:  # DcDcConverter
-        pass
+        return DcDcConverter
     elif mode == 0x3:  # Inverter
         pass
     elif mode == 0x6:  # InverterRS

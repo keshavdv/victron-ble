@@ -25,6 +25,55 @@ class OperationMode(Enum):
     BATTERY_SAFE = 248
     EXTERNAL_CONTROL = 252
 
+class ChargerError(Enum):
+    NONE = 0
+    VOLTAGE_TOO_HIGH = 2
+    TEMPERATURE_TOO_HIGH = 17
+    OVERCURRENT = 18
+    CURRENT_REVERSED = 19
+    BULK_TIME_EXCEEDED = 20
+    CURRENT_SENSOR_ISSUE = 21
+    TERMINALS_OVERHEATED = 26
+    CONVERTER_ISSUE = 28
+    INPUT_VOLTAGE_TOO_HIGH = 33
+    INPUT_CURRENT_TOO_HIGH = 34
+    INPUT_SHUTDOWN_BATT = 38
+    INPUT_SHUTDOWN_CURRENT = 39
+    LOST_COMMS = 65
+    CHARGE_SYNC_ISSUE = 66
+    BMS_CONNECTION_LOST = 67
+    NETWORK_MISCONFIGURED = 68
+    FACTORY_CALIBRATION_LOST = 116
+    INVALID_FIRMWARE = 117
+    USER_SETTINGS_INVALID = 119
+    
+class OffReason(Enum):
+    NONE = 0x00000000
+    NO_INPUT_POWER = 0x00000001
+    SWITCHED_OFF_SWITCH = 0x00000002
+    SWITCHED_OFF_REGISTER = 0x00000004
+    REMOTE_INPUT = 0x00000008
+    PROTECTION_ACTIVE = 0x00000010
+    PAY_AS_YOU_GO_OUT_OF_CREDIT = 0x00000020
+    BMS = 0x00000040
+    ENGINE_SHUTDOWN = 0x00000080
+    ANALYSING_INPUT_VOLTAGE = 0x00000100
+
+class AlarmReason(Enum):
+    LOW_VOLTAGE = 1
+    HIGH_VOLTAGE = 2
+    LOW_SOC = 4
+    LOW_STARTER_VOLTAGE = 8
+    HIGH_STARTER_VOLTAGE = 16
+    LOW_TEMPERATURE = 32
+    HIGH_TEMPERATURE = 64
+    MID_VOLTAGE = 128
+    OVERLOAD = 256
+    DC_RIPPLE = 512
+    LOW_V_AC_OUT = 1024
+    HIGH_V_AC_OUT = 2048
+    SHORT_CIRCUIT = 4096
+    BMS_LOCKOUT = 8192
 
 # Sourced from VE.Direct docs
 MODEL_ID_MAPPING = {
@@ -164,6 +213,26 @@ MODEL_ID_MAPPING = {
     0xA38B: "SmartShunt 2000A/50mV",
     0xA3A4: "Smart Battery Sense",
     0xA3A5: "Smart Battery Sense",
+    0xA3C0: "Orion Smart 12V|12V-18A Isolated DC-DC Charger",
+    0xA3C8: "Orion Smart 12V|12V-30A Isolated DC-DC Charger",
+    0xA3D0: "Orion Smart 12V|12V-30A Non-isolated DC-DC Charger",
+    0xA3C1: "Orion Smart 12V|24V-10A Isolated DC-DC Charger",
+    0xA3C9: "Orion Smart 12V|24V-15A Isolated DC-DC Charger",
+    0xA3D1: "Orion Smart 12V|24V-15A Non-isolated DC-DC Charger",
+    0xA3C2: "Orion Smart 24V|12V-20A Isolated DC-DC Charger",
+    0xA3CA: "Orion Smart 24V|12V-30A Isolated DC-DC Charger",
+    0xA3D2: "Orion Smart 24V|12V-30A Non-isolated DC-DC Charger",
+    0xA3C3: "Orion Smart 24V|24V-12A Isolated DC-DC Charger",
+    0xA3CB: "Orion Smart 24V|24V-17A Isolated DC-DC Charger",
+    0xA3D3: "Orion Smart 24V|24V-17A Non-isolated DC-DC Charger",
+    0xA3C4: "Orion Smart 24V|48V-6A Isolated DC-DC Charger",
+    0xA3CC: "Orion Smart 24V|48V-8.5A Isolated DC-DC Charger",
+    0xA3C5: "Orion Smart 48V|12V-20A Isolated DC-DC Charger",
+    0xA3CD: "Orion Smart 48V|12V-30A Isolated DC-DC Charger",
+    0xA3C6: "Orion Smart 48V|24V-12A Isolated DC-DC Charger",
+    0xA3CE: "Orion Smart 48V|24V-16A Isolated DC-DC Charger",
+    0xA3C7: "Orion Smart 48V|48V-6A Isolated DC-DC Charger",
+    0xA3CF: "Orion Smart 48V|48V-8.5A Isolated DC-DC Charger",
 }
 
 
