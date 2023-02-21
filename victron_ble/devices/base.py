@@ -1,10 +1,10 @@
 import abc
+from enum import Enum
 from typing import Any, Dict
 
 from construct import FixedSized, GreedyBytes, Int8sl, Int16ul, Struct
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad
-from enum import Enum
 
 
 # Sourced from VE.Direct docs

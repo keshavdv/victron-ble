@@ -105,7 +105,6 @@ class DcEnergyMeterData(DeviceData):
 
 
 class DcEnergyMeter(Device):
-
     PACKET = Struct(
         "meter_type" / Int16sl,
         # Voltage reading in 10mV increments

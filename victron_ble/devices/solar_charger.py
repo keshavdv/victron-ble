@@ -1,5 +1,6 @@
-from construct import Int16sl, Int16ul, Struct
 from typing import Optional
+
+from construct import Int8ul, Int16sl, Int16ul, Struct
 
 from victron_ble.devices.base import Device, DeviceData, OperationMode
 
@@ -45,17 +46,17 @@ class SolarChargerData(DeviceData):
 
 
 class SolarCharger(Device):
-
     PACKET = Struct(
         # Charge State:   0 - Off
         #                 3 - Bulk
         #                 4 - Absorption
         #                 5 - Float
-        "charge_state" / Int16sl,
+        "charge_state" / Int8ul,
+        "charger_error" / Int8ul,
         # Battery voltage reading in 0.01V increments
-        "battery_voltage" / Int16ul,
+        "battery_voltage" / Int16sl,
         # Battery charging Current reading in 0.1A increments
-        "battery_charging_current" / Int16ul,
+        "battery_charging_current" / Int16sl,
         # Todays solar power yield in 10Wh increments
         "yield_today" / Int16ul,
         # Current power from solar in 1W increments

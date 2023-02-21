@@ -130,7 +130,6 @@ class BatteryMonitorData(DeviceData):
 
 
 class BatteryMonitor(Device):
-
     PACKET = Struct(
         # Remaining time in minutes
         "remaining_mins" / Int16ul,
