@@ -4,6 +4,7 @@ from typing import Any, Dict
 
 from construct import FixedSized, GreedyBytes, Int8sl, Int16ul, Struct
 from Crypto.Cipher import AES
+from Crypto.Util import Counter
 from Crypto.Util.Padding import pad
 
 
@@ -200,10 +201,12 @@ class Device(abc.ABC):
         container = self.PARSER.parse(data)
 
         # The first byte of advertised data seems to match the first byte of the advertisement key
+        ctr = Counter.new(128, initial_value=container.iv, little_endian=True)
+
         cipher = AES.new(
             bytes.fromhex(self.advertisement_key),
-            AES.MODE_OFB,
-            iv=container.iv.to_bytes(16, "little"),
+            AES.MODE_CTR,
+            counter=ctr,
         )
         return cipher.decrypt(pad(container.encrypted_data[1:], 16))
 
