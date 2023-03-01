@@ -27,27 +27,142 @@ class OperationMode(Enum):
     EXTERNAL_CONTROL = 252
 
 
+# Source: VE.Direct-Protocol-3.32.pdf & https://www.victronenergy.com/live/mppt-error-codes
 class ChargerError(Enum):
-    NONE = 0
-    VOLTAGE_TOO_HIGH = 2
-    TEMPERATURE_TOO_HIGH = 17
-    OVERCURRENT = 18
-    CURRENT_REVERSED = 19
-    BULK_TIME_EXCEEDED = 20
-    CURRENT_SENSOR_ISSUE = 21
-    TERMINALS_OVERHEATED = 26
+    # No error
+    NO_ERROR = 0
+    # Err 1 - Battery temperature too high
+    TEMPERATURE_BATTERY_HIGH = 1
+    # Err 2 - Battery voltage too high
+    VOLTAGE_HIGH = 2
+    # Err 3 - Remote temperature sensor failure (auto-reset)
+    REMOTE_TEMPERATURE_A = 3
+    # Err 4 - Remote temperature sensor failure (auto-reset)
+    REMOTE_TEMPERATURE_B = 4
+    # Err 5 - Remote temperature sensor failure (not auto-reset)
+    REMOTE_TEMPERATURE_C = 5
+    # Err 6 - Remote battery voltage sense failure
+    REMOTE_BATTERY_A = 6
+    # Err 7 - Remote battery voltage sense failure
+    REMOTE_BATTERY_B = 7
+    # Err 8 - Remote battery voltage sense failure
+    REMOTE_BATTERY_C = 8
+    # Err 11 - Battery high ripple voltage
+    HIGH_RIPPLE = 11
+    # Err 14 - Battery temperature too low
+    TEMPERATURE_BATTERY_LOW = 14
+    # Err 17 - Charger temperature too high
+    TEMPERATURE_CHARGER = 17
+    # Err 18 - Charger over current
+    OVER_CURRENT = 18
+    # Err 20 - Bulk time limit exceeded
+    BULK_TIME = 20
+    # Err 21 - Current sensor issue (sensor bias/sensor broken)
+    CURRENT_SENSOR = 21
+    # Err 22 - Internal temperature sensor failure
+    INTERNAL_TEMPERATURE_A = 22
+    # Err 23 - Internal temperature sensor failure
+    INTERNAL_TEMPERATURE_B = 23
+    # Err 24 - Fan failure
+    FAN = 24
+    # Err 26 - Terminals overheated
+    OVERHEATED = 26
+    # Err 27 - Charger short circuit
+    SHORT_CIRCUIT = 27
+    # Err 28 - Power stage issue Converter issue (dual converter models only)
     CONVERTER_ISSUE = 28
-    INPUT_VOLTAGE_TOO_HIGH = 33
-    INPUT_CURRENT_TOO_HIGH = 34
-    INPUT_SHUTDOWN_BATT = 38
+    # Err 29 - Over-Charge protection
+    OVER_CHARGE = 29
+    # Err 33 - Input voltage too high (solar panel) PV over-voltage
+    INPUT_VOLTAGE = 33
+    # Err 34 - Input current too high (solar panel) PV over-current
+    INPUT_CURRENT = 34
+    # Err 35 - PV over-power
+    INPUT_POWER = 35
+    # Err 38 - Input shutdown (due to excessive battery voltage)
+    INPUT_SHUTDOWN_VOLTAGE = 38
+    # Err 39 - Input shutdown (due to current flow during off mode)
     INPUT_SHUTDOWN_CURRENT = 39
-    LOST_COMMS = 65
-    CHARGE_SYNC_ISSUE = 66
-    BMS_CONNECTION_LOST = 67
-    NETWORK_MISCONFIGURED = 68
-    FACTORY_CALIBRATION_LOST = 116
-    INVALID_FIRMWARE = 117
-    USER_SETTINGS_INVALID = 119
+    # Err 40 - PV Input failed to shutdown
+    INPUT_SHUTDOWN_FAILURE = 40
+    # Err 41 - Inverter shutdown (PV isolation)
+    INVERTER_SHUTDOWN_41 = 41
+    # Err 42 - Inverter shutdown (PV isolation)
+    INVERTER_SHUTDOWN_42 = 42
+    # Err 43 - Inverter shutdown (Ground Fault)
+    INVERTER_SHUTDOWN_43 = 43
+    # Err 50 - Inverter overload
+    INVERTER_OVERLOAD = 50
+    # Err 51 - Inverter temperature too high
+    INVERTER_TEMPERATURE = 51
+    # Err 52 - Inverter peak current
+    INVERTER_PEAK_CURRENT = 52
+    # Err 53 - Inverter output voltage
+    INVERTER_OUPUT_VOLTAGE_A = 53
+    # Err 54 - Inverter output voltage
+    INVERTER_OUPUT_VOLTAGE_B = 54
+    # Err 55 - Inverter self test failed
+    INVERTER_SELF_TEST_A = 55
+    # Err 56 - Inverter self test failed
+    INVERTER_SELF_TEST_B = 56
+    # Err 57 - Inverter ac voltage on output
+    INVERTER_AC = 57
+    # Err 58 - Inverter self test failed
+    INVERTER_SELF_TEST_C = 58
+    # Information 65 - Communication warning Lost communication with one of devices
+    COMMUNICATION = 65
+    # Information 66 - Incompatible device Synchronised charging device configuration issue
+    SYNCHRONISATION = 66
+    # Err 67 - BMS Connection lost
+    BMS = 67
+    # Err 68 - Network misconfigured
+    NETWORK_A = 68
+    # Err 69 - Network misconfigured
+    NETWORK_B = 69
+    # Err 70 - Network misconfigured
+    NETWORK_C = 70
+    # Err 71 - Network misconfigured
+    NETWORK_D = 71
+    # Err 80 - PV Input shutdown
+    PV_INPUT_SHUTDOWN_80 = 80
+    # Err 81 - PV Input shutdown
+    PV_INPUT_SHUTDOWN_81 = 81
+    # Err 82 - PV Input shutdown
+    PV_INPUT_SHUTDOWN_82 = 82
+    # Err 83 - PV Input shutdown
+    PV_INPUT_SHUTDOWN_83 = 83
+    # Err 84 - PV Input shutdown
+    PV_INPUT_SHUTDOWN_84 = 84
+    # Err 85 - PV Input shutdown
+    PV_INPUT_SHUTDOWN_85 = 85
+    # Err 86 - PV Input shutdown
+    PV_INPUT_SHUTDOWN_86 = 86
+    # Err 87 - PV Input shutdown
+    PV_INPUT_SHUTDOWN_87 = 87
+    # Err 114 - CPU temperature too high
+    CPU_TEMPERATURE = 114
+    # Err 116 - Factory calibration data lost
+    CALIBRATION_LOST = 116
+    # Err 117 - Invalid/incompatible firmware
+    FIRMWARE = 117
+    # Err 119 - Settings data lost
+    SETTINGS = 119
+    # Err 121 - Tester fail
+    TESTER_FAIL = 121
+    # Err 200 - Internal DC voltage error
+    INTERNAL_DC_VOLTAGE_A = 200
+    # Err 201 - Internal DC voltage error
+    INTERNAL_DC_VOLTAGE_B = 201
+    # Err 202 - PV residual current sensor self-test failure Internal GFCI sensor error
+    SELF_TEST = 202
+    # Err 203 - Internal supply voltage error
+    INTERNAL_SUPPLY_A = 203
+    # Err 205 - Internal supply voltage error
+    INTERNAL_SUPPLY_B = 205
+    # Err 212 - Internal supply voltage error
+    INTERNAL_SUPPLY_C = 212
+    # Err 215 - Internal supply voltage error
+    INTERNAL_SUPPLY_D = 215
 
 
 class OffReason(Enum):
@@ -218,6 +333,26 @@ MODEL_ID_MAPPING = {
     0xA38B: "SmartShunt 2000A/50mV",
     0xA3A4: "Smart Battery Sense",
     0xA3A5: "Smart Battery Sense",
+    0xA3C0: "Orion Smart 12V|12V-18A Isolated DC-DC Charger",
+    0xA3C8: "Orion Smart 12V|12V-30A Isolated DC-DC Charger",
+    0xA3D0: "Orion Smart 12V|12V-30A Non-isolated DC-DC Charger",
+    0xA3C1: "Orion Smart 12V|24V-10A Isolated DC-DC Charger",
+    0xA3C9: "Orion Smart 12V|24V-15A Isolated DC-DC Charger",
+    0xA3D1: "Orion Smart 12V|24V-15A Non-isolated DC-DC Charger",
+    0xA3C2: "Orion Smart 24V|12V-20A Isolated DC-DC Charger",
+    0xA3CA: "Orion Smart 24V|12V-30A Isolated DC-DC Charger",
+    0xA3D2: "Orion Smart 24V|12V-30A Non-isolated DC-DC Charger",
+    0xA3C3: "Orion Smart 24V|24V-12A Isolated DC-DC Charger",
+    0xA3CB: "Orion Smart 24V|24V-17A Isolated DC-DC Charger",
+    0xA3D3: "Orion Smart 24V|24V-17A Non-isolated DC-DC Charger",
+    0xA3C4: "Orion Smart 24V|48V-6A Isolated DC-DC Charger",
+    0xA3CC: "Orion Smart 24V|48V-8.5A Isolated DC-DC Charger",
+    0xA3C5: "Orion Smart 48V|12V-20A Isolated DC-DC Charger",
+    0xA3CD: "Orion Smart 48V|12V-30A Isolated DC-DC Charger",
+    0xA3C6: "Orion Smart 48V|24V-12A Isolated DC-DC Charger",
+    0xA3CE: "Orion Smart 48V|24V-16A Isolated DC-DC Charger",
+    0xA3C7: "Orion Smart 48V|48V-6A Isolated DC-DC Charger",
+    0xA3CF: "Orion Smart 48V|48V-8.5A Isolated DC-DC Charger",
 }
 
 
