@@ -44,18 +44,6 @@ class BatteryMonitorData(DeviceData):
         """
         return self._data["consumed_ah"]
 
-    def get_low_voltage_alarm(self) -> bool:
-        """
-        Return a boolean indicating if the low voltage alarm is active
-        """
-        return self._data["alarm"]["low_voltage"]
-
-    def get_high_voltage_alarm(self) -> bool:
-        """
-        Return a boolean indicating if the high voltage alarm is active
-        """
-        return self._data["alarm"]["high_voltage"]
-
     def get_alarm(self) -> Optional[AlarmReason]:
         """
         Return an enum indicating the current alarm reason or None otherwise

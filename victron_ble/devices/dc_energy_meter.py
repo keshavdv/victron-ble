@@ -1,9 +1,9 @@
 from enum import Enum
 from typing import Optional
 
-from construct import BitStruct, Flag, Int8sl, Int16sl, Int16ul, Int24sl, Struct
+from construct import Int16sl, Int16ul, Int24sl, Struct
 
-from victron_ble.devices.base import Device, DeviceData, kelvin_to_celsius
+from victron_ble.devices.base import AlarmReason, Device, DeviceData, kelvin_to_celsius
 from victron_ble.devices.battery_monitor import AuxMode
 
 
@@ -46,41 +46,11 @@ class DcEnergyMeterData(DeviceData):
         """
         return self._data["voltage"]
 
-    def get_low_voltage_alarm(self) -> bool:
+    def get_alarm(self) -> Optional[AlarmReason]:
         """
-        Return a boolean indicating if the low voltage alarm is active
+        Return an enum indicating the current alarm reason or None otherwise
         """
-        return self._data["alarm"]["low_voltage"]
-
-    def get_high_voltage_alarm(self) -> bool:
-        """
-        Return a boolean indicating if the high voltage alarm is active
-        """
-        return self._data["alarm"]["high_voltage"]
-
-    def get_low_starter_battery_voltage_alarm(self) -> bool:
-        """
-        Return a boolean indicating if the low starter battery voltage alarm is active
-        """
-        return self._data["alarm"]["low_starter_voltage"]
-
-    def get_high_starter_battery_voltage_alarm(self) -> bool:
-        """
-        Return a boolean indicating if the high starter battery voltage alarm is active
-        """
-        return self._data["alarm"]["high_starter_voltage"]
-
-    def get_low_temperature_alarm(self) -> bool:
-        """
-        Return a boolean indicating if the low temperature alarm is active
-        """
-        return self._data["alarm"]["low_temperature"]
-
-    def get_high_temperature_alarm(self) -> bool:
-        """
-        Return a boolean indicating if the high temperature alarm is active
-        """
-        return self._data["alarm"]["high_temperature"]
+        return AlarmReason(self._data["alarm"]) if self._data["alarm"] > 0 else None
 
     def get_aux_mode(self) -> AuxMode:
         """
@@ -109,19 +79,8 @@ class DcEnergyMeter(Device):
         "meter_type" / Int16sl,
         # Voltage reading in 10mV increments
         "voltage" / Int16ul,
-        "alarm"
-        / BitStruct(
-            "mid_voltage" / Flag,
-            "high_temperature" / Flag,
-            "low_temperature" / Flag,
-            "high_starter_voltage" / Flag,
-            "low_starter_voltage" / Flag,
-            "low_soc" / Flag,
-            "high_voltage" / Flag,
-            "low_voltage" / Flag,
-        ),
-        # Unknown byte
-        "uk_1b" / Int8sl,
+        # Alarm reason
+        "alarm" / Int16ul,
         # Value of the auxillary input
         "aux" / Int16ul,
         # The upper 22 bits indicate the current in milliamps
@@ -144,14 +103,7 @@ class DcEnergyMeter(Device):
             "aux_mode": aux_mode,
             "current": (pkt.current >> 2) / 1000,
             "voltage": pkt.voltage / 100,
-            "alarm": {
-                "low_voltage": pkt.alarm.low_voltage,
-                "high_voltage": pkt.alarm.high_voltage,
-                "low_starter_voltage": pkt.alarm.low_starter_voltage,
-                "high_starter_voltage": pkt.alarm.high_starter_voltage,
-                "low_temperature": pkt.alarm.low_temperature,
-                "high_temperature": pkt.alarm.high_temperature,
-            },
+            "alarm": pkt.alarm,
         }
 
         if aux_mode == AuxMode.STARTER_VOLTAGE:
