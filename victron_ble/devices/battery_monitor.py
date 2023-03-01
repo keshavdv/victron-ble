@@ -1,18 +1,9 @@
 from enum import Enum
 from typing import Optional
 
-from construct import (
-    BitStruct,
-    Flag,
-    GreedyBytes,
-    Int8sl,
-    Int16sl,
-    Int16ul,
-    Int24sl,
-    Struct,
-)
+from construct import GreedyBytes, Int16sl, Int16ul, Int24sl, Struct
 
-from victron_ble.devices.base import Device, DeviceData, kelvin_to_celsius
+from victron_ble.devices.base import AlarmReason, Device, DeviceData, kelvin_to_celsius
 
 
 class AuxMode(Enum):
@@ -65,41 +56,11 @@ class BatteryMonitorData(DeviceData):
         """
         return self._data["alarm"]["high_voltage"]
 
-    def get_low_soc_alarm(self) -> bool:
+    def get_alarm(self) -> Optional[AlarmReason]:
         """
-        Return a boolean indicating if the low state of charge alarm is active
+        Return an enum indicating the current alarm reason or None otherwise
         """
-        return self._data["alarm"]["low_soc"]
-
-    def get_low_starter_battery_voltage_alarm(self) -> bool:
-        """
-        Return a boolean indicating if the low starter battery voltage alarm is active
-        """
-        return self._data["alarm"]["low_starter_voltage"]
-
-    def get_high_starter_battery_voltage_alarm(self) -> bool:
-        """
-        Return a boolean indicating if the high starter battery voltage alarm is active
-        """
-        return self._data["alarm"]["high_starter_voltage"]
-
-    def get_low_temperature_alarm(self) -> bool:
-        """
-        Return a boolean indicating if the low temperature alarm is active
-        """
-        return self._data["alarm"]["low_temperature"]
-
-    def get_high_temperature_alarm(self) -> bool:
-        """
-        Return a boolean indicating if the high temperature alarm is active
-        """
-        return self._data["alarm"]["high_temperature"]
-
-    def get_midpoint_deviation_alarm(self) -> bool:
-        """
-        Return a boolean indicating if the high temperature alarm is active
-        """
-        return self._data["alarm"]["mid_deviation"]
+        return AlarmReason(self._data["alarm"]) if self._data["alarm"] > 0 else None
 
     def get_aux_mode(self) -> AuxMode:
         """
@@ -135,30 +96,8 @@ class BatteryMonitor(Device):
         "remaining_mins" / Int16ul,
         # Voltage reading in 10mV increments
         "voltage" / Int16ul,
-        # Bit map of alarm status
-        # 0b00000001 = low voltage alarm
-        # 0b00000010 = high voltage alarm
-        # 0b00000100 = low soc alarm
-        # 0b00001000 = low starter alarm
-        # 0b00001001 = low voltage + low starter alarm
-        # 0b00011001 = high starter + low voltage + low starter alarm
-        # 0b00010000 = high starter alarm
-        # 0b00100000 = low temp alarm
-        # 0b01000000 = high temp alarm
-        # 0b10000000 = midpoint voltage deviation alarm
-        "alarm"
-        / BitStruct(
-            "mid_deviation" / Flag,
-            "high_temperature" / Flag,
-            "low_temperature" / Flag,
-            "high_starter_voltage" / Flag,
-            "low_starter_voltage" / Flag,
-            "low_soc" / Flag,
-            "high_voltage" / Flag,
-            "low_voltage" / Flag,
-        ),
-        # Unknown byte
-        "uk_1b" / Int8sl,
+        # Alarm reason
+        "alarm" / Int16ul,
         # Value of the auxillary input (millivolts or degrees)
         "aux" / Int16ul,
         # The upper 22 bits indicate the current in milliamps
@@ -191,16 +130,7 @@ class BatteryMonitor(Device):
             "voltage": pkt.voltage / 100,
             "consumed_ah": pkt.consumed_ah / 10,
             "soc": ((pkt.soc & 0x3FFF) >> 4) / 10,
-            "alarm": {
-                "low_voltage": pkt.alarm.low_voltage,
-                "high_voltage": pkt.alarm.high_voltage,
-                "low_soc": pkt.alarm.low_soc,
-                "low_starter_voltage": pkt.alarm.low_starter_voltage,
-                "high_starter_voltage": pkt.alarm.high_starter_voltage,
-                "low_temperature": pkt.alarm.low_temperature,
-                "high_temperature": pkt.alarm.high_temperature,
-                "mid_deviation": pkt.alarm.mid_deviation,
-            },
+            "alarm": pkt.alarm,
         }
 
         if aux_mode == AuxMode.STARTER_VOLTAGE:

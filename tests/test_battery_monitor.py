@@ -13,15 +13,7 @@ class TestBatteryMonitor:
         assert actual.get_remaining_mins() == 65535
         assert actual.get_soc() == 50.0
         assert actual.get_voltage() == 12.53
-        assert actual.get_high_starter_battery_voltage_alarm() == False
-        assert actual.get_high_temperature_alarm() == False
-        assert actual.get_high_voltage_alarm() == False
-        assert actual.get_low_soc_alarm() == False
-        assert actual.get_low_starter_battery_voltage_alarm() == False
-        assert actual.get_low_temperature_alarm() == False
-        assert actual.get_low_voltage_alarm() == False
-        assert actual.get_midpoint_deviation_alarm() == False
-
+        assert actual.get_alarm() == None
         assert actual.get_temperature() == None
         assert actual.get_starter_voltage() == None
         assert actual.get_midpoint_voltage() == None
