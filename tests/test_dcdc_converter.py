@@ -12,7 +12,7 @@ class TestDcDcConverter:
         assert actual.get_charge_state() == OperationMode.OFF
         assert actual.get_charger_error() == ChargerError.NO_ERROR
         assert actual.get_input_voltage() == 13.15
-        # assert actual.get_output_voltage() == 0
+        assert actual.get_output_voltage() == 0
         assert actual.get_off_reason() == OffReason.ENGINE_SHUTDOWN
         assert (
             actual.get_model_name() == "Orion Smart 12V|12V-18A Isolated DC-DC Charger"

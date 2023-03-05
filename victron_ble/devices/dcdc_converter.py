@@ -32,10 +32,7 @@ class DcDcConverterData(DeviceData):
         """
         Return the output voltage in volts
         """
-        reading = self._data["output_voltage"]
-        if reading == 0x7FFF:
-            return 0
-        return reading
+        return self._data["output_voltage"]
 
     def get_off_reason(self) -> OffReason:
         """
@@ -70,7 +67,9 @@ class DcDcConverter(Device):
             "device_state": OperationMode(pkt.device_state),
             "charger_error": ChargerError(pkt.charger_error),
             "input_voltage": pkt.input_voltage / 100,
-            "output_voltage": pkt.output_voltage / 100,
+            "output_voltage": 0
+            if pkt.output_voltage == 0x7FFF
+            else pkt.output_voltage / 100,
             "off_reason": OffReason(pkt.off_reason),
         }
 
