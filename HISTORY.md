@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.5.1 (2023)
+------------------
+- Fix DC/DC output voltage when off
+
 0.5.0 (2023)
 ------------------
 - Add DC/DC charger support
