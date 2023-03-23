@@ -8,6 +8,7 @@ from victron_ble.devices.battery_sense import BatterySense
 from victron_ble.devices.dc_energy_meter import DcEnergyMeter
 from victron_ble.devices.dcdc_converter import DcDcConverter
 from victron_ble.devices.solar_charger import SolarCharger
+from victron_ble.devices.vebus import VEBus
 
 __all__ = [
     "AuxMode",
@@ -15,6 +16,7 @@ __all__ = [
     "DeviceData",
     "BatteryMonitor",
     "DcEnergyMeter",
+    "InverterCharger",
     "SolarCharger",
 ]
 
@@ -57,6 +59,6 @@ def detect_device_type(data: bytes) -> Optional[Type[Device]]:
     elif mode == 0x1:  # SolarCharger
         return SolarCharger
     elif mode == 0xC:  # VE.Bus
-        pass
+        return VEBus
 
     return None
