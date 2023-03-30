@@ -1,6 +1,6 @@
 import abc
 from enum import Enum
-from typing import Any, Dict
+from typing import Any, Dict, Type
 
 from construct import FixedSized, GreedyBytes, Int8sl, Int16ul, Struct
 from Crypto.Cipher import AES
@@ -368,6 +368,8 @@ class DeviceData:
 
 
 class Device(abc.ABC):
+    data_type: Type[DeviceData] = DeviceData
+
     PARSER = Struct(
         "prefix" / FixedSized(2, GreedyBytes),
         # Model ID
@@ -398,8 +400,14 @@ class Device(abc.ABC):
         )
         return cipher.decrypt(pad(container.encrypted_data[1:], 16))
 
+    def parse(self, data: bytes) -> DeviceData:
+        decrypted = self.decrypt(data)
+        parsed = self.parse_decrypted(decrypted)
+        model = self.get_model_id(data)
+        return self.data_type(model, parsed)
+
     @abc.abstractmethod
-    def parse(self, data: bytes):
+    def parse_decrypted(self, decrypted: bytes) -> dict:
         pass
 
 
