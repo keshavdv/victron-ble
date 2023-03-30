@@ -4,3 +4,7 @@ class UnknownDeviceError(Exception):
 
 class AdvertisementKeyMissingError(Exception):
     pass
+
+
+class AdvertisementKeyMismatchError(Exception):
+    pass
