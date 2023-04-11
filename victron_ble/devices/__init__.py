@@ -15,9 +15,13 @@ __all__ = [
     "Device",
     "DeviceData",
     "BatteryMonitor",
+    "BatteryMonitorData",
     "DcEnergyMeter",
+    "DcEnergyMeterData",
     "SolarCharger",
+    "SolarChargerData",
     "VEBus",
+    "VEBusData",
 ]
 
 # Add to this list if a device should be forced to use a particular implementation
