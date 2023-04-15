@@ -75,7 +75,9 @@ class SolarCharger(Device):
             "battery_charging_current": pkt.battery_charging_current / 10,
             "yield_today": pkt.yield_today * 10,
             "solar_power": pkt.solar_power,
-            "external_device_load": pkt.external_device_load,
+            "external_device_load": 0
+            if pkt.external_device_load == 0x1FF
+            else pkt.external_device_load,
         }
 
         return SolarChargerData(self.get_model_id(data), parsed)
