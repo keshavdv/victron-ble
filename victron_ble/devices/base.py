@@ -198,6 +198,14 @@ class AlarmReason(Enum):
     BMS_LOCKOUT = 8192
 
 
+# Sourced from Victron extra-manufacturer-data-2022-12-14.pdf
+class ACInState(Enum):
+    AC_IN_1 = 0
+    AC_IN_2 = 1
+    NOT_CONNECTED = 2
+    UNKNOWN = 3
+
+
 # Sourced from VE.Direct docs
 MODEL_ID_MAPPING = {
     0x203: "BMV-700",
@@ -356,6 +364,7 @@ MODEL_ID_MAPPING = {
     0xA3CE: "Orion Smart 48V|24V-16A Isolated DC-DC Charger",
     0xA3C7: "Orion Smart 48V|48V-6A Isolated DC-DC Charger",
     0xA3CF: "Orion Smart 48V|48V-8.5A Isolated DC-DC Charger",
+    0x2780: "Victron Multiplus II 12/3000/120-50 2x120V",
 }
 
 
