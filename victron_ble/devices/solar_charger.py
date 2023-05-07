@@ -46,6 +46,8 @@ class SolarChargerData(DeviceData):
 
 
 class SolarCharger(Device):
+    data_type = SolarChargerData
+
     PACKET = Struct(
         # Charge State:   0 - Off
         #                 3 - Bulk
@@ -65,11 +67,10 @@ class SolarCharger(Device):
         "external_device_load" / Int16ul,
     )
 
-    def parse(self, data: bytes) -> SolarChargerData:
-        decrypted = self.decrypt(data)
+    def parse_decrypted(self, decrypted: bytes) -> dict:
         pkt = self.PACKET.parse(decrypted)
 
-        parsed = {
+        return {
             "charge_state": OperationMode(pkt.charge_state),
             "battery_voltage": pkt.battery_voltage / 100,
             "battery_charging_current": pkt.battery_charging_current / 10,
@@ -77,5 +78,3 @@ class SolarCharger(Device):
             "solar_power": pkt.solar_power,
             "external_device_load": pkt.external_device_load,
         }
-
-        return SolarChargerData(self.get_model_id(data), parsed)

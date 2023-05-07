@@ -42,6 +42,8 @@ class DcDcConverterData(DeviceData):
 
 
 class DcDcConverter(Device):
+    data_type = DcDcConverterData
+
     PACKET = Struct(
         # Charge State:   0 - Off
         #                 3 - Bulk
@@ -59,11 +61,10 @@ class DcDcConverter(Device):
         GreedyBytes,
     )
 
-    def parse(self, data: bytes) -> DcDcConverterData:
-        decrypted = self.decrypt(data)
+    def parse_decrypted(self, decrypted: bytes) -> dict:
         pkt = self.PACKET.parse(decrypted)
 
-        parsed = {
+        return {
             "device_state": OperationMode(pkt.device_state),
             "charger_error": ChargerError(pkt.charger_error),
             "input_voltage": pkt.input_voltage / 100,
@@ -72,5 +73,3 @@ class DcDcConverter(Device):
             else pkt.output_voltage / 100,
             "off_reason": OffReason(pkt.off_reason),
         }
-
-        return DcDcConverterData(self.get_model_id(data), parsed)

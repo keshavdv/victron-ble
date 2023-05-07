@@ -75,6 +75,8 @@ class DcEnergyMeterData(DeviceData):
 
 
 class DcEnergyMeter(Device):
+    data_type = DcEnergyMeterData
+
     PACKET = Struct(
         "meter_type" / Int16sl,
         # Voltage reading in 10mV increments
@@ -92,8 +94,7 @@ class DcEnergyMeter(Device):
         "current" / Int24sl,
     )
 
-    def parse(self, data: bytes) -> DcEnergyMeterData:
-        decrypted = self.decrypt(data)
+    def parse_decrypted(self, decrypted: bytes) -> dict:
         pkt = self.PACKET.parse(decrypted)
 
         aux_mode = AuxMode(pkt.current & 0b11)
@@ -114,4 +115,4 @@ class DcEnergyMeter(Device):
         elif aux_mode == AuxMode.TEMPERATURE:
             parsed["temperature_kelvin"] = pkt.aux / 100
 
-        return DcEnergyMeterData(self.get_model_id(data), parsed)
+        return parsed

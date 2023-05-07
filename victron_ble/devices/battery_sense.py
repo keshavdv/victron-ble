@@ -1,4 +1,5 @@
-from victron_ble.devices import BatteryMonitor, Device, DeviceData
+from victron_ble.devices.base import DeviceData, kelvin_to_celsius
+from victron_ble.devices.battery_monitor import BatteryMonitor
 
 
 class BatterySenseData(DeviceData):
@@ -6,7 +7,7 @@ class BatterySenseData(DeviceData):
         """
         Return the temperature in Celsius
         """
-        return self._data["temperature"]
+        return kelvin_to_celsius(self._data["temperature_kelvin"])
 
     def get_voltage(self) -> float:
         """
@@ -15,11 +16,5 @@ class BatterySenseData(DeviceData):
         return self._data["voltage"]
 
 
-class BatterySense(Device):
-    def parse(self, data: bytes) -> BatterySenseData:
-        parsed = BatteryMonitor(self.advertisement_key).parse(data)
-
-        return BatterySenseData(
-            self.get_model_id(data),
-            {"temperature": parsed.get_temperature(), "voltage": parsed.get_voltage()},
-        )
+class BatterySense(BatteryMonitor):
+    data_type = BatterySenseData
