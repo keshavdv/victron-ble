@@ -7,6 +7,8 @@ from Crypto.Cipher import AES
 from Crypto.Util import Counter
 from Crypto.Util.Padding import pad
 
+from victron_ble.exceptions import AdvertisementKeyMismatchError
+
 
 # Sourced from VE.Direct docs
 class OperationMode(Enum):
@@ -388,11 +390,16 @@ class Device(abc.ABC):
     def decrypt(self, data: bytes) -> bytes:
         container = self.PARSER.parse(data)
 
-        # The first byte of advertised data seems to match the first byte of the advertisement key
+        advertisement_key = bytes.fromhex(self.advertisement_key)
+
+        # The first data byte is a key check byte
+        if container.encrypted_data[0] != advertisement_key[0]:
+            raise AdvertisementKeyMismatchError("Incorrect advertisement key")
+
         ctr = Counter.new(128, initial_value=container.iv, little_endian=True)
 
         cipher = AES.new(
-            bytes.fromhex(self.advertisement_key),
+            advertisement_key,
             AES.MODE_CTR,
             counter=ctr,
         )
