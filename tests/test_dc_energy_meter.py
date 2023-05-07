@@ -1,5 +1,9 @@
 from victron_ble.devices.battery_monitor import AuxMode
-from victron_ble.devices.dc_energy_meter import DcEnergyMeter, DcEnergyMeterData, MeterType
+from victron_ble.devices.dc_energy_meter import (
+    DcEnergyMeter,
+    DcEnergyMeterData,
+    MeterType,
+)
 
 
 class TestDcEnergyMeter:
@@ -22,9 +26,7 @@ class TestDcEnergyMeter:
         assert actual.get_model_name() == "SmartShunt 500A/50mV"
 
     def parse_decrypted(self, decrypted: str) -> DcEnergyMeterData:
-        parsed = DcEnergyMeter(None).parse_decrypted(
-            bytes.fromhex(decrypted)
-        )
+        parsed = DcEnergyMeter(None).parse_decrypted(bytes.fromhex(decrypted))
         return DcEnergyMeterData(None, parsed)
 
     def test_parse(self) -> None:

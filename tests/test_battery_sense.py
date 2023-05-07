@@ -12,9 +12,7 @@ class TestBatterySense:
         assert actual.get_model_name() == "Smart Battery Sense"
 
     def parse_decrypted(self, decrypted: str) -> BatterySenseData:
-        parsed = BatterySense(None).parse_decrypted(
-            bytes.fromhex(decrypted)
-        )
+        parsed = BatterySense(None).parse_decrypted(bytes.fromhex(decrypted))
         return BatterySenseData(None, parsed)
 
     def test_parse(self) -> None:

@@ -19,9 +19,7 @@ class TestSolarChargwer:
         assert actual.get_model_name() == "BlueSolar MPPT 75|15"
 
     def parse_decrypted(self, decrypted: str) -> SolarChargerData:
-        parsed = SolarCharger(None).parse_decrypted(
-            bytes.fromhex(decrypted)
-        )
+        parsed = SolarCharger(None).parse_decrypted(bytes.fromhex(decrypted))
         return SolarChargerData(None, parsed)
 
     def test_parse(self) -> None:

@@ -1,7 +1,10 @@
 import pytest
 
 from victron_ble.devices.battery_monitor import (
-    BatteryMonitor, BatteryMonitorData, AuxMode)
+    BatteryMonitor,
+    BatteryMonitorData,
+    AuxMode,
+)
 from victron_ble.exceptions import AdvertisementKeyMismatchError
 
 
@@ -25,9 +28,7 @@ class TestBatteryMonitor:
         assert actual.get_model_name() == "SmartShunt 500A/50mV"
 
     def parse_decrypted(self, decrypted: str) -> BatteryMonitorData:
-        parsed = BatteryMonitor(None).parse_decrypted(
-            bytes.fromhex(decrypted)
-        )
+        parsed = BatteryMonitor(None).parse_decrypted(bytes.fromhex(decrypted))
         return BatteryMonitorData(None, parsed)
 
     def test_parse(self) -> None:

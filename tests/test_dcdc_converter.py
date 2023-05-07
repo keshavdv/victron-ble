@@ -20,9 +20,7 @@ class TestDcDcConverter:
         )
 
     def parse_decrypted(self, decrypted: str) -> DcDcConverterData:
-        parsed = DcDcConverter(None).parse_decrypted(
-            bytes.fromhex(decrypted)
-        )
+        parsed = DcDcConverter(None).parse_decrypted(bytes.fromhex(decrypted))
         return DcDcConverterData(None, parsed)
 
     def test_parse(self) -> None:
