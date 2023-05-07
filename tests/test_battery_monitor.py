@@ -1,5 +1,8 @@
+import pytest
+
 from victron_ble.devices.battery_monitor import (
     BatteryMonitor, BatteryMonitorData, AuxMode)
+from victron_ble.exceptions import AdvertisementKeyMismatchError
 
 
 class TestBatteryMonitor:
@@ -51,3 +54,10 @@ class TestBatteryMonitor:
     def test_aux_temperature(self) -> None:
         actual = self.parse_decrypted("ffffe6040000ffff020000000080fede")
         assert actual.get_temperature() == 382.2
+
+    def test_key_mismatch(self) -> None:
+        data = "100289a302bb01af129087600b9b97bc2c32867c8238da"
+        with pytest.raises(AdvertisementKeyMismatchError):
+            BatteryMonitor("ffffffffffffffffffffffffffffffff").parse(
+                bytes.fromhex(data)
+            )

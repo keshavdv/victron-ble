@@ -7,6 +7,8 @@ from Crypto.Cipher import AES
 from Crypto.Util import Counter
 from Crypto.Util.Padding import pad
 
+from victron_ble.exceptions import AdvertisementKeyMismatchError
+
 
 # Sourced from VE.Direct docs
 class OperationMode(Enum):
@@ -175,6 +177,7 @@ class OffReason(Enum):
     PAY_AS_YOU_GO_OUT_OF_CREDIT = 0x00000020
     BMS = 0x00000040
     ENGINE_SHUTDOWN = 0x00000080
+    ENGINE_SHUTDOWN_AND_INPUT_VOLTAGE_LOCKOUT = 0x00000081
     ANALYSING_INPUT_VOLTAGE = 0x00000100
 
 
@@ -193,6 +196,14 @@ class AlarmReason(Enum):
     HIGH_V_AC_OUT = 2048
     SHORT_CIRCUIT = 4096
     BMS_LOCKOUT = 8192
+
+
+# Sourced from Victron extra-manufacturer-data-2022-12-14.pdf
+class ACInState(Enum):
+    AC_IN_1 = 0
+    AC_IN_2 = 1
+    NOT_CONNECTED = 2
+    UNKNOWN = 3
 
 
 # Sourced from VE.Direct docs
@@ -353,6 +364,7 @@ MODEL_ID_MAPPING = {
     0xA3CE: "Orion Smart 48V|24V-16A Isolated DC-DC Charger",
     0xA3C7: "Orion Smart 48V|48V-6A Isolated DC-DC Charger",
     0xA3CF: "Orion Smart 48V|48V-8.5A Isolated DC-DC Charger",
+    0x2780: "Victron Multiplus II 12/3000/120-50 2x120V",
 }
 
 
@@ -390,11 +402,16 @@ class Device(abc.ABC):
     def decrypt(self, data: bytes) -> bytes:
         container = self.PARSER.parse(data)
 
-        # The first byte of advertised data seems to match the first byte of the advertisement key
+        advertisement_key = bytes.fromhex(self.advertisement_key)
+
+        # The first data byte is a key check byte
+        if container.encrypted_data[0] != advertisement_key[0]:
+            raise AdvertisementKeyMismatchError("Incorrect advertisement key")
+
         ctr = Counter.new(128, initial_value=container.iv, little_endian=True)
 
         cipher = AES.new(
-            bytes.fromhex(self.advertisement_key),
+            advertisement_key,
             AES.MODE_CTR,
             counter=ctr,
         )
