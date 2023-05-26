@@ -54,6 +54,8 @@ class VEBusData(DeviceData):
 
 
 class VEBus(Device):
+    data_type = VEBusData
+
     PACKET = Struct(
         # Device state (docs do not explain how to interpret)
         "device_state" / Int8ul,
@@ -74,8 +76,7 @@ class VEBus(Device):
         GreedyBytes,
     )
 
-    def parse(self, data: bytes) -> VEBusData:
-        decrypted = self.decrypt(data)
+    def parse_decrypted(self, decrypted: bytes) -> dict:
         pkt = self.PACKET.parse(decrypted)
 
         battery_voltage = pkt.battery_voltage_and_ac_in_state & 0x3FFF
@@ -100,7 +101,7 @@ class VEBus(Device):
             pkt.battery_temperature_and_soc[0] >> 7
         )
 
-        parsed = {
+        return {
             "device_state": OperationMode(pkt.device_state),
             "battery_voltage": battery_voltage / 100,
             "battery_current": pkt.battery_current / 10,
@@ -110,5 +111,3 @@ class VEBus(Device):
             "battery_temperature": battery_temperature,
             "soc": soc if soc < 127 else None,
         }
-
-        return VEBusData(self.get_model_id(data), parsed)

@@ -1,11 +1,13 @@
 import abc
 from enum import Enum
-from typing import Any, Dict
+from typing import Any, Dict, Type
 
 from construct import FixedSized, GreedyBytes, Int8sl, Int16ul, Struct
 from Crypto.Cipher import AES
 from Crypto.Util import Counter
 from Crypto.Util.Padding import pad
+
+from victron_ble.exceptions import AdvertisementKeyMismatchError
 
 
 # Sourced from VE.Direct docs
@@ -175,6 +177,7 @@ class OffReason(Enum):
     PAY_AS_YOU_GO_OUT_OF_CREDIT = 0x00000020
     BMS = 0x00000040
     ENGINE_SHUTDOWN = 0x00000080
+    ENGINE_SHUTDOWN_AND_INPUT_VOLTAGE_LOCKOUT = 0x00000081
     ANALYSING_INPUT_VOLTAGE = 0x00000100
 
 
@@ -377,6 +380,8 @@ class DeviceData:
 
 
 class Device(abc.ABC):
+    data_type: Type[DeviceData] = DeviceData
+
     PARSER = Struct(
         "prefix" / FixedSized(2, GreedyBytes),
         # Model ID
@@ -397,18 +402,29 @@ class Device(abc.ABC):
     def decrypt(self, data: bytes) -> bytes:
         container = self.PARSER.parse(data)
 
-        # The first byte of advertised data seems to match the first byte of the advertisement key
+        advertisement_key = bytes.fromhex(self.advertisement_key)
+
+        # The first data byte is a key check byte
+        if container.encrypted_data[0] != advertisement_key[0]:
+            raise AdvertisementKeyMismatchError("Incorrect advertisement key")
+
         ctr = Counter.new(128, initial_value=container.iv, little_endian=True)
 
         cipher = AES.new(
-            bytes.fromhex(self.advertisement_key),
+            advertisement_key,
             AES.MODE_CTR,
             counter=ctr,
         )
         return cipher.decrypt(pad(container.encrypted_data[1:], 16))
 
+    def parse(self, data: bytes) -> DeviceData:
+        decrypted = self.decrypt(data)
+        parsed = self.parse_decrypted(decrypted)
+        model = self.get_model_id(data)
+        return self.data_type(model, parsed)
+
     @abc.abstractmethod
-    def parse(self, data: bytes):
+    def parse_decrypted(self, decrypted: bytes) -> dict:
         pass
 
 

@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Optional
+from typing import Optional, Type
 
 from construct import GreedyBytes, Int16sl, Int16ul, Int24sl, Struct
 
@@ -79,6 +79,7 @@ class BatteryMonitorData(DeviceData):
 
 
 class BatteryMonitor(Device):
+    data_type: Type[DeviceData] = BatteryMonitorData
     PACKET = Struct(
         # Remaining time in minutes
         "remaining_mins" / Int16ul,
@@ -105,8 +106,7 @@ class BatteryMonitor(Device):
         GreedyBytes,
     )
 
-    def parse(self, data: bytes) -> BatteryMonitorData:
-        decrypted = self.decrypt(data)
+    def parse_decrypted(self, decrypted: bytes) -> dict:
         pkt = self.PACKET.parse(decrypted)
 
         aux_mode = AuxMode(pkt.current & 0b11)
@@ -131,4 +131,4 @@ class BatteryMonitor(Device):
         elif aux_mode == AuxMode.TEMPERATURE:
             parsed["temperature_kelvin"] = pkt.aux / 100
 
-        return BatteryMonitorData(self.get_model_id(data), parsed)
+        return parsed
