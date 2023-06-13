@@ -3,21 +3,29 @@ from typing import Dict, Optional, Type
 from construct import Int8ul, Int16ul
 
 from victron_ble.devices.base import Device, DeviceData
-from victron_ble.devices.battery_monitor import AuxMode, BatteryMonitor
-from victron_ble.devices.battery_sense import BatterySense
-from victron_ble.devices.dc_energy_meter import DcEnergyMeter
-from victron_ble.devices.dcdc_converter import DcDcConverter
-from victron_ble.devices.solar_charger import SolarCharger
-from victron_ble.devices.vebus import VEBus
+from victron_ble.devices.battery_monitor import AuxMode, BatteryMonitor, BatteryMonitorData
+from victron_ble.devices.battery_sense import BatterySense, BatterySenseData
+from victron_ble.devices.dc_energy_meter import DcEnergyMeter, DcEnergyMeterData
+from victron_ble.devices.dcdc_converter import DcDcConverter, DcDcConverterData
+from victron_ble.devices.solar_charger import SolarCharger, SolarChargerData
+from victron_ble.devices.vebus import VEBus, VEBusData
 
 __all__ = [
     "AuxMode",
     "Device",
     "DeviceData",
     "BatteryMonitor",
+    "BatteryMonitorData",
+    "BatterySense",
+    "BatterySenseData",
+    "DcDcConverter",
+    "DcDcConverterData",
     "DcEnergyMeter",
+    "DcEnergyMeterData",
     "SolarCharger",
+    "SolarChargerData",
     "VEBus",
+    "VEBusData",
 ]
 
 # Add to this list if a device should be forced to use a particular implementation
