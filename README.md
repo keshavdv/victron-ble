@@ -43,9 +43,9 @@ To be able to decrypt the contents of the advertisement, you'll need to first fe
  
 **OSX**
 
-[MacOS's bleak backend](https://bleak.readthedocs.io/en/latest/backends/macos.html) uses a bluetooth UUID address instead of the more traditional MAC address to identify bluetooth devices. This UUID address is often unique to the device scanned and the device being scanned such that it cannot be used to connect to the same victron device from another computer. 
+[MacOS's bleak backend](https://bleak.readthedocs.io/en/latest/backends/macos.html) uses a bluetooth UUID address instead of the more traditional MAC address to identify bluetooth devices. This UUID address is often unique to the device scanned *and* the device being scanned such that it cannot be used to connect to the same device from another computer. 
 
-If you are going to use `victron-ble` on the same computer computer as you have the Victron app, follow this set of instructions
+If you are going to use `victron-ble` on the same Mac computer as you have the Victron app on, follow the instructions below to retrieve the address UUID and advertisement key:
 
 1. Install the Victron app from the Mac App Store
 2. Pair with your device at least once to transfer keys
@@ -57,7 +57,17 @@ If you are going to use `victron-ble` on the same computer computer as you have 
 ❯
 ```
 
-If you are going to use `victron-ble` on a different computer than the one with the Victron app (e.g. on a Raspberry Pi), follow these instructions to obtain the bluetooth MAC address instead
+If you are going to use `victron-ble` on a different non-MacOS computer than the one with the Victron app (e.g. on a Raspberry Pi), follow these instructions to obtain the bluetooth MAC address and advertisement key instead:
+
+1. Install the Victron app from the Mac App Store
+2. Pair with your device at least once to transfer keys
+3. Run the following from Terminal to dump the known keys (install `sqlite3` via Homebrew)
+```bash
+❯ sqlite3 ~/Library/Containers/com.victronenergy.victronconnect.mac/Data/Library/Application\ Support/Victron\ Energy/Victron\ Connect/d25b6546b47ebb21a04ff86a2c4fbb76.sqlite 'select macAddress,advertisementKey from advertisementKeys'
+
+a0f478020fe1|0df4d0395b7d1a876c0c33ecb9e70dcd
+❯
+```
 
 **Linux**
 
