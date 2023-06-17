@@ -43,6 +43,10 @@ To be able to decrypt the contents of the advertisement, you'll need to first fe
  
 **OSX**
 
+[MacOS's bleak backend](https://bleak.readthedocs.io/en/latest/backends/macos.html) uses a bluetooth UUID address instead of the more traditional MAC address to identify bluetooth devices. This UUID address is often unique to the device scanned and the device being scanned such that it cannot be used to connect to the same victron device from another computer. 
+
+If you are going to use `victron-ble` on the same computer computer as you have the Victron app, follow this set of instructions
+
 1. Install the Victron app from the Mac App Store
 2. Pair with your device at least once to transfer keys
 3. Run the following from Terminal to dump the known keys (install `sqlite3` via Homebrew)
@@ -52,6 +56,8 @@ To be able to decrypt the contents of the advertisement, you'll need to first fe
 {763aeff5-1334-e64a-ab30-a0f478s20fe1}|0df4d0395b7d1a876c0c33ecb9e70dcd
 ❯
 ```
+
+If you are going to use `victron-ble` on a different computer than the one with the Victron app (e.g. on a Raspberry Pi), follow these instructions to obtain the bluetooth MAC address instead
 
 **Linux**
 
