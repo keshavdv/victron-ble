@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.6.0 (2023)
+------------------
+- Add VEBus support
+- Improve readme 
+
 0.5.1 (2023)
 ------------------
 - Fix DC/DC output voltage when off
