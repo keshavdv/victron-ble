@@ -3,7 +3,11 @@ from typing import Dict, Optional, Type
 from construct import Int8ul, Int16ul
 
 from victron_ble.devices.base import Device, DeviceData
-from victron_ble.devices.battery_monitor import AuxMode, BatteryMonitor, BatteryMonitorData
+from victron_ble.devices.battery_monitor import (
+    AuxMode,
+    BatteryMonitor,
+    BatteryMonitorData,
+)
 from victron_ble.devices.battery_sense import BatterySense, BatterySenseData
 from victron_ble.devices.dc_energy_meter import DcEnergyMeter, DcEnergyMeterData
 from victron_ble.devices.dcdc_converter import DcDcConverter, DcDcConverterData
