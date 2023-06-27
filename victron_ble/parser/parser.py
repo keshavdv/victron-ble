@@ -136,14 +136,10 @@ class VictronBluetoothDeviceData(BluetoothData):
             SensorDeviceClass.CURRENT_FLOW,  # type: ignore [arg-type]
         )
         alarm = data.get_alarm()
-        if alarm is not None:
-            alarm_string = alarm.name
-        else:
-            alarm_string = "no alarm"
         self.update_sensor(
             Keys.ALARM,
             None,
-            alarm_string,
+            alarm.name if alarm else "no alarm",
         )
         self.update_sensor(
             Keys.AUX_MODE,
@@ -196,7 +192,7 @@ class VictronBluetoothDeviceData(BluetoothData):
         self.update_sensor(
             Keys.ALARM,
             None,
-            alarm.name if alarm else None,
+            alarm.name if alarm else "no alarm",
         )
         self.update_sensor(
             Keys.TEMPERATURE,
