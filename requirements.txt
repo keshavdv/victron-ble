@@ -3,3 +3,4 @@ bluetooth-sensor-state-data>=1.6.1
 click>=8.0.0
 construct>=2.0
 pycryptodome>=3.0.0
+sensor-state-data>=2.16.0
