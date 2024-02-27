@@ -65,11 +65,9 @@ class DcDcConverter(Device):
         pkt = self.PACKET.parse(decrypted)
 
         return {
-            "device_state": OperationMode(pkt.device_state),
-            "charger_error": ChargerError(pkt.charger_error),
-            "input_voltage": pkt.input_voltage / 100,
-            "output_voltage": 0
-            if pkt.output_voltage == 0x7FFF
-            else pkt.output_voltage / 100,
+            "device_state": OperationMode(pkt.device_state) if pkt.device_state != 0xFF else None,
+            "charger_error": ChargerError(pkt.charger_error) if pkt.charger_error != 0xFF else None,
+            "input_voltage": pkt.input_voltage / 100 if pkt.input_voltage != 0xFFFF else None,
+            "output_voltage": pkt.output_voltage / 100 if pkt.output_voltage != 0x7FFF else None,
             "off_reason": OffReason(pkt.off_reason),
         }

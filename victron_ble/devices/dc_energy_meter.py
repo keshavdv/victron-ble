@@ -99,11 +99,12 @@ class DcEnergyMeter(Device):
 
         aux_mode = AuxMode(pkt.current & 0b11)
 
+        current = pkt.current >> 2
         parsed = {
             "meter_type": MeterType(pkt.meter_type),
             "aux_mode": aux_mode,
-            "current": (pkt.current >> 2) / 1000,
-            "voltage": pkt.voltage / 100,
+            "current": current / 1000 if current != 0x3FFFFF else None,
+            "voltage": pkt.voltage / 100 if pkt.voltage != 0x7FFF else None,
             "alarm": pkt.alarm,
         }
 

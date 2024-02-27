@@ -71,11 +71,11 @@ class SolarCharger(Device):
         pkt = self.PACKET.parse(decrypted)
 
         return {
-            "charge_state": OperationMode(pkt.charge_state),
-            "battery_voltage": pkt.battery_voltage / 100,
-            "battery_charging_current": pkt.battery_charging_current / 10,
-            "yield_today": pkt.yield_today * 10,
-            "solar_power": pkt.solar_power,
+            "charge_state": OperationMode(pkt.charge_state) if pkt.charge_state != 0xFF else None,
+            "battery_voltage": pkt.battery_voltage / 100 if pkt.battery_voltage != 0x7FFF else None,
+            "battery_charging_current": pkt.battery_charging_current / 10 if pkt.battery_charging_current != 0x7FFF else None,
+            "yield_today": pkt.yield_today * 10 if pkt.yield_today != 0xFFFF else None,
+            "solar_power": pkt.solar_power if pkt.solar_power != 0xFFFF else None,
             "external_device_load": 0
             if pkt.external_device_load == 0x1FF
             else pkt.external_device_load,

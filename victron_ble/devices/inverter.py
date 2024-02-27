@@ -73,11 +73,13 @@ class Inverter(Device):
     def parse_decrypted(self, decrypted: bytes) -> dict:
         pkt = self.PACKET.parse(decrypted)
 
+        ac_voltage = pkt.ac_voltage & 0x7FFF
+        ac_current = (pkt.ac_voltage >> 15 | pkt.ac_current << 1) & 0x7FF
         return {
-            "device_state": OperationMode(pkt.device_state),
+            "device_state": OperationMode(pkt.device_state) if pkt.device_state != 0xFF else None,
             "alarm": pkt.alarm,
-            "battery_voltage": (pkt.battery_voltage) / 100,
-            "ac_apparent_power": pkt.ac_apparent_power,
-            "ac_voltage": (pkt.ac_voltage & 0x7FFF) / 100,
-            "ac_current": ((pkt.ac_voltage >> 15 | pkt.AC_current << 1) & 0x7FF) / 10,
+            "battery_voltage": (pkt.battery_voltage) / 100 if pkt.battery_voltage != 0x7FFF else None,
+            "ac_apparent_power": pkt.ac_apparent_power if pkt.ac_apparent_power != 0xFFFF else None,
+            "ac_voltage": ac_voltage / 100 if ac_voltage != 0x7FFF else None,
+            "ac_current": ac_current / 10 if ac_current != 0x7FF else None,
         }

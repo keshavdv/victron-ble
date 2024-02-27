@@ -94,7 +94,7 @@ class VEBus(Device):
             ac_out_power *= -1
 
         # per extra-manufacturer-data-2022-12-14.pdf, the actual temp is 40 degrees less
-        battery_temperature = (pkt.battery_temperature_and_soc[0] & 0x46) - 40
+        battery_temperature = (pkt.battery_temperature_and_soc[0] & 0x46)
 
         # confusingly, soc is split across the byte boundary
         soc = ((pkt.battery_temperature_and_soc[1] & 0x3F) << 1) + (
@@ -102,12 +102,12 @@ class VEBus(Device):
         )
 
         return {
-            "device_state": OperationMode(pkt.device_state),
-            "battery_voltage": battery_voltage / 100,
-            "battery_current": pkt.battery_current / 10,
-            "ac_in_state": ACInState(ac_in_state),
-            "ac_in_power": ac_in_power,
-            "ac_out_power": ac_out_power,
-            "battery_temperature": battery_temperature,
-            "soc": soc if soc < 127 else None,
+            "device_state": OperationMode(pkt.device_state) if pkt.device_state != 0xFF else None,
+            "battery_voltage": battery_voltage / 100 if battery_voltage != 0x3FFF else None,
+            "battery_current": pkt.battery_current / 10 if pkt.battery_current != 0x7FFF else None,
+            "ac_in_state": ACInState(ac_in_state) if ac_in_state != 3 else None,
+            "ac_in_power": ac_in_power if ac_in_power != 0x3FFFF else None,
+            "ac_out_power": ac_out_power if ac_out_power != 0x3FFFF else None,
+            "battery_temperature": battery_temperature - 40 if battery_temperature != 0x7F else None,
+            "soc": soc if soc != 0x7F else None,
         }

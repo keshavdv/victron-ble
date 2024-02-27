@@ -111,13 +111,15 @@ class BatteryMonitor(Device):
 
         aux_mode = AuxMode(pkt.current & 0b11)
 
+        current = pkt.current >> 2
+        soc = (pkt.soc & 0x3FFF) >> 4
         parsed = {
-            "remaining_mins": pkt.remaining_mins,
+            "remaining_mins": pkt.remaining_mins if pkt.remaining_mins != 0xFFFF else None,
             "aux_mode": aux_mode,
-            "current": (pkt.current >> 2) / 1000,
-            "voltage": pkt.voltage / 100,
-            "consumed_ah": pkt.consumed_ah / 10,
-            "soc": ((pkt.soc & 0x3FFF) >> 4) / 10,
+            "current": current / 1000 if current != 0x3FFFFF else None,
+            "voltage": pkt.voltage / 100 if pkt.voltage != 0x7FFF else None,
+            "consumed_ah": pkt.consumed_ah / 10 if pkt.consumed_ah != 0xFFFFF else None,
+            "soc": soc / 10 if soc != 0x3FF else None,
             "alarm": pkt.alarm,
         }
 
