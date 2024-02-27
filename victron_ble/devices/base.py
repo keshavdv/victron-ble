@@ -27,6 +27,7 @@ class OperationMode(Enum):
     RECONDITION = 247
     BATTERY_SAFE = 248
     EXTERNAL_CONTROL = 252
+    NOT_AVAILABLE = 255
 
 
 # Source: VE.Direct-Protocol-3.32.pdf & https://www.victronenergy.com/live/mppt-error-codes
