@@ -1,6 +1,4 @@
-from construct import Bytes, GreedyBytes, Int8ul, Int16sl, Int16ul, Struct
-
-from victron_ble.devices.base import ACInState, Device, DeviceData, OperationMode
+from victron_ble.devices.base import ACInState, Device, DeviceData, OperationMode, BitReader
 
 
 class VEBusData(DeviceData):
@@ -56,55 +54,35 @@ class VEBusData(DeviceData):
 class VEBus(Device):
     data_type = VEBusData
 
-    PACKET = Struct(
-        # Device state (docs do not explain how to interpret)
-        "device_state" / Int8ul,
+    def parse_decrypted(self, decrypted: bytes) -> dict:
+        reader = BitReader(decrypted)
+
+        # Device state
+        device_state = reader.read_unsigned_int(8)
         # VE.Bus error (docs do not explain how to interpret)
-        "vebus_error" / Int8ul,
+        error = reader.read_unsigned_int(8)
         # Battery charging Current reading in 0.1A increments
-        "battery_current" / Int16sl,
+        battery_current = reader.read_signed_int(16)
         # Battery voltage reading in 0.01V increments (14 bits)
         # Active AC in state (enum) (2 bits)
-        "battery_voltage_and_ac_in_state" / Int16ul,
+        battery_voltage = reader.read_unsigned_int(14)
+        # AC input active
+        ac_in_state = reader.read_unsigned_int(2)
         # Active AC in power in 1W increments (19 bits, signed)
+        ac_in_power = reader.read_signed_int(19)
         # AC out power in 1W increments (19 bits, signed)
+        ac_out_power = reader.read_signed_int(19)
         # Alarm (enum but docs say "to be defined") (2 bits)
-        "ac_in_and_ac_out_power" / Bytes(5),
+        alarm = reader.read_unsigned_int(2)
         # Battery temperature in 1 degree celcius increments (7 bits)
+        battery_temperature = reader.read_unsigned_int(7)
         # Battery state of charge in 1% increments (7 bits)
-        "battery_temperature_and_soc" / Bytes(2),
-        GreedyBytes,
-    )
-
-    def parse_decrypted(self, decrypted: bytes) -> dict:
-        pkt = self.PACKET.parse(decrypted)
-
-        battery_voltage = pkt.battery_voltage_and_ac_in_state & 0x3FFF
-
-        ac_in_state = pkt.battery_voltage_and_ac_in_state >> 14
-
-        ac_in_bytes = int.from_bytes(pkt.ac_in_and_ac_out_power[0:3], "little")
-        ac_in_power = ac_in_bytes & 0x03FFFF
-        if ac_in_bytes & 0x40000:
-            ac_in_power *= -1
-
-        ac_out_bytes = int.from_bytes(pkt.ac_in_and_ac_out_power[2:5], "little") >> 2
-        ac_out_power = (ac_out_bytes >> 1) & 0x03FFFF
-        if ac_out_bytes & 0b1:
-            ac_out_power *= -1
-
-        # per extra-manufacturer-data-2022-12-14.pdf, the actual temp is 40 degrees less
-        battery_temperature = (pkt.battery_temperature_and_soc[0] & 0x46)
-
-        # confusingly, soc is split across the byte boundary
-        soc = ((pkt.battery_temperature_and_soc[1] & 0x3F) << 1) + (
-            pkt.battery_temperature_and_soc[0] >> 7
-        )
+        soc = reader.read_unsigned_int(7)
 
         return {
-            "device_state": OperationMode(pkt.device_state) if pkt.device_state != 0xFF else None,
+            "device_state": OperationMode(device_state) if device_state != 0xFF else None,
             "battery_voltage": battery_voltage / 100 if battery_voltage != 0x3FFF else None,
-            "battery_current": pkt.battery_current / 10 if pkt.battery_current != 0x7FFF else None,
+            "battery_current": battery_current / 10 if battery_current != 0x7FFF else None,
             "ac_in_state": ACInState(ac_in_state) if ac_in_state != 3 else None,
             "ac_in_power": ac_in_power if ac_in_power != 0x3FFFF else None,
             "ac_out_power": ac_out_power if ac_out_power != 0x3FFFF else None,

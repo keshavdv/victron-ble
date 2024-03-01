@@ -431,3 +431,27 @@ class Device(abc.ABC):
 
 def kelvin_to_celsius(temp_in_kelvin: float) -> float:
     return round(temp_in_kelvin - 273.15, 2)
+
+# Reads bit-field structures in the order in which they are packed in
+# Victron Extra Manufacturer Data from LSB to MSB.
+class BitReader:
+    def __init__(self, data: str):
+        self._data = data
+        self._index = 0
+
+    def read_bit(self) -> int:
+        bit = (self._data[self._index >> 3] >> (self._index & 7)) & 1
+        self._index += 1
+        return bit
+
+    def read_unsigned_int(self, num_bits: int) -> int:
+        value = 0
+        for position in range(0, num_bits):
+            value |= self.read_bit() << position
+        return value
+
+    def read_signed_int(self, num_bits: int) -> int:
+        return BitReader.to_signed_int(self.read_unsigned_int(num_bits), num_bits)
+
+    def to_signed_int(value: int, num_bits: int) -> int:
+        return (1 << num_bits) - value if value & (1 << (num_bits - 1)) else value

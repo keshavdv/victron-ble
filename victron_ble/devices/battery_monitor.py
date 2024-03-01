@@ -1,9 +1,7 @@
 from enum import Enum
 from typing import Optional, Type
 
-from construct import GreedyBytes, Int16sl, Int16ul, Int24sl, Struct
-
-from victron_ble.devices.base import AlarmReason, Device, DeviceData, kelvin_to_celsius
+from victron_ble.devices.base import AlarmReason, Device, DeviceData, kelvin_to_celsius, BitReader
 
 
 class AuxMode(Enum):
@@ -80,57 +78,42 @@ class BatteryMonitorData(DeviceData):
 
 class BatteryMonitor(Device):
     data_type: Type[DeviceData] = BatteryMonitorData
-    PACKET = Struct(
-        # Remaining time in minutes
-        "remaining_mins" / Int16ul,
-        # Voltage reading in 10mV increments
-        "voltage" / Int16ul,
-        # Alarm reason
-        "alarm" / Int16ul,
-        # Value of the auxillary input (millivolts or degrees)
-        "aux" / Int16ul,
-        # The upper 22 bits indicate the current in milliamps
-        # The lower 2 bits identify the aux input mode:
-        #   0 = Starter battery voltage
-        #   1 = Midpoint voltage
-        #   2 = Temperature
-        #   3 = Disabled
-        "current" / Int24sl,
-        # Consumed Ah in 0.1Ah increments
-        "consumed_ah" / Int16ul,
-        # The lowest 4 bits are unknown
-        # The next 8 bits indicate the state of charge in 0.1% increments
-        # The upper 2 bits are unknown
-        "soc" / Int16ul,
-        # Throw away any extra bytes
-        GreedyBytes,
-    )
 
     def parse_decrypted(self, decrypted: bytes) -> dict:
-        pkt = self.PACKET.parse(decrypted)
+        reader = BitReader(decrypted)
 
-        aux_mode = AuxMode(pkt.current & 0b11)
+        # Remaining time in minutes
+        remaining_mins = reader.read_unsigned_int(16)
+        # Voltage reading in 10mV increments
+        voltage = reader.read_signed_int(16)
+        # Alarm reason
+        alarm = reader.read_unsigned_int(16)
+        # Value of the auxillary input (millivolts or degrees)
+        aux = reader.read_unsigned_int(16)
+        aux_mode = reader.read_unsigned_int(2)
+        # The current in milliamps
+        current = reader.read_signed_int(22)
+        # Consumed Ah in 0.1Ah increments
+        consumed_ah = reader.read_unsigned_int(20)
+        # The state of charge in 0.1% increments
+        soc = reader.read_unsigned_int(10)
 
-        current = pkt.current >> 2
-        soc = (pkt.soc & 0x3FFF) >> 4
         parsed = {
-            "remaining_mins": pkt.remaining_mins if pkt.remaining_mins != 0xFFFF else None,
-            "aux_mode": aux_mode,
+            "remaining_mins": remaining_mins if remaining_mins != 0xFFFF else None,
+            "aux_mode": AuxMode(aux_mode),
             "current": current / 1000 if current != 0x3FFFFF else None,
-            "voltage": pkt.voltage / 100 if pkt.voltage != 0x7FFF else None,
-            "consumed_ah": pkt.consumed_ah / 10 if pkt.consumed_ah != 0xFFFFF else None,
+            "voltage": voltage / 100 if voltage != 0x7FFF else None,
+            "consumed_ah": consumed_ah / 10 if consumed_ah != 0xFFFFF else None,
             "soc": soc / 10 if soc != 0x3FF else None,
-            "alarm": pkt.alarm,
+            "alarm": alarm,
         }
 
-        if aux_mode == AuxMode.STARTER_VOLTAGE:
+        if aux_mode == AuxMode.STARTER_VOLTAGE.value:
             # Starter voltage is treated as signed
-            parsed["starter_voltage"] = (
-                Int16sl.parse((pkt.aux).to_bytes(2, "little")) / 100
-            )
-        elif aux_mode == AuxMode.MIDPOINT_VOLTAGE:
-            parsed["midpoint_voltage"] = pkt.aux / 100
-        elif aux_mode == AuxMode.TEMPERATURE:
-            parsed["temperature_kelvin"] = pkt.aux / 100
+            parsed["starter_voltage"] = BitReader.to_signed_int(aux, 16) / 100
+        elif aux_mode == AuxMode.MIDPOINT_VOLTAGE.value:
+            parsed["midpoint_voltage"] = aux / 100
+        elif aux_mode == AuxMode.TEMPERATURE.value:
+            parsed["temperature_kelvin"] = aux / 100
 
         return parsed

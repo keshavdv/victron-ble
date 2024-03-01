@@ -1,9 +1,7 @@
 from enum import Enum
 from typing import Optional
 
-from construct import Int16sl, Int16ul, Int24sl, Struct
-
-from victron_ble.devices.base import AlarmReason, Device, DeviceData, kelvin_to_celsius
+from victron_ble.devices.base import AlarmReason, Device, DeviceData, kelvin_to_celsius, BitReader
 from victron_ble.devices.battery_monitor import AuxMode
 
 
@@ -77,43 +75,37 @@ class DcEnergyMeterData(DeviceData):
 class DcEnergyMeter(Device):
     data_type = DcEnergyMeterData
 
-    PACKET = Struct(
-        "meter_type" / Int16sl,
+    def parse_decrypted(self, decrypted: bytes) -> dict:
+        reader = BitReader(decrypted)
+
+        meter_type = reader.read_signed_int(16)
         # Voltage reading in 10mV increments
-        "voltage" / Int16ul,
+        voltage = reader.read_signed_int(16)
         # Alarm reason
-        "alarm" / Int16ul,
+        alarm = reader.read_unsigned_int(16)
         # Value of the auxillary input
-        "aux" / Int16ul,
-        # The upper 22 bits indicate the current in milliamps
-        # The lower 2 bits identify the aux input mode:
+        aux = reader.read_unsigned_int(16)
+        # The aux input mode:
         #   0 = Starter battery voltage
         #   1 = Midpoint voltage
         #   2 = Temperature
         #   3 = Disabled
-        "current" / Int24sl,
-    )
+        aux_mode = reader.read_unsigned_int(2)
+        # The current in milliamps
+        current = reader.read_signed_int(22)
 
-    def parse_decrypted(self, decrypted: bytes) -> dict:
-        pkt = self.PACKET.parse(decrypted)
-
-        aux_mode = AuxMode(pkt.current & 0b11)
-
-        current = pkt.current >> 2
         parsed = {
-            "meter_type": MeterType(pkt.meter_type),
-            "aux_mode": aux_mode,
+            "meter_type": MeterType(meter_type),
+            "aux_mode": AuxMode(aux_mode),
             "current": current / 1000 if current != 0x3FFFFF else None,
-            "voltage": pkt.voltage / 100 if pkt.voltage != 0x7FFF else None,
-            "alarm": pkt.alarm,
+            "voltage": voltage / 100 if voltage != 0x7FFF else None,
+            "alarm": alarm,
         }
 
-        if aux_mode == AuxMode.STARTER_VOLTAGE:
+        if aux_mode == AuxMode.STARTER_VOLTAGE.value:
             # Starter voltage is treated as signed
-            parsed["starter_voltage"] = (
-                Int16sl.parse((pkt.aux).to_bytes(2, "little")) / 100
-            )
-        elif aux_mode == AuxMode.TEMPERATURE:
-            parsed["temperature_kelvin"] = pkt.aux / 100
+            parsed["starter_voltage"] = BitReader.to_signed_int(aux, 16) / 100
+        elif aux_mode == AuxMode.TEMPERATURE.value:
+            parsed["temperature_kelvin"] = aux / 100
 
         return parsed

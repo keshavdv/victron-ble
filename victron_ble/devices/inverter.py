@@ -1,4 +1,3 @@
-from construct import GreedyBytes, Int8ul, Int16sl, Int16ul, Struct
 from typing import Optional, Type
 
 from victron_ble.devices.base import (
@@ -6,6 +5,7 @@ from victron_ble.devices.base import (
     Device,
     DeviceData,
     OperationMode,
+    BitReader,
 )
 
 
@@ -49,37 +49,27 @@ class InverterData(DeviceData):
 class Inverter(Device):
     data_type = InverterData
 
-    PACKET = Struct(
-        # Device State:   0 - Off
-        "device_state" / Int8ul,
-        # Alarm Reason Code
-        "alarm" / Int16ul,
-        # Input voltage reading in 0.01V increments
-        "battery_voltage" / Int16sl,
-        # Output AC power in 1VA
-        "ac_apparent_power" / Int16ul,
-
-        # Output AC voltage in 0.01V
-        # The next 15 bits indicate the voltage in 0.01 V (0 .. 327.66 V | 0x7FFF)
-        "ac_voltage"/ Int16ul,
-
-        # Output AC current in 0.1A
-        # The next 11 bits identify the current in 0.1 A (0 .. 204.6 A | 0x7FF)
-        # enconding in little endian (Int16ul)
-        "ac_current"/ Int16ul,
-        GreedyBytes,
-    )
-
     def parse_decrypted(self, decrypted: bytes) -> dict:
-        pkt = self.PACKET.parse(decrypted)
+        reader = BitReader(decrypted)
 
-        ac_voltage = pkt.ac_voltage & 0x7FFF
-        ac_current = (pkt.ac_voltage >> 15 | pkt.ac_current << 1) & 0x7FF
+        # Device State:   0 - Off
+        device_state = reader.read_unsigned_int(8)
+        # Alarm Reason Code
+        alarm = reader.read_unsigned_int(16)
+        # Input voltage reading in 0.01V increments
+        battery_voltage = reader.read_signed_int(16)
+        # Output AC power in 1VA
+        ac_apparent_power = reader.read_unsigned_int(16)
+        # Output AC voltage in 0.01V
+        ac_voltage = reader.read_unsigned_int(15)
+        # Output AC current in 0.1A
+        ac_current = reader.read_unsigned_int(11)
+
         return {
-            "device_state": OperationMode(pkt.device_state) if pkt.device_state != 0xFF else None,
-            "alarm": pkt.alarm,
-            "battery_voltage": (pkt.battery_voltage) / 100 if pkt.battery_voltage != 0x7FFF else None,
-            "ac_apparent_power": pkt.ac_apparent_power if pkt.ac_apparent_power != 0xFFFF else None,
+            "device_state": OperationMode(device_state) if device_state != 0xFF else None,
+            "alarm": alarm,
+            "battery_voltage": (battery_voltage) / 100 if battery_voltage != 0x7FFF else None,
+            "ac_apparent_power": ac_apparent_power if ac_apparent_power != 0xFFFF else None,
             "ac_voltage": ac_voltage / 100 if ac_voltage != 0x7FFF else None,
             "ac_current": ac_current / 10 if ac_current != 0x7FF else None,
         }

@@ -1,8 +1,6 @@
 from typing import Optional
 
-from construct import Int8ul, Int16sl, Int16ul, Struct
-
-from victron_ble.devices.base import Device, DeviceData, OperationMode
+from victron_ble.devices.base import Device, DeviceData, OperationMode, BitReader
 
 
 class SolarChargerData(DeviceData):
@@ -38,45 +36,39 @@ class SolarChargerData(DeviceData):
 
     def get_external_device_load(self) -> Optional[float]:
         """
-        Return the external device load in amps - if 0xFFFF no load output exists
+        Return the external device load in amps
         """
-        if self._data["external_device_load"] == 0xFFFF:
-            return None
-        return (self._data["external_device_load"] & 0x01FF) / 10
+        return self._data["external_device_load"]
 
 
 class SolarCharger(Device):
     data_type = SolarChargerData
 
-    PACKET = Struct(
+    def parse_decrypted(self, decrypted: bytes) -> dict:
+        reader = BitReader(decrypted)
+
         # Charge State:   0 - Off
         #                 3 - Bulk
         #                 4 - Absorption
         #                 5 - Float
-        "charge_state" / Int8ul,
-        "charger_error" / Int8ul,
+        charge_state = reader.read_unsigned_int(8)
+        charger_error = reader.read_unsigned_int(8)
         # Battery voltage reading in 0.01V increments
-        "battery_voltage" / Int16sl,
+        battery_voltage = reader.read_signed_int(16)
         # Battery charging Current reading in 0.1A increments
-        "battery_charging_current" / Int16sl,
+        battery_charging_current = reader.read_signed_int(16)
         # Todays solar power yield in 10Wh increments
-        "yield_today" / Int16ul,
+        yield_today = reader.read_unsigned_int(16)
         # Current power from solar in 1W increments
-        "solar_power" / Int16ul,
+        solar_power = reader.read_unsigned_int(16)
         # External device load in 0.1A increments
-        "external_device_load" / Int16ul,
-    )
-
-    def parse_decrypted(self, decrypted: bytes) -> dict:
-        pkt = self.PACKET.parse(decrypted)
+        external_device_load = reader.read_unsigned_int(9)
 
         return {
-            "charge_state": OperationMode(pkt.charge_state) if pkt.charge_state != 0xFF else None,
-            "battery_voltage": pkt.battery_voltage / 100 if pkt.battery_voltage != 0x7FFF else None,
-            "battery_charging_current": pkt.battery_charging_current / 10 if pkt.battery_charging_current != 0x7FFF else None,
-            "yield_today": pkt.yield_today * 10 if pkt.yield_today != 0xFFFF else None,
-            "solar_power": pkt.solar_power if pkt.solar_power != 0xFFFF else None,
-            "external_device_load": 0
-            if pkt.external_device_load == 0x1FF
-            else pkt.external_device_load,
+            "charge_state": OperationMode(charge_state) if charge_state != 0xFF else None,
+            "battery_voltage": battery_voltage / 100 if battery_voltage != 0x7FFF else None,
+            "battery_charging_current": battery_charging_current / 10 if battery_charging_current != 0x7FFF else None,
+            "yield_today": yield_today * 10 if yield_today != 0xFFFF else None,
+            "solar_power": solar_power if solar_power != 0xFFFF else None,
+            "external_device_load": external_device_load if external_device_load != 0x1FF else None,
         }
