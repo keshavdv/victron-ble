@@ -89,7 +89,7 @@ class VEBus(Device):
             ac_in_power *= -1
 
         ac_out_bytes = int.from_bytes(pkt.ac_in_and_ac_out_power[2:5], "little") >> 2
-        ac_out_power = (ac_out_bytes >> 1) & 0x07FFFF
+        ac_out_power = (ac_out_bytes >> 1) & 0x03FFFF
         if ac_out_bytes & 0b1:
             ac_out_power *= -1
 
