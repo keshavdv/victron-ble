@@ -26,6 +26,7 @@ class OperationMode(Enum):
     REPEATED_ABSORPTION = 246
     RECONDITION = 247
     BATTERY_SAFE = 248
+    ACTIVE = 249
     EXTERNAL_CONTROL = 252
 
 
@@ -182,6 +183,7 @@ class OffReason(Enum):
 
 
 class AlarmReason(Enum):
+    NONE = 0
     LOW_VOLTAGE = 1
     HIGH_VOLTAGE = 2
     LOW_SOC = 4
@@ -261,6 +263,7 @@ MODEL_ID_MAPPING = {
     0xA06F: "BlueSolar MPPT 150|45 rev2",
     0xA070: "BlueSolar MPPT 150|60 rev2",
     0xA071: "BlueSolar MPPT 150|70 rev2",
+    0xA0F0: "SmartLithium Battery 12/330",
     0xA102: "SmartSolar MPPT VE.Can 150/70",
     0xA103: "SmartSolar MPPT VE.Can 150/45",
     0xA104: "SmartSolar MPPT VE.Can 150/60",
