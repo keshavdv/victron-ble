@@ -99,7 +99,7 @@ class SmartLithiumData(DeviceData):
         """
         Return the balancer status
         """
-        return BalancerStatus(self._data["balancer_status"]).name
+        return BalancerStatus(self._data["balancer_status"])
 
 
 class SmartLithium(Device):
