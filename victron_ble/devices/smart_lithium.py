@@ -1,6 +1,6 @@
 from typing import Optional
 
-from construct import Array, BitsInteger, BitStruct, Padding
+from construct import Array, BitsInteger, BitStruct, ByteSwapped, Padding
 
 from victron_ble.devices.base import Device, DeviceData
 
@@ -47,24 +47,30 @@ class SmartLithium(Device):
     data_type = SmartLithiumData
 
     # https://community.victronenergy.com/questions/187303/victron-bluetooth-advertising-protocol.html
-    PACKET = BitStruct(
-        "bms_flags" / BitsInteger(32),
-        "error_flags" / BitsInteger(16),
-        # Cell voltage reading 7 bit * 8 cells (0x00<2.61V, 0x01=2.61V, +0.01V .. 0x7e>3.85V, 0x7f N/A)
-        "cell_voltages" / Array(8, BitsInteger(7)),
-        "battery_voltage" / BitsInteger(12),  # (0V.. +0.01V .. 40.95V)
-        "balancer_status" / BitsInteger(4),
-        "battery_temperature" / BitsInteger(7),  # -40..86C
-        Padding(1),  # unused
+    # Reverse the entire packet, because non-aligned integers are packed
+    # little-endian
+    PACKET = ByteSwapped(
+        BitStruct(
+            Padding(1),  # unused
+            "battery_temperature" / BitsInteger(7),  # -40..86C
+            "balancer_status" / BitsInteger(4),
+            "battery_voltage" / BitsInteger(12),  # (0V.. +0.01V .. 40.95V)
+            # Cell voltage reading 7 bit * 8 cells (0x00<2.61V, 0x01=2.61V, +0.01V .. 0x7e>3.85V, 0x7f N/A)
+            "cell_voltages" / Array(8, BitsInteger(7)),
+            "error_flags" / BitsInteger(16),
+            "bms_flags" / BitsInteger(32, swapped=True),
+        ),
     )
 
     def parse_decrypted(self, decrypted: bytes) -> dict:
-        pkt = self.PACKET.parse(decrypted)
+        pkt = self.PACKET.parse(decrypted[:20])
 
         parsed = {
             "bms_flags": pkt.bms_flags,
             "error_flags": pkt.error_flags,
-            "cell_voltages": [parse_cell_voltage(v) for v in pkt.cell_voltages],
+            "cell_voltages": [
+                parse_cell_voltage(v) for v in reversed(pkt.cell_voltages)
+            ],
             "battery_voltage": (
                 pkt.battery_voltage / 100.0 if pkt.battery_voltage != 0x0FFF else None
             ),
