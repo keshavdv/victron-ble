@@ -33,6 +33,8 @@ __all__ = [
     "DcEnergyMeterData",
     "SmartBatteryProtect",
     "SmartBatteryProtectData",
+    "SmartLithium",
+    "SmartLithiumData",
     "SolarCharger",
     "SolarChargerData",
     "VEBus",
