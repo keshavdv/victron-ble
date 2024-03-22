@@ -67,3 +67,13 @@ class TestSmartLithium:
             None,
         ]
         assert actual.get_error_flags() == 0
+
+    def test_parse_4(self) -> None:
+        actual = self.parse_decrypted(
+            b'\x00\x00\x00\x06\x00\x00G\xa3\xd1h,\x1a\x8dP\n\xcd\x96d\xf2\xf5\x0b\x85\xed\xe8h\xf6\x1d\xc1\xae\xa1\xce\x83')
+        assert actual.get_balancer_status() == 0
+        assert actual.get_battery_temperature() == 37
+        assert actual.get_battery_voltage() == 26.4
+        assert actual.get_bms_flags() == 6 #?
+        assert actual.get_cell_voltages() == [
+            3.31, 3.30, 3.30, 3.30, 3.30, 3.29, 3.30, 3.30]
