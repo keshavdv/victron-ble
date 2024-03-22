@@ -24,25 +24,25 @@ class SmartBatteryProtectData(DeviceData):
         """
         return self._data["device_state"]
 
-    def get_output_state(self) -> int:
+    def get_output_state(self) -> OutputState:
         """
         Return the output state
         """
         return self._data["output_state"]
 
-    def get_error_code(self) -> int:
+    def get_error_code(self) -> ChargerError:
         """
         Return the error code
         """
         return self._data["error_code"]
 
-    def get_alarm_reason(self) -> int:
+    def get_alarm_reason(self) -> AlarmReason:
         """
         Return the alarm reason
         """
         return self._data["alarm_reason"]
 
-    def get_warning_reason(self) -> int:
+    def get_warning_reason(self) -> AlarmReason:
         """
         Return the warning reason
         """
