@@ -74,8 +74,6 @@ def detect_device_type(data: bytes) -> Optional[Type[Device]]:
         pass
     elif mode == 0x9:  # SmartBatteryProtect
         return SmartBatteryProtect
-    elif mode == 0x5:  # SmartLithium
-        return SmartLithium
     elif mode == 0x1:  # SolarCharger
         return SolarCharger
     elif mode == 0xC:  # VE.Bus

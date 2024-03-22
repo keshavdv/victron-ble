@@ -1,13 +1,14 @@
-from construct import Struct, Int8ul, Int16ul, Int32ul
 from enum import Enum
+
+from construct import Int8ul, Int16ul, Int32ul, Struct
 
 from victron_ble.devices.base import (
     AlarmReason,
     ChargerError,
     Device,
     DeviceData,
-    OperationMode,
     OffReason,
+    OperationMode,
 )
 
 
