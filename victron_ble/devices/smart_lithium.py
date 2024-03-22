@@ -53,7 +53,7 @@ class SmartLithium(Device):
         BitStruct(
             Padding(1),  # unused
             "battery_temperature" / BitsInteger(7),  # -40..86C
-            "balancer_status" / BitsInteger(4),
+            "balancer_status" / BitsInteger(4),  # 0 = not balanced, 1 = balanced
             "battery_voltage" / BitsInteger(12),  # (0V.. +0.01V .. 40.95V)
             # Cell voltage reading 7 bit * 8 cells (0x00<2.61V, 0x01=2.61V, +0.01V .. 0x7e>3.85V, 0x7f N/A)
             "cell_voltages" / Array(8, BitsInteger(7)),
@@ -87,5 +87,5 @@ class SmartLithium(Device):
 
 def parse_cell_voltage(payload: int) -> Optional[float]:
     return {0x00: float("-inf"), 0x7E: float("inf"), 0x7F: None}.get(
-        payload, 2.60 + payload / 100.0
+        payload, (260 + payload) / 100.0
     )
