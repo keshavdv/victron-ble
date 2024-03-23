@@ -4,7 +4,13 @@ from construct import Array, BitsInteger, BitStruct, ByteSwapped, Padding
 
 from victron_ble.devices.base import Device, DeviceData
 
+from enum Import Enum
 
+class BalancerStatus(Enum):
+  UNKNOWN = 0
+  BALANCED = 1
+  IMBALANCE = 3
+  
 class SmartLithiumData(DeviceData):
     def get_bms_flags(self) -> int:
         """
@@ -36,7 +42,7 @@ class SmartLithiumData(DeviceData):
         """
         return self._data["cell_voltages"]
 
-    def get_balancer_status(self) -> int:
+    def get_balancer_status(self) -> BalancerStatus:
         """
         Get the raw balancer_status field (meaning not documented).
         """
@@ -53,7 +59,7 @@ class SmartLithium(Device):
         BitStruct(
             Padding(1),  # unused
             "battery_temperature" / BitsInteger(7),  # -40..86C
-            "balancer_status" / BitsInteger(4),  # 0 = Imbalance, 1 = balanced, 3 = Imbalance
+            "balancer_status" / BitsInteger(4),  # 0 = unknown, 1 = balanced, 3 = imbalance
             "battery_voltage" / BitsInteger(12),  # (0V.. +0.01V .. 40.95V)
             # Cell voltage reading 7 bit * 8 cells (0x00<2.61V, 0x01=2.61V, +0.01V .. 0x7e>3.85V, 0x7f N/A)
             "cell_voltages" / Array(8, BitsInteger(7)),
@@ -74,7 +80,7 @@ class SmartLithium(Device):
             "battery_voltage": (
                 pkt.battery_voltage / 100.0 if pkt.battery_voltage != 0x0FFF else None
             ),
-            "balancer_status": pkt.balancer_status,
+            "balancer_status": BalancerStatus(pkt.balancer_status),
             "battery_temperature": (
                 (pkt.battery_temperature - 40)
                 if pkt.battery_temperature != 0x7F
