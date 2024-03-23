@@ -263,6 +263,7 @@ MODEL_ID_MAPPING = {
     0xA071: "BlueSolar MPPT 150|70 rev2",
     0xA0EC: "SmartLithium Battery 12V/160Ah",
     0xA0EE: "SmartLithium Battery 24V/200Ah",
+    0xA0F0: "SmartLithium Battery 12V/330Ah",
     0xA102: "SmartSolar MPPT VE.Can 150/70",
     0xA103: "SmartSolar MPPT VE.Can 150/45",
     0xA104: "SmartSolar MPPT VE.Can 150/60",
