@@ -4,7 +4,7 @@ from construct import Array, BitsInteger, BitStruct, ByteSwapped, Padding
 
 from victron_ble.devices.base import Device, DeviceData
 
-from enum Import Enum
+from enum import Enum
 
 class BalancerStatus(Enum):
   UNKNOWN = 0
