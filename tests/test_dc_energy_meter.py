@@ -41,8 +41,15 @@ class TestDcEnergyMeter:
 
     def test_aux_starter(self) -> None:
         actual = self.parse_decrypted("fdffe4040000ffff00000059a65a1c8c")
+        assert actual.get_aux_mode() == AuxMode.STARTER_VOLTAGE
         assert actual.get_starter_voltage() == -0.01
 
-    def test_aux_temperature(self) -> None:
+    def test_aux_temperature_none(self) -> None:
         actual = self.parse_decrypted("fdffe4040000ffff020000ae28af8a5c")
-        assert actual.get_temperature() == 382.2
+        assert actual.get_aux_mode() == AuxMode.TEMPERATURE
+        assert actual.get_temperature() is None
+
+    def test_aux_temperature(self) -> None:
+        actual = self.parse_decrypted("fdffe40400008888020000ae28af8a5c")
+        assert actual.get_aux_mode() == AuxMode.TEMPERATURE
+        assert actual.get_temperature() == 76.37

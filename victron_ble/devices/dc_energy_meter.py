@@ -115,6 +115,10 @@ class DcEnergyMeter(Device):
                 Int16sl.parse((pkt.aux).to_bytes(2, "little")) / 100
             )
         elif aux_mode == AuxMode.TEMPERATURE:
-            parsed["temperature_kelvin"] = pkt.aux / 100
+            if pkt.aux == 0xFFFF:
+                temp_k = None
+            else:
+                temp_k = pkt.aux / 100
+            parsed["temperature_kelvin"] = temp_k
 
         return parsed
