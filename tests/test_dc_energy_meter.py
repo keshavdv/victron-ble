@@ -14,7 +14,7 @@ class TestDcEnergyMeter:
         )
 
         assert isinstance(actual, DcEnergyMeterData)
-        assert actual.get_meter_type() == MeterType.FUEL_CELL
+        assert actual.get_meter_type() == MeterType.DC_DC_CHARGER
         assert actual.get_aux_mode() == AuxMode.STARTER_VOLTAGE
         assert actual.get_current() == 0.0
         assert actual.get_voltage() == 12.52
@@ -31,7 +31,7 @@ class TestDcEnergyMeter:
 
     def test_parse(self) -> None:
         actual = self.parse_decrypted("fdffe4040000ffff00000059a65a1c8c")
-        assert actual.get_meter_type() == MeterType.FUEL_CELL
+        assert actual.get_meter_type() == MeterType.DC_DC_CHARGER
         assert actual.get_aux_mode() == AuxMode.STARTER_VOLTAGE
         assert actual.get_current() == 0.0
         assert actual.get_voltage() == 12.52

@@ -8,23 +8,23 @@ from victron_ble.devices.battery_monitor import AuxMode
 
 
 class MeterType(Enum):
-    SOLAR_CHARGER = -7
-    WIND_CHARGER = -6
-    SHAFT_GENERATOR = -5
-    ALTERNATOR = -4
-    FUEL_CELL = -3
-    WATER_GENERATOR = -2
-    DC_DC_CHARGER = -1
-    AC_CHARGER = 1
-    GENERIC_SOURCE = 2
-    GENERIC_LOAD = 3
-    ELECTRIC_DRIVE = 4
-    FRIDGE = 5
-    WATER_PUMP = 6
-    BILGE_PUMP = 7
-    DC_SYSTEM = 8
-    INVERTER = 9
-    WATER_HEATER = 10
+    SOLAR_CHARGER = -9
+    WIND_CHARGER = -8
+    SHAFT_GENERATOR = -7
+    ALTERNATOR = -6
+    FUEL_CELL = -5
+    WATER_GENERATOR = -4
+    DC_DC_CHARGER = -3
+    AC_CHARGER = -2
+    GENERIC_SOURCE = -1
+    GENERIC_LOAD = 1
+    ELECTRIC_DRIVE = 2
+    FRIDGE = 3
+    WATER_PUMP = 4
+    BILGE_PUMP = 5
+    DC_SYSTEM = 6
+    INVERTER = 7
+    WATER_HEATER = 8
 
 
 class DcEnergyMeterData(DeviceData):
