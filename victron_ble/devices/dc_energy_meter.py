@@ -1,30 +1,30 @@
 from enum import Enum
 from typing import Optional
 
-from construct import Int16sl, Int16ul, Int24sl, Struct
+from construct import BitStruct, BitsInteger, ByteSwapped, Int16sl, Padding
 
 from victron_ble.devices.base import AlarmReason, Device, DeviceData, kelvin_to_celsius
 from victron_ble.devices.battery_monitor import AuxMode
 
 
 class MeterType(Enum):
-    SOLAR_CHARGER = -7
-    WIND_CHARGER = -6
-    SHAFT_GENERATOR = -5
-    ALTERNATOR = -4
-    FUEL_CELL = -3
-    WATER_GENERATOR = -2
-    DC_DC_CHARGER = -1
-    AC_CHARGER = 1
-    GENERIC_SOURCE = 2
-    GENERIC_LOAD = 3
-    ELECTRIC_DRIVE = 4
-    FRIDGE = 5
-    WATER_PUMP = 6
-    BILGE_PUMP = 7
-    DC_SYSTEM = 8
-    INVERTER = 9
-    WATER_HEATER = 10
+    SOLAR_CHARGER = -9
+    WIND_CHARGER = -8
+    SHAFT_GENERATOR = -7
+    ALTERNATOR = -6
+    FUEL_CELL = -5
+    WATER_GENERATOR = -4
+    DC_DC_CHARGER = -3
+    AC_CHARGER = -2
+    GENERIC_SOURCE = -1
+    GENERIC_LOAD = 1
+    ELECTRIC_DRIVE = 2
+    FRIDGE = 3
+    WATER_PUMP = 4
+    BILGE_PUMP = 5
+    DC_SYSTEM = 6
+    INVERTER = 7
+    WATER_HEATER = 8
 
 
 class DcEnergyMeterData(DeviceData):
@@ -77,27 +77,29 @@ class DcEnergyMeterData(DeviceData):
 class DcEnergyMeter(Device):
     data_type = DcEnergyMeterData
 
-    PACKET = Struct(
-        "meter_type" / Int16sl,
-        # Voltage reading in 10mV increments
-        "voltage" / Int16ul,
-        # Alarm reason
-        "alarm" / Int16ul,
-        # Value of the auxillary input
-        "aux" / Int16ul,
-        # The upper 22 bits indicate the current in milliamps
-        # The lower 2 bits identify the aux input mode:
-        #   0 = Starter battery voltage
-        #   1 = Midpoint voltage
-        #   2 = Temperature
-        #   3 = Disabled
-        "current" / Int24sl,
+    PACKET = ByteSwapped(
+        BitStruct(
+            Padding(40),
+            "current" / BitsInteger(22, signed=True),
+            # Aux input mode:
+            #   0 = Starter battery voltage
+            #   1 = Midpoint voltage
+            #   2 = Temperature
+            #   3 = Disabled
+            "aux_mode" / BitsInteger(2),
+            # Value of the auxillary input
+            "aux" / BitsInteger(16),
+            # Alarm reason
+            "alarm" / BitsInteger(16),
+            # Voltage reading in 10mV increments
+            "voltage" / BitsInteger(16, signed=True),
+            "meter_type" / BitsInteger(16, signed=True),
+        )
     )
 
     def parse_decrypted(self, decrypted: bytes) -> dict:
         pkt = self.PACKET.parse(decrypted)
-
-        aux_mode = AuxMode(pkt.current & 0b11)
+        aux_mode = AuxMode(pkt.aux_mode)
 
         parsed = {
             "meter_type": MeterType(pkt.meter_type),
@@ -113,6 +115,10 @@ class DcEnergyMeter(Device):
                 Int16sl.parse((pkt.aux).to_bytes(2, "little")) / 100
             )
         elif aux_mode == AuxMode.TEMPERATURE:
-            parsed["temperature_kelvin"] = pkt.aux / 100
+            if pkt.aux == 0xFFFF:
+                temp_k = None
+            else:
+                temp_k = pkt.aux / 100
+            parsed["temperature_kelvin"] = temp_k
 
         return parsed
