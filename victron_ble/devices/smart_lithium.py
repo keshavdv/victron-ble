@@ -9,6 +9,7 @@ from enum import Enum
 class BalancerStatus(Enum):
   UNKNOWN = 0
   BALANCED = 1
+  BALANCING = 2 //?
   IMBALANCE = 3
   
 class SmartLithiumData(DeviceData):
