@@ -53,3 +53,13 @@ class TestDcEnergyMeter:
         actual = self.parse_decrypted("fdffe40400008888020000ae28af8a5c")
         assert actual.get_aux_mode() == AuxMode.TEMPERATURE
         assert actual.get_temperature() == 76.37
+
+    def test_generic_source(self) -> None:
+        actual = self.parse_decrypted("ffff6f0a0000000003000043698118eb")
+        assert actual.get_meter_type() == MeterType.GENERIC_SOURCE
+        assert actual.get_aux_mode() == AuxMode.DISABLED
+        assert actual.get_current() == 0.0
+        assert actual.get_voltage() == 26.71
+        assert actual.get_starter_voltage() is None
+        assert actual.get_alarm() is None
+        assert actual.get_temperature() is None
