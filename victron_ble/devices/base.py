@@ -183,6 +183,7 @@ class OffReason(Enum):
 
 
 class AlarmReason(Enum):
+    NO_ALARM = 0
     LOW_VOLTAGE = 1
     HIGH_VOLTAGE = 2
     LOW_SOC = 4

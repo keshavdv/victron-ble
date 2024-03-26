@@ -3,6 +3,7 @@ import pytest
 from victron_ble.devices.battery_monitor import (
     BatteryMonitor,
     BatteryMonitorData,
+    AlarmReason,
     AuxMode,
 )
 from victron_ble.exceptions import AdvertisementKeyMismatchError
@@ -21,7 +22,7 @@ class TestBatteryMonitor:
         assert actual.get_remaining_mins() == None
         assert actual.get_soc() == 50.0
         assert actual.get_voltage() == 12.53
-        assert actual.get_alarm() == None
+        assert actual.get_alarm() == AlarmReason.NO_ALARM
         assert actual.get_temperature() == None
         assert actual.get_starter_voltage() == None
         assert actual.get_midpoint_voltage() == None
@@ -39,7 +40,7 @@ class TestBatteryMonitor:
         assert actual.get_remaining_mins() == None
         assert actual.get_soc() == 50.0
         assert actual.get_voltage() == 12.53
-        assert actual.get_alarm() == None
+        assert actual.get_alarm() == AlarmReason.NO_ALARM
         assert actual.get_temperature() == None
         assert actual.get_starter_voltage() == None
         assert actual.get_midpoint_voltage() == None

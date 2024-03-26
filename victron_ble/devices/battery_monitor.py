@@ -48,11 +48,11 @@ class BatteryMonitorData(DeviceData):
         """
         return self._data["consumed_ah"]
 
-    def get_alarm(self) -> Optional[AlarmReason]:
+    def get_alarm(self) -> AlarmReason:
         """
-        Return an enum indicating the current alarm reason or None otherwise
+        Return an enum indicating the current alarm reason
         """
-        return AlarmReason(self._data["alarm"]) if self._data["alarm"] > 0 else None
+        return self._data["alarm"]
 
     def get_aux_mode(self) -> AuxMode:
         """
@@ -111,7 +111,7 @@ class BatteryMonitor(Device):
             "voltage": voltage / 100 if voltage != 0x7FFF else None,
             "consumed_ah": -consumed_ah / 10 if consumed_ah != 0xFFFFF else None,
             "soc": soc / 10 if soc != 0x3FF else None,
-            "alarm": alarm,
+            "alarm": AlarmReason(alarm),
         }
 
         if aux_mode == AuxMode.STARTER_VOLTAGE.value:
