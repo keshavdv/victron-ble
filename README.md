@@ -1,4 +1,3 @@
----
 # victron_ble
 
 A Python library to parse Instant Readout advertisement data from Victron devices.
@@ -38,6 +37,18 @@ pip install victron_ble
 ## Usage
 
 To be able to decrypt the contents of the advertisement, you'll need to first fetch the per-device encryption key from the official Victron application. The method to do this will vary per platform, instructions below:
+
+#### Using the Victron Connect app
+
+1. Install the Victron Connect app onto your phone or computer.
+2. Locate the device that you want to monitor in the list shown by the app and click on it.
+3. Click on the gear icon to open the Settings for that device.
+4. Open the menu and select Product Info.
+5. Scroll down to Instant Readout via Bluetooth and enable the feature if it is not already enabled.
+6. Click the Show button next to Instant Readout Details to display the encryption keys.
+7. Copy the MAC address and advertisement key into your YAML file.
+
+![Screenshot of the Victron Connect product info dialog showing the instant readout settings](/docs/victron-connect-instant-readout.png)
 
 #### Fetching Keys
  
@@ -147,6 +158,8 @@ parsed_data = parser(<key>).parse(<ble advertisement data>)
 ```
 
 ## Development
+
+Victron has published documentation for the instant read-out protocol [here](https://community.victronenergy.com/questions/187303/victron-bluetooth-advertising-protocol.html).
 
 If you'd like to help support a new device, collect the following and create a new Github issue:
 

@@ -3,6 +3,7 @@ import pytest
 from victron_ble.devices.battery_monitor import (
     BatteryMonitor,
     BatteryMonitorData,
+    AlarmReason,
     AuxMode,
 )
 from victron_ble.exceptions import AdvertisementKeyMismatchError
@@ -16,12 +17,12 @@ class TestBatteryMonitor:
         )
         assert isinstance(actual, BatteryMonitorData)
         assert actual.get_aux_mode() == AuxMode.DISABLED
-        assert actual.get_consumed_ah() == 50.0
+        assert actual.get_consumed_ah() == -50.0
         assert actual.get_current() == 0
-        assert actual.get_remaining_mins() == 65535
+        assert actual.get_remaining_mins() == None
         assert actual.get_soc() == 50.0
         assert actual.get_voltage() == 12.53
-        assert actual.get_alarm() == None
+        assert actual.get_alarm() == AlarmReason.NO_ALARM
         assert actual.get_temperature() == None
         assert actual.get_starter_voltage() == None
         assert actual.get_midpoint_voltage() == None
@@ -34,12 +35,12 @@ class TestBatteryMonitor:
     def test_parse(self) -> None:
         actual = self.parse_decrypted("ffffe50400000000030000f40140df03")
         assert actual.get_aux_mode() == AuxMode.DISABLED
-        assert actual.get_consumed_ah() == 50.0
+        assert actual.get_consumed_ah() == -50.0
         assert actual.get_current() == 0
-        assert actual.get_remaining_mins() == 65535
+        assert actual.get_remaining_mins() == None
         assert actual.get_soc() == 50.0
         assert actual.get_voltage() == 12.53
-        assert actual.get_alarm() == None
+        assert actual.get_alarm() == AlarmReason.NO_ALARM
         assert actual.get_temperature() == None
         assert actual.get_starter_voltage() == None
         assert actual.get_midpoint_voltage() == None
