@@ -109,7 +109,7 @@ class BatteryMonitor(Device):
             "aux_mode": AuxMode(aux_mode),
             "current": current / 1000 if current != 0x3FFFFF else None,
             "voltage": voltage / 100 if voltage != 0x7FFF else None,
-            "consumed_ah": consumed_ah / 10 if consumed_ah != 0xFFFFF else None,
+            "consumed_ah": -consumed_ah / 10 if consumed_ah != 0xFFFFF else None,
             "soc": soc / 10 if soc != 0x3FF else None,
             "alarm": alarm,
         }

@@ -16,7 +16,7 @@ class TestBatteryMonitor:
         )
         assert isinstance(actual, BatteryMonitorData)
         assert actual.get_aux_mode() == AuxMode.DISABLED
-        assert actual.get_consumed_ah() == 50.0
+        assert actual.get_consumed_ah() == -50.0
         assert actual.get_current() == 0
         assert actual.get_remaining_mins() == None
         assert actual.get_soc() == 50.0
@@ -34,7 +34,7 @@ class TestBatteryMonitor:
     def test_parse(self) -> None:
         actual = self.parse_decrypted("ffffe50400000000030000f40140df03")
         assert actual.get_aux_mode() == AuxMode.DISABLED
-        assert actual.get_consumed_ah() == 50.0
+        assert actual.get_consumed_ah() == -50.0
         assert actual.get_current() == 0
         assert actual.get_remaining_mins() == None
         assert actual.get_soc() == 50.0
