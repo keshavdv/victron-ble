@@ -1,4 +1,11 @@
-from victron_ble.devices.base import ACInState, Device, DeviceData, OperationMode, BitReader
+from victron_ble.devices.base import (
+    ACInState,
+    AlarmNotification,
+    BitReader,
+    Device,
+    DeviceData,
+    OperationMode,
+)
 
 
 class VEBusData(DeviceData):
@@ -7,6 +14,18 @@ class VEBusData(DeviceData):
         Return an enum indicating the device state
         """
         return self._data["device_state"]
+
+    def get_error(self) -> int:
+        """
+        Return the VEBus error state (unknown interpretation)
+        """
+        return self._data["error"]
+
+    def get_alarm(self) -> AlarmNotification:
+        """
+        Return the VEBus alarm state
+        """
+        return self._data["alarm"]
 
     def get_ac_in_state(self) -> ACInState:
         """
@@ -80,12 +99,22 @@ class VEBus(Device):
         soc = reader.read_unsigned_int(7)
 
         return {
-            "device_state": OperationMode(device_state) if device_state != 0xFF else None,
-            "battery_voltage": battery_voltage / 100 if battery_voltage != 0x3FFF else None,
-            "battery_current": battery_current / 10 if battery_current != 0x7FFF else None,
+            "device_state": (
+                OperationMode(device_state) if device_state != 0xFF else None
+            ),
+            "error": error if error != 0xFF else None,
+            "battery_voltage": (
+                battery_voltage / 100 if battery_voltage != 0x3FFF else None
+            ),
+            "battery_current": (
+                battery_current / 10 if battery_current != 0x7FFF else None
+            ),
             "ac_in_state": ACInState(ac_in_state) if ac_in_state != 3 else None,
             "ac_in_power": ac_in_power if ac_in_power != 0x3FFFF else None,
             "ac_out_power": ac_out_power if ac_out_power != 0x3FFFF else None,
-            "battery_temperature": battery_temperature - 40 if battery_temperature != 0x7F else None,
+            "alarm": (AlarmNotification(alarm) if alarm != 3 else None),
+            "battery_temperature": (
+                battery_temperature - 40 if battery_temperature != 0x7F else None
+            ),
             "soc": soc if soc != 0x7F else None,
         }

@@ -199,6 +199,12 @@ class AlarmReason(Enum):
     BMS_LOCKOUT = 8192
 
 
+class AlarmNotification(Enum):
+    NO_ALARM = 0
+    WARNING = 1
+    ALARM = 2
+
+
 # Sourced from Victron extra-manufacturer-data-2022-12-14.pdf
 class ACInState(Enum):
     AC_IN_1 = 0
@@ -432,10 +438,11 @@ class Device(abc.ABC):
 def kelvin_to_celsius(temp_in_kelvin: float) -> float:
     return round(temp_in_kelvin - 273.15, 2)
 
+
 # Reads bit-field structures in the order in which they are packed in
 # Victron Extra Manufacturer Data from LSB to MSB.
 class BitReader:
-    def __init__(self, data: str):
+    def __init__(self, data: bytes):
         self._data = data
         self._index = 0
 
@@ -453,5 +460,6 @@ class BitReader:
     def read_signed_int(self, num_bits: int) -> int:
         return BitReader.to_signed_int(self.read_unsigned_int(num_bits), num_bits)
 
+    @staticmethod
     def to_signed_int(value: int, num_bits: int) -> int:
-        return (1 << num_bits) - value if value & (1 << (num_bits - 1)) else value
+        return value - (1 << num_bits) if value & (1 << (num_bits - 1)) else value

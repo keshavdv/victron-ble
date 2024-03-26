@@ -18,7 +18,7 @@ class TestBatteryMonitor:
         assert actual.get_aux_mode() == AuxMode.DISABLED
         assert actual.get_consumed_ah() == 50.0
         assert actual.get_current() == 0
-        assert actual.get_remaining_mins() == 65535
+        assert actual.get_remaining_mins() == None
         assert actual.get_soc() == 50.0
         assert actual.get_voltage() == 12.53
         assert actual.get_alarm() == None
@@ -36,7 +36,7 @@ class TestBatteryMonitor:
         assert actual.get_aux_mode() == AuxMode.DISABLED
         assert actual.get_consumed_ah() == 50.0
         assert actual.get_current() == 0
-        assert actual.get_remaining_mins() == 65535
+        assert actual.get_remaining_mins() == None
         assert actual.get_soc() == 50.0
         assert actual.get_voltage() == 12.53
         assert actual.get_alarm() == None

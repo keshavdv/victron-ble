@@ -1,10 +1,10 @@
 from victron_ble.devices.base import (
+    BitReader,
     ChargerError,
     Device,
     DeviceData,
     OffReason,
     OperationMode,
-    BitReader,
 )
 
 
@@ -61,9 +61,15 @@ class DcDcConverter(Device):
         off_reason = reader.read_unsigned_int(32)
 
         return {
-            "device_state": OperationMode(device_state) if device_state != 0xFF else None,
-            "charger_error": ChargerError(charger_error) if charger_error != 0xFF else None,
+            "device_state": (
+                OperationMode(device_state) if device_state != 0xFF else None
+            ),
+            "charger_error": (
+                ChargerError(charger_error) if charger_error != 0xFF else None
+            ),
             "input_voltage": input_voltage / 100 if input_voltage != 0xFFFF else None,
-            "output_voltage": output_voltage / 100 if output_voltage != 0x7FFF else None,
+            "output_voltage": (
+                output_voltage / 100 if output_voltage != 0x7FFF else None
+            ),
             "off_reason": OffReason(off_reason),
         }

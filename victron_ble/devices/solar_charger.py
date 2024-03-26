@@ -1,6 +1,12 @@
 from typing import Optional
 
-from victron_ble.devices.base import Device, DeviceData, OperationMode, BitReader
+from victron_ble.devices.base import (
+    BitReader,
+    ChargerError,
+    Device,
+    DeviceData,
+    OperationMode,
+)
 
 
 class SolarChargerData(DeviceData):
@@ -9,6 +15,12 @@ class SolarChargerData(DeviceData):
         Return an enum indicating the current charging state
         """
         return self._data["charge_state"]
+
+    def get_charger_error(self) -> ChargerError:
+        """
+        Return an enum indicating the current charging error
+        """
+        return self._data["charger_error"]
 
     def get_battery_voltage(self) -> float:
         """
@@ -65,10 +77,23 @@ class SolarCharger(Device):
         external_device_load = reader.read_unsigned_int(9)
 
         return {
-            "charge_state": OperationMode(charge_state) if charge_state != 0xFF else None,
-            "battery_voltage": battery_voltage / 100 if battery_voltage != 0x7FFF else None,
-            "battery_charging_current": battery_charging_current / 10 if battery_charging_current != 0x7FFF else None,
+            "charge_state": (
+                OperationMode(charge_state) if charge_state != 0xFF else None
+            ),
+            "charger_error": (
+                ChargerError(charger_error) if charger_error != 0xFF else None
+            ),
+            "battery_voltage": (
+                battery_voltage / 100 if battery_voltage != 0x7FFF else None
+            ),
+            "battery_charging_current": (
+                battery_charging_current / 10
+                if battery_charging_current != 0x7FFF
+                else None
+            ),
             "yield_today": yield_today * 10 if yield_today != 0xFFFF else None,
             "solar_power": solar_power if solar_power != 0xFFFF else None,
-            "external_device_load": external_device_load if external_device_load != 0x1FF else None,
+            "external_device_load": (
+                external_device_load / 10 if external_device_load != 0x1FF else None
+            ),
         }

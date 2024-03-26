@@ -1,11 +1,11 @@
-from typing import Optional, Type
+from typing import Optional
 
 from victron_ble.devices.base import (
     AlarmReason,
+    BitReader,
     Device,
     DeviceData,
     OperationMode,
-    BitReader,
 )
 
 
@@ -46,6 +46,7 @@ class InverterData(DeviceData):
         """
         return self._data["ac_current"]
 
+
 class Inverter(Device):
     data_type = InverterData
 
@@ -66,10 +67,16 @@ class Inverter(Device):
         ac_current = reader.read_unsigned_int(11)
 
         return {
-            "device_state": OperationMode(device_state) if device_state != 0xFF else None,
+            "device_state": (
+                OperationMode(device_state) if device_state != 0xFF else None
+            ),
             "alarm": alarm,
-            "battery_voltage": (battery_voltage) / 100 if battery_voltage != 0x7FFF else None,
-            "ac_apparent_power": ac_apparent_power if ac_apparent_power != 0xFFFF else None,
+            "battery_voltage": (
+                (battery_voltage) / 100 if battery_voltage != 0x7FFF else None
+            ),
+            "ac_apparent_power": (
+                ac_apparent_power if ac_apparent_power != 0xFFFF else None
+            ),
             "ac_voltage": ac_voltage / 100 if ac_voltage != 0x7FFF else None,
             "ac_current": ac_current / 10 if ac_current != 0x7FF else None,
         }

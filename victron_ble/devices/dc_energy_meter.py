@@ -1,7 +1,13 @@
 from enum import Enum
 from typing import Optional
 
-from victron_ble.devices.base import AlarmReason, Device, DeviceData, kelvin_to_celsius, BitReader
+from victron_ble.devices.base import (
+    AlarmReason,
+    BitReader,
+    Device,
+    DeviceData,
+    kelvin_to_celsius,
+)
 from victron_ble.devices.battery_monitor import AuxMode
 
 
@@ -87,7 +93,6 @@ class DcEnergyMeter(Device):
         aux = reader.read_unsigned_int(16)
         # The aux input mode:
         #   0 = Starter battery voltage
-        #   1 = Midpoint voltage
         #   2 = Temperature
         #   3 = Disabled
         aux_mode = reader.read_unsigned_int(2)

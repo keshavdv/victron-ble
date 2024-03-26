@@ -1,7 +1,13 @@
 from enum import Enum
 from typing import Optional, Type
 
-from victron_ble.devices.base import AlarmReason, Device, DeviceData, kelvin_to_celsius, BitReader
+from victron_ble.devices.base import (
+    AlarmReason,
+    BitReader,
+    Device,
+    DeviceData,
+    kelvin_to_celsius,
+)
 
 
 class AuxMode(Enum):
