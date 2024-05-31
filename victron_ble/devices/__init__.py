@@ -3,10 +3,15 @@ from typing import Dict, Optional, Type
 from construct import Int8ul, Int16ul
 
 from victron_ble.devices.base import Device, DeviceData
-from victron_ble.devices.battery_monitor import AuxMode, BatteryMonitor, BatteryMonitorData
+from victron_ble.devices.battery_monitor import (
+    AuxMode,
+    BatteryMonitor,
+    BatteryMonitorData,
+)
 from victron_ble.devices.battery_sense import BatterySense, BatterySenseData
 from victron_ble.devices.dc_energy_meter import DcEnergyMeter, DcEnergyMeterData
 from victron_ble.devices.dcdc_converter import DcDcConverter, DcDcConverterData
+from victron_ble.devices.smart_lithium import SmartLithium, SmartLithiumData
 from victron_ble.devices.lynx_smart_bms import LynxSmartBMS, LynxSmartBMSData
 from victron_ble.devices.solar_charger import SolarCharger, SolarChargerData
 from victron_ble.devices.vebus import VEBus, VEBusData
@@ -23,6 +28,8 @@ __all__ = [
     "DcDcConverterData",
     "DcEnergyMeter",
     "DcEnergyMeterData",
+    "SmartLithium",
+    "SmartLithiumData",
     "LynxSmartBMS",
     "LynxSmartBMSData",
     "SolarCharger",
@@ -65,8 +72,10 @@ def detect_device_type(data: bytes) -> Optional[Type[Device]]:
         return LynxSmartBMS
     elif mode == 0xB:  # MultiRS
         pass
-    elif mode == 0x5:  # SmartLithium
-        pass
+    elif (
+        mode == 0x5
+    ):  # SmartLithium (commercially Lithium Battery Smart / LiFePO4 Battery Smart)
+        return SmartLithium
     elif mode == 0x1:  # SolarCharger
         return SolarCharger
     elif mode == 0xC:  # VE.Bus
