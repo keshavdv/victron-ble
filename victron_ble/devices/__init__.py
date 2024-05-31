@@ -15,6 +15,7 @@ from victron_ble.devices.smart_battery_protect import (
     SmartBatteryProtect,
     SmartBatteryProtectData,
 )
+from victron_ble.devices.lynx_smart_bms import LynxSmartBMS, LynxSmartBMSData
 from victron_ble.devices.solar_charger import SolarCharger, SolarChargerData
 from victron_ble.devices.vebus import VEBus, VEBusData
 
@@ -32,6 +33,8 @@ __all__ = [
     "DcEnergyMeterData",
     "SmartBatteryProtect",
     "SmartBatteryProtectData",
+    "LynxSmartBMS",
+    "LynxSmartBMSData",
     "SolarCharger",
     "SolarChargerData",
     "VEBus",
@@ -69,7 +72,7 @@ def detect_device_type(data: bytes) -> Optional[Type[Device]]:
     elif mode == 0x6:  # InverterRS
         pass
     elif mode == 0xA:  # LynxSmartBMS
-        pass
+        return LynxSmartBMS
     elif mode == 0xB:  # MultiRS
         pass
     elif mode == 0x9:  # SmartBatteryProtect
