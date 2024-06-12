@@ -83,7 +83,11 @@ class SmartLithium(Device):
             "battery_voltage": (
                 pkt.battery_voltage / 100.0 if pkt.battery_voltage != 0x0FFF else None
             ),
-            "balancer_status": BalancerStatus(pkt.balancer_status),
+            "balancer_status": (
+                BalancerStatus(pkt.balancer_status)
+                if pkt.balancer_status != 0xF
+                else None
+            ),
             "battery_temperature": (
                 (pkt.battery_temperature - 40)
                 if pkt.battery_temperature != 0x7F

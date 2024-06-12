@@ -80,4 +80,3 @@ def detect_device_type(data: bytes) -> Optional[Type[Device]]:
         return VEBus
 
     return None
-    
