@@ -1,5 +1,5 @@
 import abc
-from enum import Enum
+from enum import Enum, Flag
 from typing import Any, Dict, Type
 
 from construct import FixedSized, GreedyBytes, Int8sl, Int16ul, Struct
@@ -169,7 +169,7 @@ class ChargerError(Enum):
     INTERNAL_SUPPLY_D = 215
 
 
-class OffReason(Enum):
+class OffReason(Flag):
     NONE = 0x00000000
     NO_INPUT_POWER = 0x00000001
     SWITCHED_OFF_SWITCH = 0x00000002
@@ -179,11 +179,10 @@ class OffReason(Enum):
     PAY_AS_YOU_GO_OUT_OF_CREDIT = 0x00000020
     BMS = 0x00000040
     ENGINE_SHUTDOWN = 0x00000080
-    ENGINE_SHUTDOWN_AND_INPUT_VOLTAGE_LOCKOUT = 0x00000081
     ANALYSING_INPUT_VOLTAGE = 0x00000100
 
 
-class AlarmReason(Enum):
+class AlarmReason(Flag):
     NO_ALARM = 0
     LOW_VOLTAGE = 1
     HIGH_VOLTAGE = 2
@@ -377,6 +376,7 @@ MODEL_ID_MAPPING = {
     0xA3CE: "Orion Smart 48V|24V-16A Isolated DC-DC Charger",
     0xA3C7: "Orion Smart 48V|48V-6A Isolated DC-DC Charger",
     0xA3CF: "Orion Smart 48V|48V-8.5A Isolated DC-DC Charger",
+    0xA3F0: "Orion XS 12V|12V-50A",
     0x2780: "Victron Multiplus II 12/3000/120-50 2x120V",
     0xC030: "SmartShunt IP65 500A/50mV",
 }
