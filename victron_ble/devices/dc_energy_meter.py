@@ -115,4 +115,5 @@ class DcEnergyMeter(Device):
                 parsed["temperature_kelvin"] = None
             else:
                 parsed["temperature_kelvin"] = aux / 100
+
         return parsed

@@ -377,6 +377,7 @@ MODEL_ID_MAPPING = {
     0xA3C7: "Orion Smart 48V|48V-6A Isolated DC-DC Charger",
     0xA3CF: "Orion Smart 48V|48V-8.5A Isolated DC-DC Charger",
     0xA3F0: "Orion XS 12V|12V-50A",
+    0xA3E6: "Lynx Smart BMS 1000",
     0x2780: "Victron Multiplus II 12/3000/120-50 2x120V",
     0xC030: "SmartShunt IP65 500A/50mV",
 }

@@ -64,10 +64,11 @@ class DeviceDataEncoder(json.JSONEncoder):
 
 
 class Scanner(BaseScanner):
-    def __init__(self, device_keys: dict[str, str] = {}):
+    def __init__(self, device_keys: dict[str, str] = {}, indent=2):
         super().__init__()
         self._device_keys = {k.lower(): v for k, v in device_keys.items()}
         self._known_devices: dict[str, Device] = {}
+        self._indent = indent
 
     async def start(self):
         logger.info(f"Reading data for {list(self._device_keys.keys())}")
@@ -112,7 +113,7 @@ class Scanner(BaseScanner):
             "rssi": ble_device.rssi,
             "payload": parsed,
         }
-        print(json.dumps(blob, cls=DeviceDataEncoder, indent=2))
+        print(json.dumps(blob, cls=DeviceDataEncoder, indent=self._indent), flush=True)
 
 
 class DiscoveryScanner(BaseScanner):
