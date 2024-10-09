@@ -37,19 +37,30 @@ pip install victron_ble
 
 ## Usage
 
-To be able to decrypt the contents of the advertisement, you'll need to first fetch the per-device encryption key from the official Victron application. The method to do this will vary per platform, instructions below:
-
 #### Fetching Keys
+
+To be able to decrypt the contents of the advertisement, you'll need to first fetch the per-device encryption key from the official Victron application:
  
+1. Install the VictronConnect app ([Android](https://play.google.com/store/apps/details?id=com.victronenergy.victronconnect), [IOS](https://apps.apple.com/us/app/victron-connect/id943840744), [Linux](https://www.victronenergy.com/support-and-downloads/software#victronconnect-app), [OSX](https://apps.apple.com/us/app/victronconnect/id1084677271?ls=1&mt=12), [Windows](https://www.victronenergy.com/support-and-downloads/software#victronconnect-app))
+2. Open the app and pair with your device
+3. Navigate to Settings, Menu, Product Info
+4. Enable Instand readout via Bluetooth to be able to receive advertisements from your device
+5. Copy MAC Address & Encryption Key by clicking on the Show button
+6. Turn the MAC Address to the right format: fd2afb297f8f becomes FD:2A:FB:29:7F:8F 
+
+**Headless system**
+You can follow the above instruction to get the keys but you will need to pair with your headless system (using `bluetoothctl` for ex) to continue the proccess.
+
 **OSX**
 
 [MacOS's bleak backend](https://bleak.readthedocs.io/en/latest/backends/macos.html) uses a bluetooth UUID address instead of the more traditional MAC address to identify bluetooth devices. This UUID address is often unique to the device scanned *and* the device being scanned such that it cannot be used to connect to the same device from another computer. 
 
 If you are going to use `victron-ble` on the same Mac computer as you have the Victron app on, follow the instructions below to retrieve the address UUID and advertisement key:
 
-1. Install the Victron app from the Mac App Store
-2. Pair with your device at least once to transfer keys
-3. Run the following from Terminal to dump the known keys (install `sqlite3` via Homebrew)
+1. Install the VictronConnect app from the [Mac App Store](https://apps.apple.com/us/app/victronconnect/id1084677271?ls=1&mt=12)
+2. Open the app and pair with your device
+3. Enable Instand readout via Bluetooth to be able to receive advertisements from your device
+4. Run the following from Terminal to dump the known keys (install `sqlite3` via Homebrew)
 ```bash
 ❯ sqlite3 ~/Library/Containers/com.victronenergy.victronconnect.mac/Data/Library/Application\ Support/Victron\ Energy/Victron\ Connect/d25b6546b47ebb21a04ff86a2c4fbb76.sqlite 'select address,advertisementKey from advertisementKeys inner join macAddresses on advertisementKeys.macAddress == macAddresses.macAddress'
 
@@ -57,41 +68,9 @@ If you are going to use `victron-ble` on the same Mac computer as you have the V
 ❯
 ```
 
-If you are going to use `victron-ble` on a different non-MacOS computer than the one with the Victron app (e.g. on a Raspberry Pi), follow these instructions to obtain the bluetooth MAC address and advertisement key instead:
-
-1. Install the Victron app from the Mac App Store
-2. Pair with your device at least once to transfer keys
-3. Run the following from Terminal to dump the known keys (install `sqlite3` via Homebrew)
-```bash
-❯ sqlite3 ~/Library/Containers/com.victronenergy.victronconnect.mac/Data/Library/Application\ Support/Victron\ Energy/Victron\ Connect/d25b6546b47ebb21a04ff86a2c4fbb76.sqlite 'select macAddress,advertisementKey from advertisementKeys'
-
-a0f478020fe1|0df4d0395b7d1a876c0c33ecb9e70dcd
-❯
-```
-
-**Linux**
-
-1. Download the Victron AppImage app from the Victron website.
-2. Pair with your device at least once to transfer keys
-3. Run the following from a terminal to dump the known keys (install `sqlite3` via your package manager)
-```bash
-❯ sqlite3 ~/.local/share/Victron\ Energy/Victron\ Connect/d25b6546b47ebb21a04ff86a2c4fbb76.sqlite 'select address,advertisementKey from advertisementKeys inner join macAddresses on advertisementKeys.macAddress == macAddresses.macAddress'
-
-A0:F4:78:02:0F:E1|0df4d0395b7d1a876c0c33ecb9e70dcd
-❯
-```
-
-**Windows**
-
-1. Download the VictronConnect installer from the Victron website and install.
-2. Pair with your device at least once to transfer keys
-3. Open Explorer, navigate to ```%AppData%\Local\Victron Energy\Victron Connect\```
-4. Open [SQLite Viewer](https://inloop.github.io/sqlite-viewer/) in a web browser of your choice
-5. Drag and drop the ```d25b6546b47ebb21a04ff86a2c4fbb76.sqlite``` file from Explorer into the SQLite Viewer window
-
-
 #### Reading data
 
+Here we'll take OSX system as example. If you're using an other system, replace UUID by Mac address representation.
 The project ships with a standalone CLI that can be used to print device data to the console. 
 
 ```bash
