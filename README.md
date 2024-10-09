@@ -4,29 +4,7 @@ A Python library to parse Instant Readout advertisement data from Victron device
 
 Disclaimer: This software is not an officially supported interface by Victron and is provided entirely "as-is"
 
-**Supported Devices:**
-
-* SmartShunt 500A/500mv and BMV-712/702 provide the following data:
-    * Voltage
-    * Alarm status
-    * Current
-    * Remaining time
-    * State of charge (%)
-    * Consumed amp hours
-    * Auxilary input (temperature, midpoint voltage, or starter battery voltage)
-* Smart Battery Sense
-    * Voltage
-    * Temperature (°C)
-* Solar Charger (Tested with BlueSolar 75/15):
-    * Charger State (Off, Bulk, Absorption, Float)
-    * Battery Voltage (V)
-    * Battery Charging Current (A)
-    * Solar Power (W)
-    * Yield Today (Wh)
-    * External Device Load (A)
-
-If you'd like to support development for additional devices, consider [sponsoring this project](https://github.com/sponsors/keshavdv/)
-
+If you'd like to support development for additional devices, consider creating a pull request with sample advertisement data.
 
 ## Install it from PyPI
 
@@ -42,25 +20,16 @@ To be able to decrypt the contents of the advertisement, you'll need to first fe
 
 #### Using the Victron Connect app
 
-1. Install the Victron Connect app onto your phone or computer.
-2. Locate the device that you want to monitor in the list shown by the app and click on it.
-3. Click on the gear icon to open the Settings for that device.
-4. Open the menu and select Product Info.
-5. Scroll down to Instant Readout via Bluetooth and enable the feature if it is not already enabled.
-6. Click the Show button next to Instant Readout Details to display the encryption keys.
-7. Copy the MAC address and advertisement key into your YAML file.
-
-![Screenshot of the Victron Connect product info dialog showing the instant readout settings](/docs/victron-connect-instant-readout.png)
-
-
-To be able to decrypt the contents of the advertisement, you'll need to first fetch the per-device encryption key from the official Victron application:
- 
 1. Install the VictronConnect app ([Android](https://play.google.com/store/apps/details?id=com.victronenergy.victronconnect), [IOS](https://apps.apple.com/us/app/victron-connect/id943840744), [Linux](https://www.victronenergy.com/support-and-downloads/software#victronconnect-app), [OSX](https://apps.apple.com/us/app/victronconnect/id1084677271?ls=1&mt=12), [Windows](https://www.victronenergy.com/support-and-downloads/software#victronconnect-app))
 2. Open the app and pair with your device
-3. Navigate to Settings, Menu, Product Info
-4. Enable Instant readout via Bluetooth to be able to receive advertisements from your device
-5. Copy MAC Address & Encryption Key by clicking on the Show button
-6. Turn the MAC Address to the right format: fd2afb297f8f becomes FD:2A:FB:29:7F:8F 
+3. Locate the device that you want to monitor in the list shown by the app and click on it.
+4. Click on the gear icon to open the Settings for that device.
+5. Open the menu and select Product Info.
+6. Scroll down to Instant Readout via Bluetooth and enable the feature if it is not already enabled.
+7. Click the Show button next to Instant Readout Details to display the encryption keys.
+8. Copy the MAC address and advertisement key
+
+![Screenshot of the Victron Connect product info dialog showing the instant readout settings](/docs/victron-connect-instant-readout.png)
 
 #### Headless system
 You can follow the above instruction to get the keys but you will need to pair with your headless system (using `bluetoothctl` for ex) to continue the proccess.
@@ -84,7 +53,7 @@ If you are going to use `victron-ble` on the same Mac computer as you have the V
 
 #### Reading data
 
-Here we'll take OSX system as example. If you're using an other system, replace UUID by Mac address representation.
+Here we're using OSX as an example. If you're using another system, replace the UUID with the real MAC address.
 The project ships with a standalone CLI that can be used to print device data to the console. 
 
 ```bash
