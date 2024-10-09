@@ -86,7 +86,9 @@ class OrionXS(Device):
             "charger_error": (
                 ChargerError(charger_error) if charger_error != 0xFF else None
             ),
-            "output_voltage": output_voltage / 100 if output_voltage != 0xFFFF else None,
+            "output_voltage": (
+                output_voltage / 100 if output_voltage != 0xFFFF else None
+            ),
             "output_current": output_current / 10 if output_current != 0xFFFF else None,
             "input_voltage": input_voltage / 100 if input_voltage != 0xFFFF else None,
             "input_current": input_current / 10 if input_current != 0xFFFF else None,

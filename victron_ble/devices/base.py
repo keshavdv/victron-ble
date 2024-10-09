@@ -1,8 +1,9 @@
 import abc
+import struct
+from dataclasses import dataclass
 from enum import Enum, Flag
 from typing import Any, Dict, Type
 
-from construct import FixedSized, GreedyBytes, Int8sl, Int16ul, Struct
 from Crypto.Cipher import AES
 from Crypto.Util import Counter
 from Crypto.Util.Padding import pad
@@ -394,28 +395,35 @@ class DeviceData:
         )
 
 
+@dataclass
+class AdvertisementContainer:
+    prefix: int
+    model_id: int
+    readout_type: int
+    iv: int
+    encrypted_data: bytes
+
+
 class Device(abc.ABC):
     data_type: Type[DeviceData] = DeviceData
 
-    PARSER = Struct(
-        "prefix" / FixedSized(2, GreedyBytes),
-        # Model ID
-        "model_id" / Int16ul,
-        # Packet type
-        "readout_type" / Int8sl,
-        # IV for encryption
-        "iv" / Int16ul,
-        "encrypted_data" / GreedyBytes,
-    )
+    def parse_container(self, data) -> AdvertisementContainer:
+        return AdvertisementContainer(
+            prefix=struct.unpack("<H", data[:2])[0],
+            model_id=struct.unpack("<H", data[2:4])[0],
+            readout_type=struct.unpack("<B", data[4:5])[0],
+            iv=struct.unpack("<H", data[5:7])[0],
+            encrypted_data=data[7:],
+        )
 
     def __init__(self, advertisement_key: str):
         self.advertisement_key = advertisement_key
 
     def get_model_id(self, data: bytes) -> int:
-        return self.PARSER.parse(data).model_id
+        return self.parse_container(data).model_id
 
     def decrypt(self, data: bytes) -> bytes:
-        container = self.PARSER.parse(data)
+        container = self.parse_container(data)
 
         advertisement_key = bytes.fromhex(self.advertisement_key)
 

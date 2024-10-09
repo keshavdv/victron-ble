@@ -1,9 +1,8 @@
 from enum import Enum
 
-from construct import Int8ul, Int16sl, Int16ul, Int32ul, Struct
-
 from victron_ble.devices.base import (
     AlarmReason,
+    BitReader,
     ChargerError,
     Device,
     DeviceData,
@@ -70,37 +69,31 @@ class SmartBatteryProtectData(DeviceData):
 class SmartBatteryProtect(Device):
     data_type = SmartBatteryProtectData
 
-    PACKET = Struct(
-        "device_state" / Int8ul,
-        "output_state" / Int8ul,
-        "error_code" / Int8ul,
-        "alarm_reason" / Int16ul,
-        "warning_reason" / Int16ul,
-        "input_voltage" / Int16sl,
-        "output_voltage" / Int16ul,
-        "off_reason" / Int32ul,
-    )
-
     def parse_decrypted(self, decrypted: bytes) -> dict:
-        pkt = self.PACKET.parse(decrypted)
+        reader = BitReader(decrypted)
+
+        device_state = reader.read_unsigned_int(8)
+        output_state = reader.read_unsigned_int(8)
+        error_code = reader.read_unsigned_int(8)
+        alarm_reason = reader.read_unsigned_int(16)
+        warning_reason = reader.read_unsigned_int(16)
+        input_voltage = reader.read_signed_int(16)
+        output_voltage = reader.read_unsigned_int(16)
+        off_reason = reader.read_unsigned_int(32)
 
         return {
             "device_state": (
-                OperationMode(pkt.device_state) if pkt.device_state != 0xFF else None
+                OperationMode(device_state) if device_state != 0xFF else None
             ),
             "output_state": (
-                OutputState(pkt.output_state) if pkt.output_state != 0xFF else None
+                OutputState(output_state) if output_state != 0xFF else None
             ),
-            "error_code": (
-                ChargerError(pkt.error_code) if pkt.error_code != 0xFF else None
-            ),
-            "alarm_reason": AlarmReason(pkt.alarm_reason),
-            "warning_reason": AlarmReason(pkt.warning_reason),
-            "input_voltage": (
-                pkt.input_voltage / 100 if pkt.input_voltage != 0x7FFF else None
-            ),
+            "error_code": (ChargerError(error_code) if error_code != 0xFF else None),
+            "alarm_reason": AlarmReason(alarm_reason),
+            "warning_reason": AlarmReason(warning_reason),
+            "input_voltage": (input_voltage / 100 if input_voltage != 0x7FFF else None),
             "output_voltage": (
-                pkt.output_voltage / 100 if pkt.output_voltage != 0xFFFF else None
+                output_voltage / 100 if output_voltage != 0xFFFF else None
             ),
-            "off_reason": OffReason(pkt.off_reason),
+            "off_reason": OffReason(off_reason),
         }

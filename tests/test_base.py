@@ -1,8 +1,4 @@
-import pytest
-
-from victron_ble.devices.base import (
-    BitReader,
-)
+from victron_ble.devices.base import BitReader
 
 
 class TestBitReader:

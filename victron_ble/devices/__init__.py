@@ -1,6 +1,5 @@
+import struct
 from typing import Dict, Optional, Type
-
-from construct import Int8ul, Int16ul
 
 from victron_ble.devices.base import Device, DeviceData
 from victron_ble.devices.battery_monitor import (
@@ -12,8 +11,8 @@ from victron_ble.devices.battery_sense import BatterySense, BatterySenseData
 from victron_ble.devices.dc_energy_meter import DcEnergyMeter, DcEnergyMeterData
 from victron_ble.devices.dcdc_converter import DcDcConverter, DcDcConverterData
 from victron_ble.devices.inverter import Inverter, InverterData
-from victron_ble.devices.orion_xs import OrionXS, OrionXSData
 from victron_ble.devices.lynx_smart_bms import LynxSmartBMS, LynxSmartBMSData
+from victron_ble.devices.orion_xs import OrionXS, OrionXSData
 from victron_ble.devices.smart_battery_protect import (
     SmartBatteryProtect,
     SmartBatteryProtectData,
@@ -61,8 +60,11 @@ MODEL_PARSER_OVERRIDE: Dict[int, Type[Device]] = {
 
 
 def detect_device_type(data: bytes) -> Optional[Type[Device]]:
-    model_id = Int16ul.parse(data[2:4])
-    mode = Int8ul.parse(data[4:5])
+    try:
+        model_id = struct.unpack("<H", data[2:4])[0]
+        mode = struct.unpack("<B", data[4:5])[0]
+    except IndexError:
+        return None
 
     # Model ID-based preferences
     match = MODEL_PARSER_OVERRIDE.get(model_id)

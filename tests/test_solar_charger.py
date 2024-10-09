@@ -1,5 +1,5 @@
-from victron_ble.devices.solar_charger import SolarCharger, SolarChargerData
 from victron_ble.devices.base import OperationMode
+from victron_ble.devices.solar_charger import SolarCharger, SolarChargerData
 
 
 class TestSolarCharger:

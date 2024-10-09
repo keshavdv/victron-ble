@@ -1,10 +1,10 @@
 import pytest
 
 from victron_ble.devices.battery_monitor import (
-    BatteryMonitor,
-    BatteryMonitorData,
     AlarmReason,
     AuxMode,
+    BatteryMonitor,
+    BatteryMonitorData,
 )
 from victron_ble.exceptions import AdvertisementKeyMismatchError
 

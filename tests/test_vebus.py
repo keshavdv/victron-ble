@@ -1,5 +1,5 @@
+from victron_ble.devices.base import ACInState, AlarmNotification, OperationMode
 from victron_ble.devices.vebus import VEBus
-from victron_ble.devices.base import AlarmNotification, OperationMode, ACInState
 
 
 class TestVEBus:

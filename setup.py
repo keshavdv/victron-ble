@@ -1,6 +1,8 @@
 """Python setup.py for victron_ble package"""
+
 import io
 import os
+
 from setuptools import find_packages, setup
 
 
@@ -39,8 +41,6 @@ setup(
     author="keshavdv",
     packages=find_packages(exclude=["tests", ".github"]),
     install_requires=read_requirements("requirements.txt"),
-    entry_points={
-        "console_scripts": ["victron-ble = victron_ble.cli:cli"]
-    },
+    entry_points={"console_scripts": ["victron-ble = victron_ble.cli:cli"]},
     extras_require={"test": read_requirements("requirements-test.txt")},
 )

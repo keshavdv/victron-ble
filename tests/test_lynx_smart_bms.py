@@ -1,5 +1,3 @@
-import pytest
-
 from victron_ble.devices.lynx_smart_bms import LynxSmartBMS, LynxSmartBMSData
 
 

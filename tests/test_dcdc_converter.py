@@ -1,5 +1,5 @@
+from victron_ble.devices.base import ChargerError, OffReason, OperationMode
 from victron_ble.devices.dcdc_converter import DcDcConverter, DcDcConverterData
-from victron_ble.devices.base import OperationMode, OffReason, ChargerError
 
 
 class TestDcDcConverter:

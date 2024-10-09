@@ -106,12 +106,12 @@ class BatteryMonitor(Device):
 
         parsed = {
             "remaining_mins": remaining_mins if remaining_mins != 0xFFFF else None,
+            "voltage": voltage / 100 if voltage != 0x7FFF else None,
+            "alarm": AlarmReason(alarm),
             "aux_mode": AuxMode(aux_mode),
             "current": current / 1000 if current != 0x3FFFFF else None,
-            "voltage": voltage / 100 if voltage != 0x7FFF else None,
             "consumed_ah": -consumed_ah / 10 if consumed_ah != 0xFFFFF else None,
             "soc": soc / 10 if soc != 0x3FF else None,
-            "alarm": AlarmReason(alarm),
         }
 
         if aux_mode == AuxMode.STARTER_VOLTAGE.value:

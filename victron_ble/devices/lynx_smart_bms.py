@@ -1,6 +1,4 @@
-from construct import BitsInteger, BitStruct, ByteSwapped, Padding
-
-from victron_ble.devices.base import Device, DeviceData
+from victron_ble.devices.base import BitReader, Device, DeviceData
 
 
 class LynxSmartBMSData(DeviceData):
@@ -62,42 +60,30 @@ class LynxSmartBMSData(DeviceData):
 class LynxSmartBMS(Device):
     data_type = LynxSmartBMSData
 
-    # https://community.victronenergy.com/questions/187303/victron-bluetooth-advertising-protocol.html
-    # Reverse the entire packet, because non-aligned integers are packed
-    # little-endian
-    PACKET = ByteSwapped(
-        BitStruct(
-            Padding(1),  # unused
-            "battery_temperature" / BitsInteger(7),  # -40..86C
-            "consumed_ah" / BitsInteger(20),  # -104857..0Ah
-            "soc" / BitsInteger(10),  # 0..100%
-            "alarm_flags" / BitsInteger(18),
-            "io_status" / BitsInteger(16),
-            "current" / BitsInteger(16, signed=True),  # -3276.8..3276.6 A
-            "voltage" / BitsInteger(16),  # -327.68..327.66 V
-            "remaining_mins" / BitsInteger(16),  # 0..45.5 days (in mins)
-            "error_flags" / BitsInteger(8),
-        ),
-    )
-
     def parse_decrypted(self, decrypted: bytes) -> dict:
-        pkt = self.PACKET.parse(decrypted[:20])
+
+        reader = BitReader(decrypted)
+        error_flags = reader.read_unsigned_int(8)
+        remaining_mins = reader.read_unsigned_int(16)
+        voltage = reader.read_signed_int(16)
+        current = reader.read_signed_int(16)
+        io_status = reader.read_unsigned_int(16)
+        alarm_flags = reader.read_unsigned_int(18)
+        soc = reader.read_unsigned_int(10)
+        consumed_ah = reader.read_unsigned_int(20)
+        temperature = reader.read_unsigned_int(7)
 
         parsed = {
-            "error_flags": pkt.error_flags,
-            "remaining_mins": (
-                pkt.remaining_mins if pkt.remaining_mins != 0xFFFF else None
-            ),
-            "voltage": pkt.voltage / 100 if pkt.voltage != 0x7FFF else None,
-            "current": pkt.current / 10 if pkt.current != 0x7FFF else None,
-            "io_status": pkt.io_status,
-            "alarm_flags": pkt.alarm_flags,
-            "soc": pkt.soc / 10.0 if pkt.soc != 0x3FFF else None,
-            "consumed_ah": pkt.consumed_ah / 10 if pkt.consumed_ah != 0xFFFFF else None,
+            "error_flags": error_flags,
+            "remaining_mins": (remaining_mins if remaining_mins != 0xFFFF else None),
+            "voltage": voltage / 100 if voltage != 0x7FFF else None,
+            "current": current / 10 if current != 0x7FFF else None,
+            "io_status": io_status,
+            "alarm_flags": alarm_flags,
+            "soc": soc / 10.0 if soc != 0x3FFF else None,
+            "consumed_ah": consumed_ah / 10 if consumed_ah != 0xFFFFF else None,
             "battery_temperature": (
-                (pkt.battery_temperature - 40)
-                if pkt.battery_temperature != 0x7F
-                else None
+                (temperature - 40) if temperature != 0x7F else None
             ),
         }
 

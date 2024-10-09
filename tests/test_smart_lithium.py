@@ -1,9 +1,7 @@
-import pytest
-
 from victron_ble.devices.smart_lithium import (
+    BalancerStatus,
     SmartLithium,
     SmartLithiumData,
-    BalancerStatus,
 )
 
 
@@ -16,10 +14,11 @@ class TestSmartLithium:
         actual = self.parse_decrypted(
             b"\x00\x00\x00\x06\x00\x00\xc7\xe3\xf1\xf8\xff\xff\xff,5\xb5\xfa\xb4x\x01\x0f\xd2I\xd2\xae_iV\xe1\xf8\xa9e"
         )
+        assert actual.get_error_flags() == 0
         assert actual.get_balancer_status() == BalancerStatus.IMBALANCE
         assert actual.get_battery_temperature() == 13
         assert actual.get_battery_voltage() == 13.24
-        assert actual.get_bms_flags() == 6
+        assert actual.get_bms_flags() == 100663296
         assert actual.get_cell_voltages() == [
             3.31,
             3.31,
@@ -30,7 +29,6 @@ class TestSmartLithium:
             None,
             None,
         ]
-        assert actual.get_error_flags() == 0
 
     def test_parse_2(self) -> None:
         actual = self.parse_decrypted(
@@ -39,7 +37,7 @@ class TestSmartLithium:
         assert actual.get_balancer_status() == BalancerStatus.BALANCED
         assert actual.get_battery_temperature() == 14
         assert actual.get_battery_voltage() == 13.24
-        assert actual.get_bms_flags() == 6
+        assert actual.get_bms_flags() == 100663296
         assert actual.get_cell_voltages() == [
             3.31,
             3.31,
@@ -59,7 +57,7 @@ class TestSmartLithium:
         assert actual.get_balancer_status() == BalancerStatus.IMBALANCE
         assert actual.get_battery_temperature() == 13
         assert actual.get_battery_voltage() == 13.23
-        assert actual.get_bms_flags() == 6
+        assert actual.get_bms_flags() == 100663296
         assert actual.get_cell_voltages() == [
             3.31,
             3.31,
@@ -79,7 +77,7 @@ class TestSmartLithium:
         assert actual.get_balancer_status() == BalancerStatus.UNKNOWN
         assert actual.get_battery_temperature() == 37
         assert actual.get_battery_voltage() == 26.4
-        assert actual.get_bms_flags() == 6  # ?
+        assert actual.get_bms_flags() == 100663296  # ?
         assert actual.get_cell_voltages() == [
             3.31,
             3.30,
@@ -98,7 +96,7 @@ class TestSmartLithium:
         assert actual.get_balancer_status() == BalancerStatus.BALANCED
         assert actual.get_battery_temperature() == 40
         assert actual.get_battery_voltage() == 26.83
-        assert actual.get_bms_flags() == 6  # ?
+        assert actual.get_bms_flags() == 100663296  # ?
         assert actual.get_cell_voltages() == [
             3.36,
             3.35,

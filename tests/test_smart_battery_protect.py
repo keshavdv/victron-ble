@@ -1,5 +1,3 @@
-import pytest
-
 from victron_ble.devices.smart_battery_protect import (
     AlarmReason,
     ChargerError,
@@ -20,6 +18,6 @@ class TestSmartBatteryProtect:
         assert parser.get_error_code() == ChargerError.NO_ERROR
         assert parser.get_input_voltage() == 13.07
         assert parser.get_output_voltage() == 13.07
-        assert parser.get_off_reason() == OffReason.NONE
+        assert parser.get_off_reason() == OffReason.NO_REASON
         assert parser.get_output_state() == OutputState.ON
         assert parser.get_warning_reason() == AlarmReason.NO_ALARM
