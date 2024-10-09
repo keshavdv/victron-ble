@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Optional
 
-from construct import BitStruct, BitsInteger, ByteSwapped, Int16sl, Padding
+from construct import BitsInteger, BitStruct, ByteSwapped, Int16sl, Padding
 
 from victron_ble.devices.base import AlarmReason, Device, DeviceData, kelvin_to_celsius
 from victron_ble.devices.battery_monitor import AuxMode

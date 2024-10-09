@@ -64,7 +64,7 @@ class DeviceDataEncoder(json.JSONEncoder):
 
 
 class Scanner(BaseScanner):
-    def __init__(self, device_keys: dict[str, str] = {}, indent = 2):
+    def __init__(self, device_keys: dict[str, str] = {}, indent=2):
         super().__init__()
         self._device_keys = {k.lower(): v for k, v in device_keys.items()}
         self._known_devices: dict[str, Device] = {}
