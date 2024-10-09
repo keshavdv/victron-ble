@@ -44,7 +44,7 @@ To be able to decrypt the contents of the advertisement, you'll need to first fe
 1. Install the VictronConnect app ([Android](https://play.google.com/store/apps/details?id=com.victronenergy.victronconnect), [IOS](https://apps.apple.com/us/app/victron-connect/id943840744), [Linux](https://www.victronenergy.com/support-and-downloads/software#victronconnect-app), [OSX](https://apps.apple.com/us/app/victronconnect/id1084677271?ls=1&mt=12), [Windows](https://www.victronenergy.com/support-and-downloads/software#victronconnect-app))
 2. Open the app and pair with your device
 3. Navigate to Settings, Menu, Product Info
-4. Enable Instand readout via Bluetooth to be able to receive advertisements from your device
+4. Enable Instant readout via Bluetooth to be able to receive advertisements from your device
 5. Copy MAC Address & Encryption Key by clicking on the Show button
 6. Turn the MAC Address to the right format: fd2afb297f8f becomes FD:2A:FB:29:7F:8F 
 
