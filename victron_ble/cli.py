@@ -61,7 +61,7 @@ def read(device_keys: List[Tuple[str, str]]):
     loop = asyncio.get_event_loop()
 
     async def scan(keys):
-        scanner = Scanner(keys)
+        scanner = Scanner(keys, indent=None)
         await scanner.start()
 
     asyncio.ensure_future(scan({k: v for k, v in device_keys}))
