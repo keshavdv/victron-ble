@@ -26,6 +26,7 @@ class OperationMode(Enum):
     REPEATED_ABSORPTION = 246
     RECONDITION = 247
     BATTERY_SAFE = 248
+    ACTIVE = 249
     EXTERNAL_CONTROL = 252
 
 
@@ -182,6 +183,7 @@ class OffReason(Enum):
 
 
 class AlarmReason(Enum):
+    NONE = 0
     LOW_VOLTAGE = 1
     HIGH_VOLTAGE = 2
     LOW_SOC = 4
@@ -339,6 +341,7 @@ MODEL_ID_MAPPING = {
     0xA345: "Phoenix Smart IP43 Charger 12|30 (3)",
     0xA346: "Phoenix Smart IP43 Charger 24|16 (1+1)",
     0xA347: "Phoenix Smart IP43 Charger 24|16 (3)",
+    0xA3B0: "Smart BatteryProtect 12/24V-65A",
     0xA381: "BMV-712 Smart",
     0xA382: "BMV-710H Smart",
     0xA383: "BMV-712 Smart Rev2",
