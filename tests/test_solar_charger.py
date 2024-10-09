@@ -2,7 +2,7 @@ from victron_ble.devices.solar_charger import SolarCharger, SolarChargerData
 from victron_ble.devices.base import OperationMode
 
 
-class TestSolarChargwer:
+class TestSolarCharger:
     def test_end_to_end_parse(self) -> None:
         data = "100242a0016207adceb37b605d7e0ee21b24df5c"
         actual = SolarCharger("adeccb947395801a4dd45a2eaa44bf17").parse(

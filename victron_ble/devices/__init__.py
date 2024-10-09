@@ -11,6 +11,8 @@ from victron_ble.devices.battery_monitor import (
 from victron_ble.devices.battery_sense import BatterySense, BatterySenseData
 from victron_ble.devices.dc_energy_meter import DcEnergyMeter, DcEnergyMeterData
 from victron_ble.devices.dcdc_converter import DcDcConverter, DcDcConverterData
+from victron_ble.devices.inverter import Inverter, InverterData
+from victron_ble.devices.orion_xs import OrionXS, OrionXSData
 from victron_ble.devices.lynx_smart_bms import LynxSmartBMS, LynxSmartBMSData
 from victron_ble.devices.smart_battery_protect import (
     SmartBatteryProtect,
@@ -32,6 +34,12 @@ __all__ = [
     "DcDcConverterData",
     "DcEnergyMeter",
     "DcEnergyMeterData",
+    "Inverter",
+    "InverterData",
+    "OrionXS",
+    "OrionXSData",
+    "SmartBatteryProtect",
+    "SmartBatteryProtectData",
     "SmartLithium",
     "SmartLithiumData",
     "SmartBatteryProtect",
@@ -71,7 +79,7 @@ def detect_device_type(data: bytes) -> Optional[Type[Device]]:
     elif mode == 0x4:  # DcDcConverter
         return DcDcConverter
     elif mode == 0x3:  # Inverter
-        pass
+        return Inverter
     elif mode == 0x6:  # InverterRS
         pass
     elif mode == 0xA:  # LynxSmartBMS
@@ -84,11 +92,11 @@ def detect_device_type(data: bytes) -> Optional[Type[Device]]:
         return SmartLithium
     elif mode == 0x9:  # SmartBatteryProtect
         return SmartBatteryProtect
-    elif mode == 0x5:  # SmartLithium
-        pass
     elif mode == 0x1:  # SolarCharger
         return SolarCharger
     elif mode == 0xC:  # VE.Bus
         return VEBus
+    elif mode == 0xF:  # Orion XS
+        return OrionXS
 
     return None

@@ -1,5 +1,5 @@
 import abc
-from enum import Enum
+from enum import Enum, Flag
 from typing import Any, Dict, Type
 
 from construct import FixedSized, GreedyBytes, Int8sl, Int16ul, Struct
@@ -28,6 +28,7 @@ class OperationMode(Enum):
     BATTERY_SAFE = 248
     ACTIVE = 249
     EXTERNAL_CONTROL = 252
+    NOT_AVAILABLE = 255
 
 
 # Source: VE.Direct-Protocol-3.32.pdf & https://www.victronenergy.com/live/mppt-error-codes
@@ -168,8 +169,8 @@ class ChargerError(Enum):
     INTERNAL_SUPPLY_D = 215
 
 
-class OffReason(Enum):
-    NONE = 0x00000000
+class OffReason(Flag):
+    NO_REASON = 0x00000000
     NO_INPUT_POWER = 0x00000001
     SWITCHED_OFF_SWITCH = 0x00000002
     SWITCHED_OFF_REGISTER = 0x00000004
@@ -178,12 +179,11 @@ class OffReason(Enum):
     PAY_AS_YOU_GO_OUT_OF_CREDIT = 0x00000020
     BMS = 0x00000040
     ENGINE_SHUTDOWN = 0x00000080
-    ENGINE_SHUTDOWN_AND_INPUT_VOLTAGE_LOCKOUT = 0x00000081
     ANALYSING_INPUT_VOLTAGE = 0x00000100
 
 
-class AlarmReason(Enum):
-    NONE = 0
+class AlarmReason(Flag):
+    NO_ALARM = 0
     LOW_VOLTAGE = 1
     HIGH_VOLTAGE = 2
     LOW_SOC = 4
@@ -198,6 +198,12 @@ class AlarmReason(Enum):
     HIGH_V_AC_OUT = 2048
     SHORT_CIRCUIT = 4096
     BMS_LOCKOUT = 8192
+
+
+class AlarmNotification(Enum):
+    NO_ALARM = 0
+    WARNING = 1
+    ALARM = 2
 
 
 # Sourced from Victron extra-manufacturer-data-2022-12-14.pdf
@@ -370,6 +376,7 @@ MODEL_ID_MAPPING = {
     0xA3CE: "Orion Smart 48V|24V-16A Isolated DC-DC Charger",
     0xA3C7: "Orion Smart 48V|48V-6A Isolated DC-DC Charger",
     0xA3CF: "Orion Smart 48V|48V-8.5A Isolated DC-DC Charger",
+    0xA3F0: "Orion XS 12V|12V-50A",
     0xA3E6: "Lynx Smart BMS 1000",
     0x2780: "Victron Multiplus II 12/3000/120-50 2x120V",
     0xC030: "SmartShunt IP65 500A/50mV",
@@ -438,3 +445,29 @@ class Device(abc.ABC):
 
 def kelvin_to_celsius(temp_in_kelvin: float) -> float:
     return round(temp_in_kelvin - 273.15, 2)
+
+
+# Reads bit-field structures in the order in which they are packed in
+# Victron Extra Manufacturer Data from LSB to MSB.
+class BitReader:
+    def __init__(self, data: bytes):
+        self._data = data
+        self._index = 0
+
+    def read_bit(self) -> int:
+        bit = (self._data[self._index >> 3] >> (self._index & 7)) & 1
+        self._index += 1
+        return bit
+
+    def read_unsigned_int(self, num_bits: int) -> int:
+        value = 0
+        for position in range(0, num_bits):
+            value |= self.read_bit() << position
+        return value
+
+    def read_signed_int(self, num_bits: int) -> int:
+        return BitReader.to_signed_int(self.read_unsigned_int(num_bits), num_bits)
+
+    @staticmethod
+    def to_signed_int(value: int, num_bits: int) -> int:
+        return value - (1 << num_bits) if value & (1 << (num_bits - 1)) else value

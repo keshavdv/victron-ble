@@ -1,6 +1,6 @@
 from enum import Enum
 
-from construct import Int8ul, Int16ul, Int32ul, Struct
+from construct import Int8ul, Int16sl, Int16ul, Int32ul, Struct
 
 from victron_ble.devices.base import (
     AlarmReason,
@@ -76,7 +76,7 @@ class SmartBatteryProtect(Device):
         "error_code" / Int8ul,
         "alarm_reason" / Int16ul,
         "warning_reason" / Int16ul,
-        "input_voltage" / Int16ul,
+        "input_voltage" / Int16sl,
         "output_voltage" / Int16ul,
         "off_reason" / Int32ul,
     )
@@ -85,12 +85,22 @@ class SmartBatteryProtect(Device):
         pkt = self.PACKET.parse(decrypted)
 
         return {
-            "device_state": OperationMode(pkt.device_state),
-            "output_state": OutputState(pkt.output_state),
-            "error_code": ChargerError(pkt.error_code),
+            "device_state": (
+                OperationMode(pkt.device_state) if pkt.device_state != 0xFF else None
+            ),
+            "output_state": (
+                OutputState(pkt.output_state) if pkt.output_state != 0xFF else None
+            ),
+            "error_code": (
+                ChargerError(pkt.error_code) if pkt.error_code != 0xFF else None
+            ),
             "alarm_reason": AlarmReason(pkt.alarm_reason),
             "warning_reason": AlarmReason(pkt.warning_reason),
-            "input_voltage": pkt.input_voltage / 100,
-            "output_voltage": pkt.output_voltage / 100,
+            "input_voltage": (
+                pkt.input_voltage / 100 if pkt.input_voltage != 0x7FFF else None
+            ),
+            "output_voltage": (
+                pkt.output_voltage / 100 if pkt.output_voltage != 0xFFFF else None
+            ),
             "off_reason": OffReason(pkt.off_reason),
         }

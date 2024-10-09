@@ -1,4 +1,3 @@
----
 # victron_ble
 
 A Python library to parse Instant Readout advertisement data from Victron devices.
@@ -37,7 +36,22 @@ pip install victron_ble
 
 ## Usage
 
-#### Fetching Keys
+To be able to decrypt the contents of the advertisement, you'll need to first fetch the per-device encryption key from the official Victron application. The method to do this will vary per platform, instructions below:
+
+### Fetching Keys
+
+#### Using the Victron Connect app
+
+1. Install the Victron Connect app onto your phone or computer.
+2. Locate the device that you want to monitor in the list shown by the app and click on it.
+3. Click on the gear icon to open the Settings for that device.
+4. Open the menu and select Product Info.
+5. Scroll down to Instant Readout via Bluetooth and enable the feature if it is not already enabled.
+6. Click the Show button next to Instant Readout Details to display the encryption keys.
+7. Copy the MAC address and advertisement key into your YAML file.
+
+![Screenshot of the Victron Connect product info dialog showing the instant readout settings](/docs/victron-connect-instant-readout.png)
+
 
 To be able to decrypt the contents of the advertisement, you'll need to first fetch the per-device encryption key from the official Victron application:
  
@@ -48,10 +62,10 @@ To be able to decrypt the contents of the advertisement, you'll need to first fe
 5. Copy MAC Address & Encryption Key by clicking on the Show button
 6. Turn the MAC Address to the right format: fd2afb297f8f becomes FD:2A:FB:29:7F:8F 
 
-**Headless system**
+#### Headless system
 You can follow the above instruction to get the keys but you will need to pair with your headless system (using `bluetoothctl` for ex) to continue the proccess.
 
-**OSX**
+#### OSX
 
 [MacOS's bleak backend](https://bleak.readthedocs.io/en/latest/backends/macos.html) uses a bluetooth UUID address instead of the more traditional MAC address to identify bluetooth devices. This UUID address is often unique to the device scanned *and* the device being scanned such that it cannot be used to connect to the same device from another computer. 
 
@@ -126,6 +140,8 @@ parsed_data = parser(<key>).parse(<ble advertisement data>)
 ```
 
 ## Development
+
+Victron has published documentation for the instant read-out protocol [here](https://community.victronenergy.com/questions/187303/victron-bluetooth-advertising-protocol.html).
 
 If you'd like to help support a new device, collect the following and create a new Github issue:
 
