@@ -1,5 +1,7 @@
 include LICENSE
 include HISTORY.md
 include Containerfile
+include requirements.txt
+include requirements-test.txt
 graft tests
 graft victron_ble
