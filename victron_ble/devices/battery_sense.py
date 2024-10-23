@@ -1,3 +1,5 @@
+from typing import Optional
+
 from victron_ble.devices.base import DeviceData, kelvin_to_celsius
 from victron_ble.devices.battery_monitor import BatteryMonitor
 
@@ -9,7 +11,7 @@ class BatterySenseData(DeviceData):
         """
         return kelvin_to_celsius(self._data["temperature_kelvin"])
 
-    def get_voltage(self) -> float:
+    def get_voltage(self) -> Optional[float]:
         """
         Return the voltage in volts
         """

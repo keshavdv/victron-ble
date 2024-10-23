@@ -10,37 +10,37 @@ from victron_ble.devices.base import (
 
 
 class SolarChargerData(DeviceData):
-    def get_charge_state(self) -> OperationMode:
+    def get_charge_state(self) -> Optional[OperationMode]:
         """
         Return an enum indicating the current charging state
         """
         return self._data["charge_state"]
 
-    def get_charger_error(self) -> ChargerError:
+    def get_charger_error(self) -> Optional[ChargerError]:
         """
         Return an enum indicating the current charging error
         """
         return self._data["charger_error"]
 
-    def get_battery_voltage(self) -> float:
+    def get_battery_voltage(self) -> Optional[float]:
         """
         Return the battery voltage in volts
         """
         return self._data["battery_voltage"]
 
-    def get_battery_charging_current(self) -> float:
+    def get_battery_charging_current(self) -> Optional[float]:
         """
         Return the battery charging current in amps
         """
         return self._data["battery_charging_current"]
 
-    def get_yield_today(self) -> float:
+    def get_yield_today(self) -> Optional[float]:
         """
         Return the yield_today in Wh
         """
         return self._data["yield_today"]
 
-    def get_solar_power(self) -> float:
+    def get_solar_power(self) -> Optional[float]:
         """
         Return the current solar power in W
         """

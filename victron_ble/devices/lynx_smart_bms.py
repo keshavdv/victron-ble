@@ -1,3 +1,5 @@
+from typing import Optional
+
 from victron_ble.devices.base import BitReader, Device, DeviceData
 
 
@@ -8,19 +10,19 @@ class LynxSmartBMSData(DeviceData):
         """
         return self._data["error_flags"]
 
-    def get_remaining_mins(self) -> float:
+    def get_remaining_mins(self) -> Optional[float]:
         """
         Return the number of remaining minutes of battery life in minutes
         """
         return self._data["remaining_mins"]
 
-    def get_voltage(self) -> float:
+    def get_voltage(self) -> Optional[float]:
         """
         Return the voltage in volts
         """
         return self._data["voltage"]
 
-    def get_current(self) -> float:
+    def get_current(self) -> Optional[float]:
         """
         Return the current in amps
         """
@@ -38,19 +40,19 @@ class LynxSmartBMSData(DeviceData):
         """
         return self._data["alarm_flags"]
 
-    def get_soc(self) -> float:
+    def get_soc(self) -> Optional[float]:
         """
         Return the state of charge in percentage
         """
         return self._data["soc"]
 
-    def get_consumed_ah(self) -> float:
+    def get_consumed_ah(self) -> Optional[float]:
         """
         Return the consumed energy in amp hours
         """
         return self._data["consumed_ah"]
 
-    def get_battery_temperature(self) -> int:
+    def get_battery_temperature(self) -> Optional[int]:
         """
         Return the temperature in Celsius if the aux input is set to temperature
         """

@@ -30,7 +30,7 @@ class SmartLithiumData(DeviceData):
         """
         return self._data["battery_voltage"]
 
-    def get_battery_temperature(self) -> int:
+    def get_battery_temperature(self) -> Optional[int]:
         """
         Return the temperature in Celsius if the aux input is set to temperature
         """
@@ -42,7 +42,7 @@ class SmartLithiumData(DeviceData):
         """
         return self._data["cell_voltages"]
 
-    def get_balancer_status(self) -> BalancerStatus:
+    def get_balancer_status(self) -> Optional[BalancerStatus]:
         """
         Get the raw balancer_status field (meaning not documented).
         """

@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Optional
 
 from victron_ble.devices.base import (
     AlarmReason,
@@ -17,19 +18,19 @@ class OutputState(Enum):
 
 
 class SmartBatteryProtectData(DeviceData):
-    def get_device_state(self) -> OperationMode:
+    def get_device_state(self) -> Optional[OperationMode]:
         """
         Return the device state
         """
         return self._data["device_state"]
 
-    def get_output_state(self) -> OutputState:
+    def get_output_state(self) -> Optional[OutputState]:
         """
         Return the output state
         """
         return self._data["output_state"]
 
-    def get_error_code(self) -> ChargerError:
+    def get_error_code(self) -> Optional[ChargerError]:
         """
         Return the error code
         """
@@ -47,13 +48,13 @@ class SmartBatteryProtectData(DeviceData):
         """
         return self._data["warning_reason"]
 
-    def get_input_voltage(self) -> float:
+    def get_input_voltage(self) -> Optional[float]:
         """
         Return the input voltage in volts
         """
         return self._data["input_voltage"]
 
-    def get_output_voltage(self) -> float:
+    def get_output_voltage(self) -> Optional[float]:
         """
         Return the output voltage in volts
         """

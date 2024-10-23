@@ -38,13 +38,13 @@ class DcEnergyMeterData(DeviceData):
         """
         return self._data["meter_type"]
 
-    def get_current(self) -> float:
+    def get_current(self) -> Optional[float]:
         """
         Return the current in amps
         """
         return self._data["current"]
 
-    def get_voltage(self) -> float:
+    def get_voltage(self) -> Optional[float]:
         """
         Return the voltage in volts
         """
