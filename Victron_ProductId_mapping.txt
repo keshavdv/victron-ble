@@ -1,0 +1,805 @@
+# extracted from vecan-dbus binary using
+# od -i -w8 < ids | grep -m 1 65535 -B 1000 | while read -a REPLY ; do echo ${REPLY[1]} $(dd if=vecan-dbus bs=1 count=60 status=none skip=$((${REPLY[2]}-65536)) | cut -d '' -f1) ; done > products.txt
+1 VPN
+2 VBC
+3 VVC
+4 VCC
+5 VCM
+6 VGM
+7 VRS
+8 Free Technics software
+9 VBC GMDSS
+10 VPM GMDSS
+11 BPP
+12 VBC 48V
+13 VVC2
+14 VBC 144V
+15 VBC2
+16 VBC 144V
+17 Lynx Shunt 1000A VE.Net
+256 BMV to NMEA2000 interface
+257 Skylla-i Control
+258 Hybrid Panel
+259 VE.Bus to NMEA2000 interface
+260 Skylla-i 24/100 (1+1)
+261 Skylla-i 24/80A (1+1)
+262 Skylla-i 24/100 (3)
+263 Skylla-i 24/80 (3)
+264 BlueSolar Charger MPPT 150/70
+320 Ion Control
+321 Lynx Shunt 1000A VE.Can
+322 Lynx Ion
+512 BMV-600S
+513 BMV-602S
+514 BMV-600HS
+515 BMV-700
+516 BMV-702
+517 BMV-700H
+529 BMV PCBA test firmware
+768 BlueSolar Charger MPPT 70/15
+4368 Remote panel
+4384 Remote panel 20MHz
+4385 Remote panel Dongle 20MHz
+4400 MK2 20Mhz
+4401 MK2 Dongle 20Mhz
+4402 VE.Bus Resetter (based on MK2) 20 Mhz
+4416 MK2 tachometer 20Mhz
+4421 BMS 20Mhz
+4432 Solar switch box
+4448 USB VEBus grabber
+4464 MK3
+5153 Phoenix Charger 12/100
+5154 Phoenix Charger 12/200
+5169 Phoenix Charger 24/50
+5170 Phoenix Charger 24/100
+5888 Phoenix Multi 12V full power
+5889 Phoenix Multi 12V half power
+5890 Phoenix MultiPlus 12V full power
+5891 MultiCompact 12V low power
+5892 MultiCompact 12V medium power
+5893 MultiCompact 12V high power
+5894 MultiCompactPlus 12V high power
+5895 MultiCompactPlus 12V medium power
+5904 Phoenix Multi 24V full power
+5905 Phoenix Multi 24V half power
+5906 Phoenix MultiPlus 24V full power
+5907 MultiCompact 24V low power
+5908 MultiCompact 24V medium power
+5909 MultiCompact 24V high power
+5910 MultiCompactPlus 24V high power
+5911 MultiCompactPlus 24V medium power
+5936 Phoenix Multi 120 12V full power
+5937 Phoenix Multi 120 12V half power
+5938 Phoenix MultiPlus 120 12V full power
+5952 Phoenix Multi 120 24V full power
+5953 Phoenix Multi 120 24V half power
+5954 Phoenix MultiPlus 120 24V full power
+5968 Phoenix Multi 48V full power
+5969 Phoenix Multi 48V half power
+5970 Phoenix MultiPlus 48V full power
+6144 Phoenix Multi 12V full power
+6145 Phoenix Multi 12V half power
+6146 Phoenix MultiPlus 12V full power
+6147 MultiCompact 12V low power
+6148 MultiCompact 12V medium power
+6149 MultiCompact 12V high power
+6150 MultiCompactPlus 12V high power
+6151 MultiCompactPlus 12V medium power
+6152 Phoenix MultiPlus 12V/2000
+6153 Phoenix MultiPlus 12V/3000
+6160 Phoenix Multi 24V full power
+6161 Phoenix Multi 24V half power
+6162 Phoenix MultiPlus 24V full power
+6163 MultiCompact 24V low power
+6164 MultiCompact 24V medium power
+6165 MultiCompact 24V high power
+6166 MultiCompactPlus 24V high power
+6167 MultiCompactPlus 24V medium power
+6168 Phoenix MultiPlus 24V/2000
+6192 Phoenix Multi 120 12V full power
+6193 Phoenix Multi 120 12V half power
+6194 Phoenix MultiPlus 120 12V full power
+6198 MultiCompactPlus 120 12V high power
+6201 Phoenix MultiPlus 120 12V/3000
+6208 Phoenix Multi 120 24V full power
+6209 Phoenix Multi 120 24V half power
+6210 Phoenix MultiPlus 120 24V full power
+6214 MultiCompactPlus 120 24V high power
+6224 Phoenix Multi 48V full power
+6225 Phoenix Multi 48V half power
+6226 Phoenix MultiPlus 48V full power
+6230 MultiCompactPlus 48V high power
+6242 Phoenix MultiPlus 120 48V full power
+6257 MultiCompactPlus 12V 2K
+6258 MultiCompactPlus 24V 2K
+6400 MultiPlus 12/3000/120-50
+6401 MultiPlus 12/3000/120-30
+6402 Phoenix MultiPlus 12V full power
+6403 Phoenix Multi Compact 12/800/35-16
+6406 MultiPlus Compact 12/1600/70-16
+6407 MultiPlus Compact 12/1200/50-16
+6408 MultiPlus Compact 12/2000/80-30
+6409 MultiPlus 12/3000/120-16
+6416 MultiPlus 24/3000/70-50
+6417 MultiPlus 24/3000/70-30
+6418 MultiPlus 24/3000/70-16
+6419 Phoenix Multi Compact 24/800/16-16
+6422 MultiPlus Compact 24/1600/40-16
+6423 MultiPlus Compact 24/1200/25-16
+6424 MultiPlus Compact 24/2000/50-30
+6432 MultiPlus 48/3000/35-50
+6433 MultiPlus 48/3000/35-30
+6434 MultiPlus 48/3000/35-16
+6448 Quattro 12/5000/200-2x30
+6449 Quattro 12/3000/120-50/30
+6450 Quattro 12/5000/200-50/30
+6451 Quattro 12/5000/220-2x75
+6464 Quattro 24/5000/120-2x30
+6465 Quattro 24/3000/70-50/30
+6466 Quattro 24/5000/120-50/30
+6467 Quattro 24/8000/200-2x100
+6472 Quattro 24/5000/120-2x100
+6473 MultiPlus 24/5000/120-50
+6480 Quattro 48/5000/70-2x30
+6482 Quattro 48/5000/70-50/30
+6483 Quattro 48/10000/140-2x100
+6484 Quattro 48/8000/110-2x100
+6488 Quattro 48/5000/70-2x100
+6489 MultiPlus 48/5000/70-50
+8194 MultiPlus 12/3000/120-50 120V
+8200 MultiPlus Compact 12/2000/80-50 120V
+8201 Phoenix MultiPlus 120 12V/3000
+8210 MultiPlus 24/3000/70-50 120V
+8216 MultiPlus Compact 24/2000/50-50 120V
+8226 Phoenix MultiPlus 120 48V/3000
+8264 Quattro 24/5000/120-2x100 120V
+8273 Quattro 48/3000/35-2x50 120V
+8275 Quattro 48/5000/70-2x100 120V
+8281 Phoenix MultiPlus 120 48V/5000
+8288 Phoenix 12/3000/120-50-120/240V
+8290 MultiPlus Compact 12/2000/80-50(30)-120/240V
+8305 Quattro 24/5000/120-2x60-120/240V
+8306 MultiPlus Compact 24/2000/50-50(30)-120/240V
+8320 Phoenix MultiPlus 120/240 48V/3000 with 50A AC relais
+8449 Phoenix HF
+9219 Phoenix 12/800
+9220 Phoenix 12/1200
+9235 Phoenix 24/800
+9236 Phoenix 24/1200
+9251 Phoenix 48/800
+9252 Phoenix 48/1200
+9299 Phoenix 12/800 120V
+9300 Phoenix 12/1200 120V
+9315 Phoenix 24/800 120V
+9316 Phoenix 24/1200 120V
+9331 Phoenix 48/800 120V
+9332 Phoenix 48/1200 120V
+9728 MultiPlus 12/3000/120-50
+9731 MultiPlus Compact 12/800/35-16
+9733 MultiPlus-II 12/3000/120-32
+9734 MultiPlus Compact 12/1600/70-16
+9735 MultiPlus Compact 12/1200/50-16
+9736 MultiPlus Compact 12/2000/80-30
+9737 MultiPlus 12/3000/120-16
+9744 MultiPlus 24/3000/70-50
+9745 MultiPlus-II 24/3000/70-32
+9746 MultiPlus 24/3000/70-16
+9747 MultiPlus Compact 24/800/16-16
+9748 MultiPlus 24/5000/120-100
+9749 MultiPlus-II 24/5000/120-50
+9750 MultiPlus Compact 24/1600/40-16
+9751 MultiPlus Compact 24/1200/25-16
+9752 MultiPlus Compact 24/2000/50-30
+9753 MultiPlus-II 48/15000/200-100
+9760 MultiPlus 48/3000/35-50
+9761 MultiPlus-II 48/8000/110-100
+9762 MultiPlus 48/3000/35-16
+9763 MultiPlus-II 48/5000/70-50
+9764 MultiPlus 48/5000/70-100
+9765 MultiPlus-II 48/3000/35-32
+9766 MultiPlus-II 48/5000/70-50
+9767 MultiPlus-II 48/10000/140-100/100
+9768 MultiPlus-II 48/3000/35-32
+9769 MultiPlus-II 48/3000/35-32
+9777 Quattro 12/3000/120-50/30
+9778 Quattro-II 12/5000/200-2x50
+9779 Quattro 12/5000/220-2x75
+9780 Quattro 12/3000/120-2x50
+9793 Quattro 24/3000/70-50/30
+9794 Quattro 24/5000/120-50/30
+9795 Quattro 24/8000/200-2x100
+9796 Quattro 24/3000/70-2x50
+9797 Quattro-II 24/5000/120-2x50
+9800 Quattro 24/5000/120-2x100
+9801 MultiPlus 24/5000/120-50
+9809 Quattro-II 48/5000/70-2x50
+9810 Quattro 48/5000/70-50/30
+9811 Quattro 48/10000/140-2x100
+9812 Quattro 48/8000/110-2x100
+9813 Quattro 48/8000/110-2x100
+9814 Quattro 48/15000/200-2x100
+9815 Quattro 48/5000/70-2x100-S
+9816 Quattro 48/5000/70-2x100
+9817 MultiPlus 48/5000/70-50
+9824 MultiPlus 12/500/20-16
+9825 MultiPlus 12/800/35-16
+9826 MultiPlus 12/1200/50-16
+9827 MultiPlus 12/1600/70-16
+9828 MultiPlus 12/2000/80-32
+9829 MultiPlus 24/500/10-16
+9830 MultiPlus 24/800/16-16
+9831 MultiPlus 24/1200/25-16
+9832 MultiPlus 24/1600/40-16
+9833 MultiPlus 24/2000/50-32
+9840 MultiPlus 48/500/6-16
+9841 MultiPlus 48/800/9-16
+9842 MultiPlus 48/1200/13-16
+9843 MultiPlus 48/1600/20-16
+9844 MultiPlus 48/2000/25-32
+9856 MultiGrid 12/3000/120-50
+9861 MultiGrid 24/3000/70-50
+9872 MultiGrid 48/3000/35-50
+9986 MultiPlus 12/3000/120-50 120V
+9989 MultiPlus-II 12/3000/120-50 120V
+9992 MultiPlus Compact 12/2000/80-50 120V
+10001 MultiPlus-II 24/3000/70-50 120V
+10002 MultiPlus 24/3000/70-50 120V
+10008 MultiPlus Compact 24/2000/50-50 120V
+10025 MultiPlus-II 48/3000/35-50 120V
+10035 Quattro 12/5000/220-2x100 120V
+10056 Quattro 24/5000/120-2x100 120V
+10065 Quattro 48/3000/35-2x50 120V
+10067 Quattro 48/5000/70-2x100 120V
+10068 Quattro 48/10000/140-2x100 120V
+10084 MultiPlus 12/2000/80-50 120V
+10089 MultiPlus 24/2000/50-50 120V
+10100 MultiPlus 48/2000/25-50 120V
+10101 MultiPlus-II 24/3000/70-50 2x120V
+10112 MultiPlus-II 12/3000/120-50 2x120V
+10113 Quattro-II 12/3000/120-2x50 2x120V
+40960 Skylla-IP44/IP65 battery charger
+40961 Skylla-IP65 12V/70A (1+1)
+40962 Skylla-IP65 12V/70A (3)
+40963 Skylla-IP44 12V/60A (1+1)
+40964 Skylla-IP44 12V/60A (3)
+40965 Skylla-IP65 24V/35A (1+1)
+40966 Skylla-IP65 24V/35A (3)
+40967 Skylla-IP44 24V/30A (1+1)
+40968 Skylla-IP44 24V/30A (3)
+40976 Skylla-S battery charger
+40977 Skylla-S 12V/100A (1+1)
+40978 Skylla-S 12V/100A (3)
+40979 Skylla-S 24V/100A (1+1)
+40980 Skylla-S 24V/100A (3)
+40981 Skylla-S 24V/50A (1+1)
+40982 Skylla-S 24V/50A (3)
+41024 BlueSolar Charger MPPT 75/50
+41025 BlueSolar Charger MPPT 150/35 rev1
+41026 BlueSolar Charger MPPT 75/15
+41027 BlueSolar Charger MPPT 100/15
+41028 BlueSolar Charger MPPT 100/30 rev1
+41029 BlueSolar Charger MPPT 100/50 rev1
+41030 BlueSolar Charger MPPT 150/70
+41031 BlueSolar Charger MPPT 150/100
+41032 BlueSolar Charger MPPT 75/50 rev2
+41033 BlueSolar Charger MPPT 100/50 rev2
+41034 BlueSolar Charger MPPT 100/30 rev2
+41035 BlueSolar Charger MPPT 150/35 rev2
+41036 BlueSolar Charger MPPT 75/10
+41037 BlueSolar Charger MPPT 150/45
+41038 BlueSolar Charger MPPT 150/60
+41039 BlueSolar Charger MPPT 150/85
+41040 SmartSolar Charger MPPT 250/100
+41041 SmartSolar Charger MPPT 150/100
+41042 SmartSolar Charger MPPT 150/85
+41043 SmartSolar Charger MPPT 75/15
+41044 SmartSolar Charger MPPT 75/10
+41045 SmartSolar Charger MPPT 100/15
+41046 SmartSolar Charger MPPT 100/30
+41047 SmartSolar Charger MPPT 100/50
+41048 SmartSolar Charger MPPT 150/35
+41049 SmartSolar Charger MPPT 150/100 rev2
+41050 SmartSolar Charger MPPT 150/85 rev2
+41051 SmartSolar Charger MPPT 250/70
+41052 SmartSolar Charger MPPT 250/85
+41053 SmartSolar Charger MPPT 250/60
+41054 SmartSolar Charger MPPT 250/60
+41055 SmartSolar Charger MPPT 100/20
+41056 SmartSolar Charger MPPT 100/20 48V
+41057 SmartSolar Charger MPPT 150/45
+41058 SmartSolar Charger MPPT 150/60
+41059 SmartSolar Charger MPPT 150/70
+41060 SmartSolar Charger MPPT 250/85 rev2
+41061 SmartSolar Charger MPPT 250/100 rev2
+41062 BlueSolar Charger MPPT 100/20
+41063 BlueSolar Charger MPPT 100/20 48V
+41064 SmartSolar Charger MPPT 250/60 rev2
+41065 SmartSolar Charger MPPT 250/70 rev2
+41066 SmartSolar Charger MPPT 150/45 rev2
+41067 SmartSolar Charger MPPT 150/60 rev2
+41068 SmartSolar Charger MPPT 150/70 rev2
+41069 SmartSolar Charger MPPT 150/85 rev3
+41070 SmartSolar Charger MPPT 150/100 rev3
+41071 BlueSolar Charger MPPT 150/45 rev2
+41072 BlueSolar Charger MPPT 150/60 rev2
+41073 BlueSolar Charger MPPT 150/70 rev2
+41074 BlueSolar Charger MPPT 150/45 rev3
+41075 SmartSolar Charger MPPT 150/45 rev3
+41076 SmartSolar Charger MPPT 75/10 rev2
+41077 SmartSolar Charger MPPT 75/15 rev2
+41078 BlueSolar Charger MPPT 100/30 rev3
+41079 BlueSolar Charger MPPT 100/50 rev3
+41080 BlueSolar Charger MPPT 150/35 rev3
+41081 BlueSolar Charger MPPT 75/10 rev2
+41082 BlueSolar Charger MPPT 75/15 rev2
+41083 BlueSolar Charger MPPT 100/15 rev2
+41084 BlueSolar Charger MPPT 75/10 rev3
+41085 BlueSolar Charger MPPT 75/15 rev3
+41086 SmartSolar Charger MPPT 100/30 12V
+41153 Lithium Battery Balancer 12V/3.5A
+41154 Lithium Battery Balancer 12V/8A
+41155 Lithium Battery Balancer 24V/3.5A
+41156 Lithium Battery Balancer 12V/2A
+41184 Smart Lithium Battery 12.8V/90Ah
+41185 Smart Lithium Battery 12.8V/60Ah
+41186 Smart Lithium Battery 12.8V/160Ah
+41187 Smart Lithium Battery 12.8V/200Ah
+41188 Smart Lithium Battery 12.8V/300Ah
+41189 Smart Lithium Battery 12.8V/100Ah
+41190 Smart Lithium Battery 12.8V/200Ah
+41191 Smart Lithium Battery 12.8V/300Ah
+41192 Smart Lithium Battery 12.8V/100Ah
+41193 Smart Lithium Battery 12.8V/150Ah
+41194 Smart Lithium Battery 25.6V/200Ah
+41195 Smart Lithium Battery 12.8V/200Ah
+41196 Smart Lithium Battery 12.8V/160Ah
+41197 Smart Lithium Battery 12.8V/50Ah
+41198 Smart Lithium Battery 25.6V/200Ah
+41199 Smart Lithium Battery 25.6V/100Ah
+41200 Smart Lithium Battery 12.8V/330Ah
+41201 Smart Lithium Battery 25.6V/330Ah
+41202 Smart Lithium Battery 12.8V/300Ah
+41216 BlueSolar Remote Panel
+41217 BlueSolar Charger MPPT 150/85
+41218 SmartSolar MPPT VE.Can 150/70
+41219 SmartSolar MPPT VE.Can 150/45
+41220 SmartSolar MPPT VE.Can 150/60
+41221 SmartSolar MPPT VE.Can 150/85
+41222 SmartSolar MPPT VE.Can 150/100
+41223 SmartSolar MPPT VE.Can 250/45
+41224 SmartSolar MPPT VE.Can 250/60
+41225 SmartSolar MPPT VE.Can 250/70
+41226 SmartSolar MPPT VE.Can 250/85
+41227 SmartSolar MPPT VE.Can 250/100
+41228 SmartSolar MPPT VE.Can 150/70 rev2
+41229 SmartSolar MPPT VE.Can 150/85 rev2
+41230 SmartSolar MPPT VE.Can 150/100 rev2
+41231 BlueSolar MPPT VE.Can 150/100
+41232 SmartSolar MPPT RS 450/100
+41233 SmartSolar MPPT RS 450/200
+41234 BlueSolar MPPT VE.Can 250/70
+41235 BlueSolar MPPT VE.Can 250/100
+41236 SmartSolar MPPT VE.Can 250/70 rev2
+41237 SmartSolar MPPT VE.Can 250/100 rev2
+41238 SmartSolar MPPT VE.Can 250/85 rev2
+41239 BlueSolar MPPT VE.Can 150/100 rev2
+41248 VE.Bus to NMEA2000 interface (rev2)
+41249 VE.Direct to CAN interface
+41264 Lynx Ion + Shunt
+41265 Lynx Smart Shunt 1000A VE.Can
+41280 PV Inverter (QWACS)
+41281 PV Inverter (AC Current Sensor)
+41282 Fronius solar inverters
+41283 SMA solar inverters
+41284 SunSpec solar inverters
+41285 ABB/Fimer solar inverters
+41312 Tank sensor
+41313 Generic Tank Input
+41314 Generic Temperature Input
+41315 NMEA-0183 GPS
+41316 NMEA 2000 GPS
+41317 Generic pulse meter
+41318 Generic digital input
+41328 Mppt control
+41329 Mppt control PCBA test firmware
+41344 Peak Power Pack 12V 8Ah
+41345 Peak Power Pack PCBA test firmware
+41346 VE.Direct Bluetooth Smart Dongle
+41347 Bootloader for softdevice v7
+41348 Virtual id for v1 legacy dongle
+41349 Peak Power Pack 12V 20Ah
+41350 Peak Power Pack 12V 30Ah
+41351 Peak Power Pack 12V 40Ah
+41352 VE.Direct Bluetooth Smart Dongle (Rev2)
+41353 VE.Direct Bluetooth Smart Dongle (Rev3)
+41360 SmartSolar Bluetooth Interface
+41361 SmartSolar Bluetooth Interface (Rev2)
+41362 BMV-7xx Smart Bluetooth Interface
+41363 Lynx Ion BMS Bluetooth Interface
+41364 Phoenix Inverter Smart Bluetooth Interface
+41365 VE.Can SmartSolar Bluetooth Interface
+41366 SmartShunt Bluetooth Interface
+41367 SmartSolar Bluetooth Interface (Rev3)
+41368 BMV-7xx Smart Bluetooth Interface (Rev2)
+41369 Lynx Ion BMS Bluetooth Interface (Rev2)
+41370 Phoenix Inverter Smart Bluetooth Interface (Rev2)
+41371 VE.Can SmartSolar Bluetooth Interface (Rev2)
+41372 SmartShunt Bluetooth Interface (Rev2)
+41373 SmartShunt Bluetooth Interface (Rev2)
+41374 Sun Inverter Bluetooth Interface
+41375 All-In-1 Bluetooth Interface
+41392 Smart Energy Meter
+41393 VE.Can Energy Meter
+41472 Phoenix Inverter
+41473 Phoenix Inverter 12V 250VA 230V
+41474 Phoenix Inverter 24V 250VA 230V
+41476 Phoenix Inverter 48V 250VA 230V
+41489 Phoenix Inverter 12V 375VA 230V
+41490 Phoenix Inverter 24V 375VA 230V
+41492 Phoenix Inverter 48V 375VA 230V
+41505 Phoenix Inverter 12V 500VA 230V
+41506 Phoenix Inverter 24V 500VA 230V
+41508 Phoenix Inverter 48V 500VA 230V
+41521 Phoenix Inverter 12V 250VA 230V
+41522 Phoenix Inverter 24V 250VA 230V
+41524 Phoenix Inverter 48V 250VA 230V
+41525 Phoenix Sun Inverter 12V 250VA 230V
+41526 Phoenix Sun Inverter 24V 250VA 230V
+41527 Phoenix Sun Inverter 48V 250VA 230V
+41529 Phoenix Inverter 12V 250VA 120V
+41530 Phoenix Inverter 24V 250VA 120V
+41532 Phoenix Inverter 48V 250VA 120V
+41537 Phoenix Inverter 12V 375VA 230V
+41538 Phoenix Inverter 24V 375VA 230V
+41540 Phoenix Inverter 48V 375VA 230V
+41545 Phoenix Inverter 12V 375VA 120V
+41546 Phoenix Inverter 24V 375VA 120V
+41548 Phoenix Inverter 48V 375VA 120V
+41553 Phoenix Inverter 12V 500VA 230V
+41554 Phoenix Inverter 24V 500VA 230V
+41556 Phoenix Inverter 48V 500VA 230V
+41561 Phoenix Inverter 12V 500VA 120V
+41562 Phoenix Inverter 24V 500VA 120V
+41564 Phoenix Inverter 48V 500VA 120V
+41569 Phoenix Inverter 12V 800VA 230V
+41570 Phoenix Inverter 24V 800VA 230V
+41572 Phoenix Inverter 48V 800VA 230V
+41577 Phoenix Inverter 12V 800VA 120V
+41578 Phoenix Inverter 24V 800VA 120V
+41580 Phoenix Inverter 48V 800VA 120V
+41585 Phoenix Inverter 12V 1200VA 230V
+41586 Phoenix Inverter 24V 1200VA 230V
+41588 Phoenix Inverter 48V 1200VA 230V
+41593 Phoenix Inverter 12V 1200VA 120V
+41594 Phoenix Inverter 24V 1200VA 120V
+41596 Phoenix Inverter 48V 1200VA 120V
+41601 Smart Phoenix Inverter 12V 2000VA 230V
+41602 Smart Phoenix Inverter 24V 2000VA 230V
+41604 Smart Phoenix Inverter 48V 2000VA 230V
+41609 Smart Phoenix Inverter 12V 2000VA 120V
+41610 Smart Phoenix Inverter 24V 2000VA 120V
+41612 Smart Phoenix Inverter 48V 2000VA 120V
+41617 Smart Phoenix Inverter 12V 2000VA 230V
+41618 Smart Phoenix Inverter 24V 2000VA 230V
+41620 Smart Phoenix Inverter 48V 2000VA 230V
+41625 Smart Phoenix Inverter 12V 2000VA 120V
+41626 Smart Phoenix Inverter 24V 2000VA 120V
+41628 Smart Phoenix Inverter 48V 2000VA 120V
+41633 Smart Phoenix Inverter 12V 3000VA 230V
+41634 Smart Phoenix Inverter 24V 3000VA 230V
+41636 Smart Phoenix Inverter 48V 3000VA 230V
+41641 Smart Phoenix Inverter 12V 3000VA 120V
+41642 Smart Phoenix Inverter 24V 3000VA 120V
+41644 Smart Phoenix Inverter 48V 3000VA 120V
+41650 Smart Phoenix Inverter 24V 5000VA 230V
+41652 Smart Phoenix Inverter 48V 5000VA 230V
+41658 Smart Phoenix Inverter 24V 5000VA 120V
+41660 Smart Phoenix Inverter 48V 5000VA 120V
+41697 Phoenix Inverter 12V 800VA 230V
+41698 Phoenix Inverter 24V 800VA 230V
+41700 Phoenix Inverter 48V 800VA 230V
+41705 Phoenix Inverter 12V 800VA 120V
+41706 Phoenix Inverter 24V 800VA 120V
+41708 Phoenix Inverter 48V 800VA 120V
+41713 Phoenix Inverter 12V 1200VA 230V
+41714 Phoenix Inverter 24V 1200VA 230V
+41716 Phoenix Inverter 48V 1200VA 230V
+41721 Phoenix Inverter 12V 1200VA 120V
+41722 Phoenix Inverter 24V 1200VA 120V
+41724 Phoenix Inverter 48V 1200VA 120V
+41728 Blue Smart Charger - Generic
+41729 Blue Smart IP65 Charger 12|10
+41730 Blue Smart IP65 Charger 12|15
+41731 Blue Smart IP65 Charger 24|8
+41732 Blue Smart IP65 Charger 12|5
+41733 Blue Smart IP65 Charger 12|7
+41734 Blue Smart IP65 Charger 24|5
+41735 Blue Smart IP65 Charger 12|4
+41736 Blue Smart IP65s Charger 12|4
+41737 Blue Smart IP65s Charger 12|5
+41738 Blue Smart IP65 Charger 12|25
+41739 Blue Smart IP65 Charger 24|13
+41740 Blue Smart IP65 Charger 6V/12V-1.1A
+41741 Blue Smart IP65s Charger 12/4
+41742 Blue Smart IP65s Charger 12/5
+41743 Blue Smart IP65 Charger 12/7
+41744 Blue Smart IP67 Charger 12|7
+41745 Blue Smart IP67 Charger 12|13
+41746 Blue Smart IP67 Charger 24|5
+41747 Blue Smart IP67 Charger 12|17
+41748 Blue Smart IP67 Charger 12|25
+41749 Blue Smart IP67 Charger 24|8
+41750 Blue Smart IP67 Charger 24|12
+41751 Blue Smart IP67 Charger 12/7
+41752 Blue Smart IP67 Charger 12/13
+41753 Blue Smart IP67 Charger 24/5
+41754 Blue Smart IP67 Charger 12/17
+41755 Blue Smart IP67 Charger 12/25
+41756 Blue Smart IP67 Charger 24/8
+41757 Blue Smart IP67 Charger 24/12
+41760 Blue Smart IP22 Charger 12|15 (1)
+41761 Blue Smart IP22 Charger 12|15 (3)
+41762 Blue Smart IP22 Charger 12|20 (1)
+41763 Blue Smart IP22 Charger 12|20 (3)
+41764 Blue Smart IP22 Charger 12|30 (1)
+41765 Blue Smart IP22 Charger 12|30 (3)
+41766 Blue Smart IP22 Charger 24|8 (1)
+41767 Blue Smart IP22 Charger 24|8 (3)
+41768 Blue Smart IP22 Charger 24|12 (1)
+41769 Blue Smart IP22 Charger 24|12 (3)
+41770 Blue Smart IP22 Charger 24|16 (1)
+41771 Blue Smart IP22 Charger 24|16 (3)
+41772 Blue Smart IP22 Charger 12/15 (1)
+41773 Blue Smart IP22 Charger 12/15 (3)
+41774 Blue Smart IP22 Charger 12/20 (1)
+41775 Blue Smart IP22 Charger 12/20 (3)
+41776 Blue Smart IP22 Charger 12/30 (1)
+41777 Blue Smart IP22 Charger 12/30 (3)
+41778 Blue Smart IP22 Charger 24/8 (1)
+41779 Blue Smart IP22 Charger 24/8 (3)
+41780 Blue Smart IP22 Charger 24/12 (1)
+41781 Blue Smart IP22 Charger 24/12 (3)
+41782 Blue Smart IP22 Charger 24/16 (1)
+41783 Blue Smart IP22 Charger 24/16 (3)
+41784 Blue Smart IP65 Charger 12/10
+41785 Blue Smart IP65 Charger 12/15
+41786 Blue Smart IP65 Charger 24/5
+41787 Blue Smart IP65 Charger 24/8
+41788 Blue Smart IP65 Charger 12/5
+41792 Phoenix Smart IP43 Charger 12|50 (1+1) 230V
+41793 Phoenix Smart IP43 Charger 12|50 (3) 230V
+41794 Phoenix Smart IP43 Charger 24|25 (1+1) 230V
+41795 Phoenix Smart IP43 Charger 24|25 (3) 230V
+41796 Phoenix Smart IP43 Charger 12|30 (1+1) 230V
+41797 Phoenix Smart IP43 Charger 12|30 (3) 230V
+41798 Phoenix Smart IP43 Charger 24|16 (1+1) 230V
+41799 Phoenix Smart IP43 Charger 24|16 (3) 230V
+41808 Phoenix Smart IP43 Charger 12|50 (1+1) 120-240V
+41809 Phoenix Smart IP43 Charger 12|50 (3) 120-240V
+41810 Phoenix Smart IP43 Charger 24|25 (1+1) 120-240V
+41811 Phoenix Smart IP43 Charger 24|25 (3) 120-240V
+41812 Phoenix Smart IP43 Charger 12|30 (1+1) 120-240V
+41813 Phoenix Smart IP43 Charger 12|30 (3) 120-240V
+41814 Phoenix Smart IP43 Charger 24|16 (1+1) 120-240V
+41815 Phoenix Smart IP43 Charger 24|16 (3) 120-240V
+41824 IMPULSE-II 24/6 Smart IP44
+41825 IMPULSE-II 24/8 Smart IP44
+41826 IMPULSE-II 24/6 Smart IP65
+41827 IMPULSE-II 24/8 Smart IP65
+41828 IMPULSE-II 24/6 Smart IP44
+41829 IMPULSE-II 24/8 Smart IP44
+41830 IMPULSE-II 24/12 Smart IP65
+41831 IMPULSE-II 24/11 Smart IP44
+41832 IMPULSE-II 24/8 Smart IP44
+41833 IMPULSE-II 24/6 Smart IP44
+41834 IMPULSE-II 24/8 Smart IP65
+41835 IMPULSE-II 24/6 Smart IP65
+41853 Vector 12/20 Smart
+41854 IMPULSE-II L 12/20 Smart
+41855 IMPULSE-II L 12/20 Smart
+41856 BMV-710 Smart
+41857 BMV-712 Smart
+41858 BMV-710H Smart
+41859 BMV-712 Smart
+41865 SmartShunt 500A/50mV
+41866 SmartShunt 1000A/50mV
+41867 SmartShunt 2000A/50mV
+41868 SmartShunt IP67 500A/50mV
+41869 SmartShunt IP67 1000A/50mV
+41870 SmartShunt IP67 2000A/50mV
+41872 Lynx Ion BMS General
+41873 Lynx Ion BMS 150A
+41874 Lynx Ion BMS 400A
+41875 Lynx Ion BMS 600A
+41876 Lynx Ion BMS 1000A
+41888 VE.Bus smart dongle
+41892 Smart VT sensor
+41893 Smart VT sensor (Rev2)
+41904 Smart BatteryProtect 12/24V-65A
+41905 Smart BatteryProtect 12/24V-100A
+41906 Smart BatteryProtect 12/24V-220A
+41907 Smart BatteryProtect 48V-100A
+41920 Orion Smart 12V/12V-18A DC-DC Converter
+41921 Orion Smart 12V/24V-10A DC-DC Converter
+41922 Orion Smart 24V/12V-20A DC-DC Converter
+41923 Orion Smart 24V/24V-12A DC-DC Converter
+41924 Orion Smart 24V/48V-6A DC-DC Converter
+41925 Orion Smart 48V/12V-20A DC-DC Converter
+41926 Orion Smart 48V/24V-12A DC-DC Converter
+41927 Orion Smart 48V/48V-6A DC-DC Converter
+41928 Orion Smart 12V/12V-30A DC-DC Converter
+41929 Orion Smart 12V/24V-15A DC-DC Converter
+41930 Orion Smart 24V/12V-30A DC-DC Converter
+41931 Orion Smart 24V/24V-17A DC-DC Converter
+41932 Orion Smart 24V/48V-8.5A DC-DC Converter
+41933 Orion Smart 48V/12V-30A DC-DC Converter
+41934 Orion Smart 48V/24V-16A DC-DC Converter
+41935 Orion Smart 48V/48V-8A DC-DC Converter
+41936 Orion Smart 12V/12V-30A Buck-Boost Converter
+41937 Orion Smart 12V/24V-15A Buck-Boost Converter
+41938 Orion Smart Orion 24V/12V-30A Buck-Boost Converter
+41939 Orion Smart Orion 24V/24V-17A Buck-Boost Converter
+41952 Smart BMS CL 12-100
+41957 Lynx Smart BMS 500
+41958 Lynx Smart BMS 1000
+41960 Smart BMS 12-200
+41964 smallBMS
+41968 Smart Buckboost 12V/12V-50A non-iso DC-DC charger
+41984 MultiC - Generic
+41985 Inverter RS Solar 48V/6000VA/80A
+41986 Inverter RS 48V/6000VA
+42049 Multi RS Solar 48V/6000VA/100A
+42050 Multi RS Solar 48V/6000VA/100A
+42051 Multi RS Solar 48V/6000VA/100A
+42052 Multi RS Solar 48V/6000VA/100A
+42112 Multi 15kVA 3phase
+42176 Transfer Switch - Generic id
+42177 Transfer Switch 3 Phase 2 in 1 out 80A
+42241 MultiPlus-X Smart 12V/3000VA/120A
+45056 Valence XP Battery
+45057 Valence BMS
+45058 Carlo Gavazzi EM24 Energy Meter
+45059 Redflow ZBM 2 Battery
+45060 LG resu battery
+45061 BMZ battery
+45062 Carlo Gavazzi virtual PV Inverter (on EM24)
+45063 CAN-bus BMS battery
+45064 Murata battery
+45065 Pylontech battery
+45066 BYD B-Box Pro battery
+45067 PureDrive battery
+45068 Carlo Gavazzi ET 112 Energy Meter
+45069 Carlo Gavazzi ET 340 Energy Meter
+45070 ZCell BMS
+45071 Energy Tube EMSC2 battery
+45072 Mercedes Benz Energy battery
+45073 Carlo Gavazzi virtual PV Inverter (on ET340)
+45074 FIAMM SoNick 48TL battery
+45075 SSS DC Energy Meter/Switch
+45076 Freedom WON battery
+45077 BYD B-Box L battery
+45078 Discover AES battery
+45079 Carlo Gavazzi EM24 Ethernet Energy Meter
+45080 Smappee Power Box
+45081 BYD Premium LV battery
+45088 BlueNova battery
+45089 BSLBATT battery
+45090 REC-BMS battery
+45091 Eastron SDM630 Energy Meter
+45092 Freedom WON eTower battery
+45093 Dyness battery
+45094 Carlo Gavazzi EM540 Energy Meter
+45095 Carlo Gavazzi virtual PV Inverter (on EM540)
+45096 Cegasa battery
+45097 Pylontech Pelio-L battery
+45104 IMT Si-RS485 Series Solar Irradiance Sensor
+45105 Carlo Gavazzi EM300 Spec 27 Energy Meter
+45106 Carlo Gavazzi virtual PV Inverter (on EM300 Spec 27)
+45107 ABB B-Series Energy Meter
+45108 Shelly EM/3EM Energy Meter
+45120 Fischer Panda Genset
+45121 WATT Imperium Fuel Cell 3.0
+45122 Bornay Windplus
+45123 WATT Imperium Fuel Cell 4.0
+45136 123 SmartBMS
+45137 Hubble battery
+45152 Oceanvolt Display 2
+45153 Oceanvolt ServoProp
+45168 Volturnus Wind Turbine Voltage Limiter
+45169 EConnect Distribution Box
+45184 Wakespeed WS500 Alternator Regulator
+45185 Wakespeed WS3000 DCDC EMS
+45248 MG BMS 24-96V General
+45249 MG BMS 24-48V/150A
+45250 MG BMS 24-48V/400A
+45251 MG BMS 24-48V/600A
+45252 MG BMS 24-48V/1000A
+45253 MG BMS 72V/400A
+45254 MG BMS 96V/600A
+45255 MG BMS 72-96V/500A
+45264 MG BMS 12V General
+45265 MG BMS 12V/150
+45266 MG BMS 12V/400A
+45267 MG BMS 12V/600A
+45268 MG BMS 12V/1000A
+45272 MG BMS 48-900V General
+45273 MG BMS 48-900V/300A
+45274 MG BMS 48-900V/500A
+45280 MG SmartLink MX
+45281 MG SmartLink Connect
+45282 MG SmartLink PLC
+49152 VGR, VGR2 or VER
+49153 Color Control
+49154 Venus GX
+49155 Generic Venus Device
+49156 VE.Direct LoRaWAN
+49157 VE.Direct LoRaWAN Smart
+49158 Octo GX
+49159 EasySolar-II
+49160 MultiPlus-II
+49161 Maxi GX
+49162 Cerbo GX
+49163 EasySolar-II
+49164 MultiPlus-II
+49165 Maxi GX
+49166 EasySolar-II
+49167 MultiPlus-II
+49168 Maxi GX
+49169 SHS400
+49170 Cerbo GX
+49171 Ekrano GX
+49172 Cerbo-S GX
+49184 VE.Direct LoRaWAN
+49185 Global Link 520
+49188 EV Charge Station 32A
+49189 EV Charge Station 32A
+49190 EV Charge Station 32A NS
+49192 GX Tank 140
+49193 RuuviTag
+49194 Mopeka sensor
+49200 SmartShunt IP65 500A/50mV
+49201 SmartShunt IP65 1000A/50mV
+49202 SmartShunt IP65 2000A/50mV
+49203 All-In-1 Smart
+49204 BMV-800 Smart
+49205 SmartShunt IP65 500A/50mV
+49206 SmartShunt IP65 1000A/50mV
+49207 SmartShunt IP65 2000A/50mV
+57344 Generic example 0
+57345 Generic example 1
+57346 Generic example 2
+57347 Generic example 3
+57348 Generic example 4
+57349 Generic example 5
+57350 Generic example 6
+57351 Generic example 7
+57352 XUP example 0
+57353 XUP example 1
+57354 XUP example 2
+57355 XUP example 3
+57356 XUP example 4
+57357 XUP example 5
+57358 XUP example 6
+57359 XUP example 7
+57360 BUP example 0
+57361 BUP example 1
+57362 BUP example 2
+57363 BUP example 3
+57364 BUP example 4
+57365 BUP example 5
+57366 BUP example 6
+57367 BUP example 7
+57368 DUP example 0
+57369 DUP example 1
+57370 DUP example 2
+57371 DUP example 3
+57372 DUP example 4
+57373 DUP example 5
+57374 DUP example 6
+57375 DUP example 7
+65024 sw vedirect interface
+65025 sw ble interface
+65026 sw VE.Bus interface
+65027 sw mqtt interface
+65534 reserved
+65535 No product set
