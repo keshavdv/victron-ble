@@ -8,6 +8,7 @@ from victron_ble.devices.battery_monitor import (
     BatteryMonitorData,
 )
 from victron_ble.devices.battery_sense import BatterySense, BatterySenseData
+from victron_ble.devices.ac_charger import AcCharger, AcChargerData
 from victron_ble.devices.dc_energy_meter import DcEnergyMeter, DcEnergyMeterData
 from victron_ble.devices.dcdc_converter import DcDcConverter, DcDcConverterData
 from victron_ble.devices.inverter import Inverter, InverterData
@@ -29,6 +30,8 @@ __all__ = [
     "BatteryMonitorData",
     "BatterySense",
     "BatterySenseData",
+    "AcCharger",
+    "AcChargerData",
     "DcDcConverter",
     "DcDcConverterData",
     "DcEnergyMeter",
@@ -77,7 +80,7 @@ def detect_device_type(data: bytes) -> Optional[Type[Device]]:
     elif mode == 0xD:  # DcEnergyMeter
         return DcEnergyMeter
     elif mode == 0x8:  # AcCharger
-        pass
+        return AcCharger
     elif mode == 0x4:  # DcDcConverter
         return DcDcConverter
     elif mode == 0x3:  # Inverter
