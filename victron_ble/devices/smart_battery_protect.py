@@ -59,7 +59,7 @@ class SmartBatteryProtectData(DeviceData):
         """
         return self._data["output_voltage"]
 
-    def get_off_reason(self) -> int:
+    def get_off_reason(self) -> OffReason:
         """
         Return the off reason
         """
