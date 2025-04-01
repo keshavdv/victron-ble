@@ -1,6 +1,7 @@
 import struct
 from typing import Dict, Optional, Type
 
+from victron_ble.devices.ac_charger import AcCharger, AcChargerData
 from victron_ble.devices.base import Device, DeviceData
 from victron_ble.devices.battery_monitor import (
     AuxMode,
@@ -8,7 +9,6 @@ from victron_ble.devices.battery_monitor import (
     BatteryMonitorData,
 )
 from victron_ble.devices.battery_sense import BatterySense, BatterySenseData
-from victron_ble.devices.ac_charger import AcCharger, AcChargerData
 from victron_ble.devices.dc_energy_meter import DcEnergyMeter, DcEnergyMeterData
 from victron_ble.devices.dcdc_converter import DcDcConverter, DcDcConverterData
 from victron_ble.devices.inverter import Inverter, InverterData
@@ -20,7 +20,6 @@ from victron_ble.devices.smart_battery_protect import (
 )
 from victron_ble.devices.smart_lithium import SmartLithium, SmartLithiumData
 from victron_ble.devices.solar_charger import SolarCharger, SolarChargerData
-from victron_ble.devices.smart_charger import SmartCharger, SmartChargerData
 from victron_ble.devices.vebus import VEBus, VEBusData
 
 __all__ = [
@@ -62,7 +61,6 @@ __all__ = [
 MODEL_PARSER_OVERRIDE: Dict[int, Type[Device]] = {
     0xA3A4: BatterySense,  # Smart Battery Sense
     0xA3A5: BatterySense,  # Smart Battery Sense
-    0xA339: SmartCharger,  # Blue Smart Charger IP65/67
 }
 
 

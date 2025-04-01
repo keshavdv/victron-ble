@@ -446,6 +446,7 @@ class Device(abc.ABC):
 
     def parse(self, data: bytes) -> DeviceData:
         decrypted = self.decrypt(data)
+        print(decrypted.hex())
         parsed = self.parse_decrypted(decrypted)
         model = self.get_model_id(data)
         return self.data_type(model, parsed)

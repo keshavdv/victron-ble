@@ -60,13 +60,13 @@ class AcChargerData(DeviceData):
 
     def get_temperature(self) -> Optional[float]:
         """
-        Return the output charging current in amps
+        Return the temperature of the charger in celcius
         """
         return self._data["temperature"]
 
     def get_ac_current(self) -> Optional[float]:
         """
-        Return the output charging current in amps
+        Return the input current in amps
         """
         return self._data["ac_current"]
 
@@ -83,18 +83,20 @@ class AcCharger(Device):
         #                 5 - Float
         charge_state = reader.read_unsigned_int(8)
         charger_error = reader.read_unsigned_int(8)
-        output_voltage1 = reader.read_signed_int(
+        output_voltage1 = reader.read_unsigned_int(
             13
         )  # Output voltage reading in 0.01V increments
-        output_current1 = reader.read_signed_int(
+        output_current1 = reader.read_unsigned_int(
             11
         )  # Output current reading in 0.1A increments
-        output_voltage2 = reader.read_signed_int(13)
-        output_current2 = reader.read_signed_int(11)
-        output_voltage3 = reader.read_signed_int(13)
-        output_current3 = reader.read_signed_int(11)
+        output_voltage2 = reader.read_unsigned_int(13)
+        output_current2 = reader.read_unsigned_int(11)
+        output_voltage3 = reader.read_unsigned_int(13)
+        output_current3 = reader.read_unsigned_int(11)
         temerature = reader.read_signed_int(7)  # Celsius
-        ac_current = reader.read_signed_int(9)  # AC current reading in 0.1A increments
+        ac_current = reader.read_unsigned_int(
+            9
+        )  # AC current reading in 0.1A increments
 
         return {
             "charge_state": (
@@ -104,22 +106,22 @@ class AcCharger(Device):
                 ChargerError(charger_error) if charger_error != 0xFF else None
             ),
             "output_voltage1": (
-                output_voltage1 / 100 if output_voltage1 != 0x7FFF else None
+                output_voltage1 / 100 if output_voltage1 != 0x1FFF else None
             ),
             "output_voltage2": (
-                output_voltage2 / 100 if output_voltage2 != 0x7FFF else None
+                output_voltage2 / 100 if output_voltage2 != 0x1FFF else None
             ),
             "output_voltage3": (
-                output_voltage3 / 100 if output_voltage3 != 0x7FFF else None
+                output_voltage3 / 100 if output_voltage3 != 0x1FFF else None
             ),
             "output_current1": (
-                output_current1 / 10 if output_current1 != 0x7FFF else None
+                output_current1 / 10 if output_current1 != 0x7FF else None
             ),
             "output_current2": (
-                output_current2 / 10 if output_current2 != 0x7FFF else None
+                output_current2 / 10 if output_current2 != 0x7FF else None
             ),
             "output_current3": (
-                output_current3 / 10 if output_current3 != 0x7FFF else None
+                output_current3 / 10 if output_current3 != 0x7FF else None
             ),
             "temperature": ((temerature - 40) if temerature != 0x7F else None),
             "ac_current": (ac_current / 10 if ac_current != 0x1FF else None),
