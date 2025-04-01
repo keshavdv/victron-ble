@@ -1,6 +1,3 @@
-update: add support Blue Smart IP65 Charger
-
-
 # victron_ble
 
 A Python library to parse Instant Readout advertisement data from Victron devices.
