@@ -35,6 +35,13 @@ setup(
     name="victron_ble",
     version=read("victron_ble", "VERSION"),
     license="Unlicense",
+    classifiers=[
+        "Development Status :: 4 - Beta",
+        "Intended Audience :: Developers",
+        "Topic :: Software Development :: Build Tools",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.9",
+    ],
     description="Python API to read Victron Instant Readout advertisements",
     url="https://github.com/keshavdv/victron-ble/",
     long_description=read("README.md"),
