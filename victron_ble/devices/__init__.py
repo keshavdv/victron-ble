@@ -19,6 +19,7 @@ from victron_ble.devices.smart_battery_protect import (
 )
 from victron_ble.devices.smart_lithium import SmartLithium, SmartLithiumData
 from victron_ble.devices.solar_charger import SolarCharger, SolarChargerData
+from victron_ble.devices.smart_charger import SmartCharger, SmartChargerData
 from victron_ble.devices.vebus import VEBus, VEBusData
 
 __all__ = [
@@ -47,6 +48,8 @@ __all__ = [
     "LynxSmartBMSData",
     "SolarCharger",
     "SolarChargerData",
+    "SmartCharger",
+    "SmartChargerData",
     "VEBus",
     "VEBusData",
 ]
@@ -56,6 +59,7 @@ __all__ = [
 MODEL_PARSER_OVERRIDE: Dict[int, Type[Device]] = {
     0xA3A4: BatterySense,  # Smart Battery Sense
     0xA3A5: BatterySense,  # Smart Battery Sense
+    0xA339: SmartCharger,  # Blue Smart Charger IP65/67
 }
 
 
