@@ -34,6 +34,7 @@ def read_requirements(path):
 setup(
     name="victron_ble",
     version=read("victron_ble", "VERSION"),
+    license="Unlicense",
     description="Python API to read Victron Instant Readout advertisements",
     url="https://github.com/keshavdv/victron-ble/",
     long_description=read("README.md"),
