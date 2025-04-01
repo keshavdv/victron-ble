@@ -15,9 +15,7 @@ class TestDcDcConverter:
         assert actual.get_input_voltage() == 13.15
         assert actual.get_output_voltage() == None
         assert actual.get_off_reason() == OffReason.ENGINE_SHUTDOWN
-        assert (
-            actual.get_model_name() == "Orion Smart 12V|12V-18A Isolated DC-DC Charger"
-        )
+        assert actual.get_model_name() == "Orion Smart 12V/12V-18A DC-DC Converter"
 
     def parse_decrypted(self, decrypted: str) -> DcDcConverterData:
         parsed = DcDcConverter(None).parse_decrypted(bytes.fromhex(decrypted))

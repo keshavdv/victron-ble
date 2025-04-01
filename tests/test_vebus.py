@@ -40,4 +40,4 @@ class TestVEBus:
         assert actual.get_device_state() == OperationMode.OFF
         assert actual.get_error() == 0
         assert actual.get_alarm() == AlarmNotification.NO_ALARM
-        assert actual.get_model_name() == "Victron Multiplus II 12/3000/120-50 2x120V"
+        assert actual.get_model_name() == "MultiPlus-II 12/3000/120-50 2x120V"
