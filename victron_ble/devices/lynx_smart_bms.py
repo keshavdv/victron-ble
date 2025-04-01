@@ -63,7 +63,6 @@ class LynxSmartBMS(Device):
     data_type = LynxSmartBMSData
 
     def parse_decrypted(self, decrypted: bytes) -> dict:
-
         reader = BitReader(decrypted)
         error_flags = reader.read_unsigned_int(8)
         remaining_mins = reader.read_unsigned_int(16)
