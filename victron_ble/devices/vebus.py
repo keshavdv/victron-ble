@@ -1,3 +1,5 @@
+from typing import Optional
+
 from victron_ble.devices.base import (
     ACInState,
     AlarmNotification,
@@ -9,61 +11,61 @@ from victron_ble.devices.base import (
 
 
 class VEBusData(DeviceData):
-    def get_device_state(self) -> OperationMode:
+    def get_device_state(self) -> Optional[OperationMode]:
         """
         Return an enum indicating the device state
         """
         return self._data["device_state"]
 
-    def get_error(self) -> int:
+    def get_error(self) -> Optional[int]:
         """
         Return the VEBus error state (unknown interpretation)
         """
         return self._data["error"]
 
-    def get_alarm(self) -> AlarmNotification:
+    def get_alarm(self) -> Optional[AlarmNotification]:
         """
         Return the VEBus alarm state
         """
         return self._data["alarm"]
 
-    def get_ac_in_state(self) -> ACInState:
+    def get_ac_in_state(self) -> Optional[ACInState]:
         """
         Return an enum indicating the current ac power state
         """
         return self._data["ac_in_state"]
 
-    def get_ac_in_power(self) -> float:
+    def get_ac_in_power(self) -> Optional[float]:
         """
         Return the current AC power draw
         """
         return self._data["ac_in_power"]
 
-    def get_ac_out_power(self) -> float:
+    def get_ac_out_power(self) -> Optional[float]:
         """
         Return the current AC power output
         """
         return self._data["ac_out_power"]
 
-    def get_battery_current(self) -> float:
+    def get_battery_current(self) -> Optional[float]:
         """
         Return the battery current in amps (positive for charging, negative for inverting)
         """
         return self._data["battery_current"]
 
-    def get_battery_voltage(self) -> float:
+    def get_battery_voltage(self) -> Optional[float]:
         """
         Return the battery voltage in volts
         """
         return self._data["battery_voltage"]
 
-    def get_battery_temperature(self) -> float:
+    def get_battery_temperature(self) -> Optional[float]:
         """
         Return the battery temperature in degrees celcius
         """
         return self._data["battery_temperature"]
 
-    def get_soc(self) -> float:
+    def get_soc(self) -> Optional[float]:
         """
         Return the battery state of charge as a percentage
         """

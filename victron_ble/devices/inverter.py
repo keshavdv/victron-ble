@@ -10,7 +10,7 @@ from victron_ble.devices.base import (
 
 
 class InverterData(DeviceData):
-    def get_device_state(self) -> OperationMode:
+    def get_device_state(self) -> Optional[OperationMode]:
         """
         Return an enum indicating the current device state
         """
@@ -22,25 +22,25 @@ class InverterData(DeviceData):
         """
         return AlarmReason(self._data["alarm"]) if self._data["alarm"] > 0 else None
 
-    def get_battery_voltage(self) -> float:
+    def get_battery_voltage(self) -> Optional[float]:
         """
         Return the battery voltage in volts
         """
         return self._data["battery_voltage"]
 
-    def get_ac_apparent_power(self) -> int:
+    def get_ac_apparent_power(self) -> Optional[int]:
         """
         Return the output AC power in voltampere
         """
         return self._data["ac_apparent_power"]
 
-    def get_ac_voltage(self) -> float:
+    def get_ac_voltage(self) -> Optional[float]:
         """
         Return the output AC voltage in volts
         """
         return self._data["ac_voltage"]
 
-    def get_ac_current(self) -> float:
+    def get_ac_current(self) -> Optional[float]:
         """
         Return the output AC current in amperes
         """

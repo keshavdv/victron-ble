@@ -1,3 +1,5 @@
+from typing import Optional
+
 from victron_ble.devices.base import (
     BitReader,
     ChargerError,
@@ -9,37 +11,37 @@ from victron_ble.devices.base import (
 
 
 class OrionXSData(DeviceData):
-    def get_charge_state(self) -> OperationMode:
+    def get_charge_state(self) -> Optional[OperationMode]:
         """
         Return an enum indicating the current charging state
         """
         return self._data["device_state"]
 
-    def get_charger_error(self) -> ChargerError:
+    def get_charger_error(self) -> Optional[ChargerError]:
         """
         Return an enum indicating the error code
         """
         return self._data["charger_error"]
 
-    def get_input_voltage(self) -> float:
+    def get_input_voltage(self) -> Optional[float]:
         """
         Return the input voltage in volts
         """
         return self._data["input_voltage"]
 
-    def get_input_current(self) -> float:
+    def get_input_current(self) -> Optional[float]:
         """
         Return the input current in amps
         """
         return self._data["input_current"]
 
-    def get_output_voltage(self) -> float:
+    def get_output_voltage(self) -> Optional[float]:
         """
         Return the output voltage in volts
         """
         return self._data["output_voltage"]
 
-    def get_output_current(self) -> float:
+    def get_output_current(self) -> Optional[float]:
         """
         Return the output current in amps
         """

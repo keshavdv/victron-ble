@@ -18,31 +18,31 @@ class AuxMode(Enum):
 
 
 class BatteryMonitorData(DeviceData):
-    def get_remaining_mins(self) -> float:
+    def get_remaining_mins(self) -> Optional[float]:
         """
         Return the number of remaining minutes of battery life in minutes
         """
         return self._data["remaining_mins"]
 
-    def get_current(self) -> float:
+    def get_current(self) -> Optional[float]:
         """
         Return the current in amps
         """
         return self._data["current"]
 
-    def get_voltage(self) -> float:
+    def get_voltage(self) -> Optional[float]:
         """
         Return the voltage in volts
         """
         return self._data["voltage"]
 
-    def get_soc(self) -> float:
+    def get_soc(self) -> Optional[float]:
         """
         Return the state of charge in percentage
         """
         return self._data["soc"]
 
-    def get_consumed_ah(self) -> float:
+    def get_consumed_ah(self) -> Optional[float]:
         """
         Return the consumed energy in amp hours
         """
