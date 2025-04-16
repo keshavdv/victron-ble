@@ -93,7 +93,7 @@ class AcCharger(Device):
         output_current2 = reader.read_unsigned_int(11)
         output_voltage3 = reader.read_unsigned_int(13)
         output_current3 = reader.read_unsigned_int(11)
-        temerature = reader.read_signed_int(7)  # Celsius
+        temerature = reader.read_unsigned_int(7)  # Celsius
         ac_current = reader.read_unsigned_int(
             9
         )  # AC current reading in 0.1A increments

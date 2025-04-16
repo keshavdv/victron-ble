@@ -16,6 +16,7 @@ class TestAcCharger:
         assert actual.get_output_current1() == 0.4
         assert actual.get_ac_current() == None
         assert actual.get_output_current2() == None
+        assert actual.get_temperature() == 21
         assert actual.get_model_name() == "Blue Smart IP22 Charger 12/30 (1)"
 
     def parse_decrypted(self, decrypted: str) -> AcChargerData:
@@ -29,3 +30,4 @@ class TestAcCharger:
         assert actual.get_output_voltage1() == 13.5
         assert actual.get_output_current1() == 0.5
         assert actual.get_output_current2() == None
+        assert actual.get_temperature() == 21
