@@ -14,7 +14,7 @@ from victron_ble.devices.base import (
 
 class OutputState(Enum):
     ON = 1
-    OFF = 4
+    OFF = 0
 
 
 class SmartBatteryProtectData(DeviceData):
