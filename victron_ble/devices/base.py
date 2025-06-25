@@ -1,7 +1,7 @@
 import abc
 import struct
 from dataclasses import dataclass
-from enum import Enum, Flag
+from enum import Enum
 from typing import Any, Dict, Type
 
 from Crypto.Cipher import AES
@@ -170,7 +170,7 @@ class ChargerError(Enum):
     INTERNAL_SUPPLY_D = 215
 
 
-class OffReason(Flag):
+class OffReason(Enum):
     NO_REASON = 0x00000000
     NO_INPUT_POWER = 0x00000001
     SWITCHED_OFF_SWITCH = 0x00000002
@@ -183,7 +183,7 @@ class OffReason(Flag):
     ANALYSING_INPUT_VOLTAGE = 0x00000100
 
 
-class AlarmReason(Flag):
+class AlarmReason(Enum):
     NO_ALARM = 0
     LOW_VOLTAGE = 1
     HIGH_VOLTAGE = 2
