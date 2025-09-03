@@ -6,7 +6,7 @@ _Describe more what you did on changes._
 1. (...)
 2. (...)
 
-### Bugfixes :bug: (delete if dind't have any)
+### Bugfixes :bug: (delete if didn't have any)
 -
 
 ### Checks
