@@ -13,6 +13,7 @@ from victron_ble.devices.base import (
 
 
 class OutputState(Enum):
+    SHUTDOWN = 0
     ON = 1
     OFF = 4
 
