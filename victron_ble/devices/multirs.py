@@ -1,15 +1,8 @@
-from dataclasses import dataclass
-from enum import Enum
 import struct
+from enum import Enum
 from typing import Optional
 
-from victron_ble.devices.base import (
-    Device,
-    DeviceData,
-    OperationMode,
-    ChargerError,
-    ACInState,
-)
+from victron_ble.devices.base import ACInState, ChargerError, Device, DeviceData
 
 
 class MultiRSOperationMode(Enum):
@@ -123,13 +116,23 @@ class MultiRS(Device):
         active_ac_in = (battery_voltage_ac_in >> 14) & 0x03
 
         return {
-            "device_state": MultiRSOperationMode(device_state) if device_state != 0xFF else None,
-            "charger_error": ChargerError(charger_error) if charger_error != 0xFF else None,
-            "battery_current": battery_current / 10.0 if battery_current != 0x7FFF else None,
+            "device_state": (
+                MultiRSOperationMode(device_state) if device_state != 0xFF else None
+            ),
+            "charger_error": (
+                ChargerError(charger_error) if charger_error != 0xFF else None
+            ),
+            "battery_current": (
+                battery_current / 10.0 if battery_current != 0x7FFF else None
+            ),
             "battery_voltage": battery_voltage,
             "active_ac_in": ACInState(active_ac_in) if active_ac_in != 0x03 else None,
-            "active_ac_in_power": active_ac_in_power if active_ac_in_power != 0x7FFF else None,
-            "active_ac_out_power": active_ac_out_power if active_ac_out_power != 0x7FFF else None,
+            "active_ac_in_power": (
+                active_ac_in_power if active_ac_in_power != 0x7FFF else None
+            ),
+            "active_ac_out_power": (
+                active_ac_out_power if active_ac_out_power != 0x7FFF else None
+            ),
             "pv_power": pv_power if pv_power != 0xFFFF else None,
             "yield_today": yield_today / 100.0 if yield_today != 0xFFFF else None,
         }
