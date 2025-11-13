@@ -13,6 +13,7 @@ from victron_ble.devices.dc_energy_meter import DcEnergyMeter, DcEnergyMeterData
 from victron_ble.devices.dcdc_converter import DcDcConverter, DcDcConverterData
 from victron_ble.devices.inverter import Inverter, InverterData
 from victron_ble.devices.lynx_smart_bms import LynxSmartBMS, LynxSmartBMSData
+from victron_ble.devices.multirs import MultiRS, MultiRSData
 from victron_ble.devices.orion_xs import OrionXS, OrionXSData
 from victron_ble.devices.smart_battery_protect import (
     SmartBatteryProtect,
@@ -48,6 +49,8 @@ __all__ = [
     "SmartBatteryProtectData",
     "LynxSmartBMS",
     "LynxSmartBMSData",
+    "MultiRS",
+    "MultiRSData",
     "SolarCharger",
     "SolarChargerData",
     "SmartCharger",
@@ -92,7 +95,7 @@ def detect_device_type(data: bytes) -> Optional[Type[Device]]:
     elif mode == 0xA:  # LynxSmartBMS
         return LynxSmartBMS
     elif mode == 0xB:  # MultiRS
-        pass
+        return MultiRS
     elif (
         mode == 0x5
     ):  # SmartLithium (commercially Lithium Battery Smart / LiFePO4 Battery Smart)
