@@ -983,7 +983,7 @@ MODEL_ID_MAPPING = {
     0xC035: "SmartShunt IP65 500A/50mV",
     0xC036: "SmartShunt IP65 1000A/50mV",
     0xC037: "SmartShunt IP65 2000A/50mV",
-    0xC038: "SmartShunt 300A/50mV"
+    0xC038: "SmartShunt 300A/50mV",
 }
 
 

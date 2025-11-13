@@ -1,6 +1,7 @@
 from victron_ble.devices.multirs import MultiRS, MultiRSData, MultiRSOperationMode
 from victron_ble.devices.base import ChargerError, ACInState
 
+
 class TestMultiRS:
     def test_end_to_end_parse(self) -> None:
         """
