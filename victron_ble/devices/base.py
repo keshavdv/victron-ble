@@ -864,6 +864,7 @@ MODEL_ID_MAPPING = {
     0xA3E8: "Smart BMS 12-200",
     0xA3EC: "smallBMS",
     0xA3F0: "Smart Buckboost 12V/12V-50A non-iso DC-DC charger",
+    0xA3F1: "Orion XS 1400 12-24V/12-24V-50A non-iso DC-DC charger",
     0xA400: "MultiC - Generic",
     0xA401: "Inverter RS Solar 48V/6000VA/80A",
     0xA402: "Inverter RS 48V/6000VA",
