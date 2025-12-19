@@ -645,6 +645,7 @@
 41960 Smart BMS 12-200
 41964 smallBMS
 41968 Smart Buckboost 12V/12V-50A non-iso DC-DC charger
+41969 Orion XS 1400 12-24V/12-24V-50A non-iso DC-DC charger
 41984 MultiC - Generic
 41985 Inverter RS Solar 48V/6000VA/80A
 41986 Inverter RS 48V/6000VA
