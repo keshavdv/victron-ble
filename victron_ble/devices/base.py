@@ -2,14 +2,13 @@ import abc
 import struct
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, Optional, Type, TypeVar
+from typing import Any, Dict, Type, TypeVar
 
 from Crypto.Cipher import AES
 from Crypto.Util import Counter
 from Crypto.Util.Padding import pad
 
 from victron_ble.exceptions import AdvertisementKeyMismatchError
-
 
 E = TypeVar("E", bound=Enum)
 
@@ -22,7 +21,7 @@ def parse_enum(enum_class: Type[E], value: int) -> E:
     try:
         return enum_class(value)
     except ValueError:
-        return enum_class.UNKNOWN
+        return getattr(enum_class, "UNKNOWN")
 
 
 # Sourced from VE.Direct docs
