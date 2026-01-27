@@ -7,6 +7,7 @@ from victron_ble.devices.base import (
     Device,
     DeviceData,
     kelvin_to_celsius,
+    parse_enum,
 )
 
 
@@ -107,7 +108,7 @@ class BatteryMonitor(Device):
         parsed = {
             "remaining_mins": remaining_mins if remaining_mins != 0xFFFF else None,
             "voltage": voltage / 100 if voltage != 0x7FFF else None,
-            "alarm": AlarmReason(alarm),
+            "alarm": parse_enum(AlarmReason, alarm),
             "aux_mode": AuxMode(aux_mode),
             "current": current / 1000 if current != 0x3FFFFF else None,
             "consumed_ah": -consumed_ah / 10 if consumed_ah != 0xFFFFF else None,

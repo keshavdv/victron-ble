@@ -9,6 +9,7 @@ from victron_ble.devices.base import (
     DeviceData,
     OffReason,
     OperationMode,
+    parse_enum,
 )
 
 
@@ -91,11 +92,11 @@ class SmartBatteryProtect(Device):
                 OutputState(output_state) if output_state != 0xFF else None
             ),
             "error_code": (ChargerError(error_code) if error_code != 0xFF else None),
-            "alarm_reason": AlarmReason(alarm_reason),
-            "warning_reason": AlarmReason(warning_reason),
+            "alarm_reason": parse_enum(AlarmReason, alarm_reason),
+            "warning_reason": parse_enum(AlarmReason, warning_reason),
             "input_voltage": (input_voltage / 100 if input_voltage != 0x7FFF else None),
             "output_voltage": (
                 output_voltage / 100 if output_voltage != 0xFFFF else None
             ),
-            "off_reason": OffReason(off_reason),
+            "off_reason": parse_enum(OffReason, off_reason),
         }

@@ -7,6 +7,7 @@ from victron_ble.devices.base import (
     DeviceData,
     OffReason,
     OperationMode,
+    parse_enum,
 )
 
 
@@ -73,5 +74,5 @@ class DcDcConverter(Device):
             "output_voltage": (
                 output_voltage / 100 if output_voltage != 0x7FFF else None
             ),
-            "off_reason": OffReason(off_reason),
+            "off_reason": parse_enum(OffReason, off_reason),
         }

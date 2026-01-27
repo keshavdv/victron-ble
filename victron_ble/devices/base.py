@@ -2,13 +2,26 @@ import abc
 import struct
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, Type
+from typing import Any, Dict, Type, TypeVar
 
 from Crypto.Cipher import AES
 from Crypto.Util import Counter
 from Crypto.Util.Padding import pad
 
 from victron_ble.exceptions import AdvertisementKeyMismatchError
+
+E = TypeVar("E", bound=Enum)
+
+
+def parse_enum(enum_class: Type[E], value: int) -> E:
+    """
+    Safely convert an int to an enum, returning the UNKNOWN member if the value is not valid.
+    The enum_class must have an UNKNOWN member defined.
+    """
+    try:
+        return enum_class(value)
+    except ValueError:
+        return getattr(enum_class, "UNKNOWN")
 
 
 # Sourced from VE.Direct docs
@@ -171,6 +184,7 @@ class ChargerError(Enum):
 
 
 class OffReason(Enum):
+    UNKNOWN = -1
     NO_REASON = 0x00000000
     NO_INPUT_POWER = 0x00000001
     SWITCHED_OFF_SWITCH = 0x00000002
@@ -186,6 +200,7 @@ class OffReason(Enum):
 
 
 class AlarmReason(Enum):
+    UNKNOWN = -1
     NO_ALARM = 0
     LOW_VOLTAGE = 1
     HIGH_VOLTAGE = 2
