@@ -7,6 +7,7 @@ from victron_ble.devices.base import (
     Device,
     DeviceData,
     kelvin_to_celsius,
+    parse_enum,
 )
 from victron_ble.devices.battery_monitor import AuxMode
 
@@ -54,7 +55,8 @@ class DcEnergyMeterData(DeviceData):
         """
         Return an enum indicating the current alarm reason or None otherwise
         """
-        return AlarmReason(self._data["alarm"]) if self._data["alarm"] > 0 else None
+        alarm = self._data["alarm"]
+        return parse_enum(AlarmReason, alarm) if alarm > 0 else None
 
     def get_aux_mode(self) -> AuxMode:
         """
