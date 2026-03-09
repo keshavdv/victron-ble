@@ -68,7 +68,7 @@ class DeviceDataEncoder(json.JSONEncoder):
 class Scanner(BaseScanner):
     def __init__(self, device_keys: dict[str, str] = {}, indent=2):
         super().__init__()
-        self._device_keys = {k.lower(): v for k, v in device_keys.items()}
+        self._device_keys = {k.lower().replace(":", ""): v for k, v in device_keys.items()}
         self._known_devices: dict[str, Device] = {}
         self._indent = indent
 
@@ -77,7 +77,7 @@ class Scanner(BaseScanner):
         await super().start()
 
     def get_device(self, ble_device: BLEDevice, raw_data: bytes) -> Device:
-        address = ble_device.address.lower()
+        address = ble_device.address.lower().replace(":", "")
         if address not in self._known_devices:
             advertisement_key = self.load_key(address)
 
