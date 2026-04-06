@@ -32,7 +32,8 @@ def cli(verbose):
 
 @cli.command(help="Discover Victron devices with Instant Readout")
 def discover():
-    loop = asyncio.get_event_loop()
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
 
     async def scan():
         scanner = DiscoveryScanner()
@@ -45,7 +46,8 @@ def discover():
 @cli.command(help="Dump all advertisements matching the given device ID")
 @click.argument("id", type=str)
 def dump(id: str):
-    loop = asyncio.get_event_loop()
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
 
     async def scan():
         scanner = DebugScanner(id)
@@ -58,7 +60,8 @@ def dump(id: str):
 @cli.command(help="Read data from specified devices")
 @click.argument("device_keys", nargs=-1, type=DeviceKeyParam())
 def read(device_keys: List[Tuple[str, str]]):
-    loop = asyncio.get_event_loop()
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
 
     async def scan(keys):
         scanner = Scanner(keys, indent=None)
