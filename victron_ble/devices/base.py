@@ -4,11 +4,80 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Any, Dict, Type
 
-from Crypto.Cipher import AES
-from Crypto.Util import Counter
-from Crypto.Util.Padding import pad
+try:
+    from cryptography.hazmat.primitives.ciphers import Cipher as _CgCipher
+    from cryptography.hazmat.primitives.ciphers import algorithms as _cg_algorithms
+    from cryptography.hazmat.primitives.ciphers import modes as _cg_modes
 
-from victron_ble.exceptions import AdvertisementKeyMismatchError
+    _HAVE_CRYPTOGRAPHY = True
+except ImportError:  # pragma: no cover
+    _HAVE_CRYPTOGRAPHY = False
+
+# AES block size in bytes; CTR uses the same block as the cipher.
+_AES_BLOCK_SIZE = 16
+# 128-bit counter mask, used to wrap the LE counter on overflow.
+_CTR_MASK_128 = (1 << 128) - 1
+
+try:
+    from Crypto.Cipher import AES  # type: ignore
+    from Crypto.Util import Counter  # type: ignore
+
+    _HAVE_PYCRYPTODOME = True
+except ImportError:  # pragma: no cover
+    _HAVE_PYCRYPTODOME = False
+
+if not (_HAVE_CRYPTOGRAPHY or _HAVE_PYCRYPTODOME):
+    raise ImportError(
+        "victron_ble requires either the 'cryptography' package "
+        "or PyCryptodome for AES decryption.  Install one with "
+        "'pip install cryptography' or 'pip install pycryptodome'."
+    )
+
+from victron_ble.exceptions import AdvertisementKeyMismatchError  # noqa: E402
+
+
+def _pkcs7_pad16(data: bytes) -> bytes:
+    """PKCS#7 pad to a 16-byte multiple, matching ``Crypto.Util.Padding.pad``."""
+    pad_len = (16 - (len(data) % 16)) % 16
+    if pad_len == 0:
+        pad_len = 16
+    return data + bytes([pad_len]) * pad_len
+
+
+def _aes_ctr_decrypt(key: bytes, iv_le_u16: int, ciphertext: bytes) -> bytes:
+    """AES-128-CTR decrypt with a 128-bit little-endian counter.
+
+    Mirrors PyCryptodome's
+    ``Counter.new(128, initial_value=iv, little_endian=True)`` using
+    whichever AES backend is available.  The Victron Instant Readout
+    payload fits in a single 16-byte AES block in practice, but the
+    little-endian counter is still honoured across blocks for
+    correctness.
+
+    The cryptography library only offers a *big-endian* CTR mode
+    (per NIST SP 800-38A), so when that backend is selected we drive
+    AES-ECB manually, generating each keystream block from a
+    little-endian-encoded counter ourselves.
+    """
+    padded = _pkcs7_pad16(ciphertext)
+    if _HAVE_CRYPTOGRAPHY:
+        encryptor = _CgCipher(_cg_algorithms.AES(key), _cg_modes.ECB()).encryptor()
+        out = bytearray()
+        counter = iv_le_u16
+        n = len(padded)
+        for i in range(0, n, _AES_BLOCK_SIZE):
+            block_nonce = counter.to_bytes(_AES_BLOCK_SIZE, "little")
+            keystream = encryptor.update(block_nonce)
+            end = i + _AES_BLOCK_SIZE
+            block = padded[i:end]
+            out += bytes(b ^ k for b, k in zip(block, keystream))
+            counter = (counter + 1) & _CTR_MASK_128
+        encryptor.finalize()
+        return bytes(out)
+    # PyCryptodome reference implementation
+    ctr = Counter.new(128, initial_value=iv_le_u16, little_endian=True)
+    cipher = AES.new(key, AES.MODE_CTR, counter=ctr)
+    return cipher.decrypt(padded)
 
 
 # Sourced from VE.Direct docs
@@ -1035,14 +1104,11 @@ class Device(abc.ABC):
         if container.encrypted_data[0] != advertisement_key[0]:
             raise AdvertisementKeyMismatchError("Incorrect advertisement key")
 
-        ctr = Counter.new(128, initial_value=container.iv, little_endian=True)
-
-        cipher = AES.new(
+        return _aes_ctr_decrypt(
             advertisement_key,
-            AES.MODE_CTR,
-            counter=ctr,
+            container.iv,
+            container.encrypted_data[1:],
         )
-        return cipher.decrypt(pad(container.encrypted_data[1:], 16))
 
     def parse(self, data: bytes) -> DeviceData:
         decrypted = self.decrypt(data)
