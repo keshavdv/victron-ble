@@ -1,4 +1,27 @@
-from victron_ble.devices.base import BitReader
+from victron_ble.devices.base import BitReader, OffReason
+
+
+class TestOffReason:
+    def test_known_values(self) -> None:
+        """Known OffReason values should resolve to the expected enum members."""
+        assert OffReason.NO_REASON == OffReason(0x00000000)
+        assert OffReason.ENGINE_SHUTDOWN == OffReason(0x00000080)
+        assert (
+            OffReason.ENGINE_SHUTDOWN_AND_INPUT_VOLTAGE_LOCKOUT
+            == OffReason(0x00000081)
+        )
+
+    def test_unknown_value_creates_synthetic_member(self) -> None:
+        """Unknown values should produce a synthetic member instead of crashing."""
+        member = OffReason(137)
+        assert member.name == "UNKNOWN_137"
+        assert member.value == 137
+
+    def test_unknown_value_preserves_raw_value(self) -> None:
+        """The raw integer value should be preserved in the synthetic member."""
+        member = OffReason(999)
+        assert member.value == 999
+        assert member.name == "UNKNOWN_999"
 
 
 class TestBitReader:
