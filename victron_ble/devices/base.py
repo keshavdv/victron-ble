@@ -184,6 +184,22 @@ class OffReason(Enum):
     ENGINE_SHUTDOWN_AND_INPUT_VOLTAGE_LOCKOUT = 0x00000081
     ANALYSING_INPUT_VOLTAGE = 0x00000100
 
+    @classmethod
+    def _missing_(cls, value: object) -> "OffReason":
+        """
+        Handle unknown OffReason values gracefully instead of raising ValueError.
+
+        New Victron firmware versions may introduce OffReason values not yet
+        defined in this enum. Rather than crashing the entire device parser,
+        return a synthetic member that preserves the raw value for debugging.
+        """
+        if isinstance(value, int):
+            member = object.__new__(cls)
+            member._name_ = f"UNKNOWN_{value}"
+            member._value_ = value
+            return member
+        return super()._missing_(value)
+
 
 class AlarmReason(Enum):
     NO_ALARM = 0
