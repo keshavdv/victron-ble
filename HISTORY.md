@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.9.4 (2026)
+------------------
+- Add SolarSense 750 support
+
 0.6.0 (2023)
 ------------------
 - Add VEBus support
