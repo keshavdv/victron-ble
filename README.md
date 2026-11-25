@@ -53,7 +53,7 @@ If you are going to use `victron-ble` on the same Mac computer as you have the V
 
 #### Reading data
 
-Here we're using OSX as an example. If you're using another system, replace the UUID with the real MAC address.
+Here we're using OSX as an example. If you're using another system, replace the UUID with the real MAC address. MAC addresses can be entered with or without colons, and matching is case-insensitive.
 The project ships with a standalone CLI that can be used to print device data to the console. 
 
 ```bash
